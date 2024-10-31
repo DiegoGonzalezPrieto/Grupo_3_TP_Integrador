@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="Grupo_3_TP_Integrador">
+    <wb-module deploy-name="TPInt_Grupo_3_Labo4">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/scripts"/>
-        <property name="context-root" value="Grupo_3_TP_Integrador"/>
-        <property name="java-output-path" value="/Grupo_3_TP_Integrador/build/classes"/>
+        <property name="java-output-path" value="/TPInt_Grupo_3_Labo4/build/classes"/>
+        <property name="context-root" value="TPInt_Grupo_3_Labo4"/>
     </wb-module>
 </project-modules>
