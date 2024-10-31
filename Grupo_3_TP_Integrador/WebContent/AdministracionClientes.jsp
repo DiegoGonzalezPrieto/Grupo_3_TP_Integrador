@@ -12,6 +12,7 @@
 		<label for="nombre"></label>
 		<input id="nombre" name="nombre">
 		<button type="submit">Crear Cliente</button>
+		<label for="apellido"></label>
 	</form>
 </body>
 </html>
