@@ -2,6 +2,7 @@
     <wb-module deploy-name="Grupo_3_TP_Integrador">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/scripts"/>
         <property name="context-root" value="Grupo_3_TP_Integrador"/>
         <property name="java-output-path" value="/Grupo_3_TP_Integrador/build/classes"/>
     </wb-module>
