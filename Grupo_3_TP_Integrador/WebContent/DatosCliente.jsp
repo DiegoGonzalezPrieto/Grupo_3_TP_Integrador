@@ -7,7 +7,67 @@
 <title>Datos Personales</title>
 </head>
 <body>
-<h1>Datos Personales</h1>
-
+    <center>
+        <table width="800" bgcolor="#00A7D1" cellpadding="10" cellspacing="0">
+            <tr>
+                <td width="50%" align="right">
+                    <label>Nombre: </label>
+                    <input type="text" value="Juan Pablo" readonly size="20">
+                </td>
+                <td width="50%" align="right">
+                    <label>Apellido: </label>
+                    <input type="text" value="Rajoy" readonly size="20">
+                </td>
+            </tr>
+            <tr>
+                <td width="50%" align="right">
+                    <label>Nro. Documento o CUIL: </label>
+                    <select>
+                        <option value="DNI" selected>DNI</option>
+                        <option value="CUIL">CUIL</option>
+                    </select>
+                    <input type="text" value="35035199" readonly size="20">
+                </td>
+                <td width="50%" align="right">
+                    <label>Fecha Nac.: </label>
+                    <input type="text" value="01/03/2001" readonly size="20">
+                </td>
+            </tr>
+            <tr>
+                <td width="50%" align="right">
+                    <label>Sexo: </label>
+                    <input type="text" value="Masculino" readonly size="20">
+                </td>
+                <td width="50%" align="right">
+                    <label>Nacionalidad: </label>
+                    <input type="text" value="Argentina" readonly size="20">
+                </td>
+            </tr>
+            <tr>
+                <td width="50%" align="right">
+                    <label>Dirección: </label>
+                    <input type="text" value="Calle 6" readonly size="20">
+                </td>
+                <td width="50%" align="right">
+                    <label>Localidad: </label>
+                    <input type="text" value="San Antonio" readonly size="20">
+                </td>
+            </tr>
+            <tr>
+                <td width="50%" align="right">
+                    <label>Provincia: </label>
+                    <input type="text" value="Buenos Aires" readonly size="20">
+                </td>
+                <td width="50%" align="right">
+                    <label>Email: </label>
+                    <input type="text" value="user@test.com" readonly size="20">
+                </td>
+            </tr>
+        </table>
+        <br><br><br>
+        <form action="DetallesCuenta.jsp" method="GET">
+            <button type="submit">Ver Detalle de Cuenta</button>
+        </form>
+    </center>
 </body>
 </html>
