@@ -15,6 +15,8 @@
 			<div class="navbar-container" style="display:flex; justify-content:space-between; align-items:center" >
 			    <a href="#" class="navbar-logo">Banco XYZ</a>
 			    <ul class="navbar-menu" style="list-style-type: none; text-decoration:none; display:flex">
+			    	<li style="margin:5px">Usuario Tal</li>
+			    	<li style="margin:5px"><a href="HomeCliente.jsp">Inicio</a></li>
 			    	<li style="margin:5px"><a href="DetallesCuenta.jsp">Mis cuentas</a></li>
 			    	<li style="margin:5px"><a href="Prestamos.jsp">Préstamos</a></li>
 			    	<li style="margin:5px"><a href="Perfil.jsp">Perfil</a></li>
