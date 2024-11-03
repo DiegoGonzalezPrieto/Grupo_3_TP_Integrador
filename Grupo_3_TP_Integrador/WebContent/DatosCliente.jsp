@@ -15,7 +15,7 @@
             <h4 class="mb-0">Datos Personales</h4>
         </div>
         <div class="card-body">
-            <form action="DetallesCuenta.jsp" method="GET">
+            <form action="HomeCliente.jsp" method="GET">
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -98,7 +98,7 @@
                 </div>
 
                 <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-primary">Ver Detalle de Cuenta</button>
+                    <button type="submit" class="btn btn-primary">Volver</button>
                 </div>
             </form>
         </div>
