@@ -18,10 +18,15 @@
 <body>
 	<div class="container mt-5" style="font-size: 0.8em">
 		<h1 class="text-center">Gestión de Prestamos</h1>
-
-		<div class="text-right mb-4">
-			<button class="btn btn-primary" onclick="window.location.href='SolicitudPrestamo.jsp'">+ Nuevo Prestamo</button>
-		</div>	
+		
+		<div class="d-flex justify-content-between align-items-center mb-4">
+			<div class="p-2">
+				<h4>Bienvenida  MARIA LAURA</h4>
+			</div>
+			<div class="p-2">
+				<button class="btn btn-primary" onclick="window.location.href='SolicitudPrestamo.jsp'">+ Nuevo Prestamo</button>
+			</div>
+		</div>
 				
 		<!-- BUSQUEDA POR FILTROS -->
 		<div class="card mb-4">
