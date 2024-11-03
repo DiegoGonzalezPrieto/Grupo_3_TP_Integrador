@@ -1,28 +1,34 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<!DOCTYPE>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>pago de Préstamos</title>
+	<title>Pago de Préstamos</title>
 	
-	<!--  BOOTSTRAP CSS -->
+	<!-- BOOTSTRAP CSS -->
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 	
-	<!--  JQUERY Y DATATABLE -->
+	<!-- JQUERY Y DATATABLES PAGINACION ORDENAMIENTO DE COL -->
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <link href="https://cdn.datatables.net/2.1.8/css/jquery.dataTables.min.css" rel="stylesheet">
-
+	<script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+	<link href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet"></link>
 </head>
 <body>
 	<div class="container mt-5">
-		<h1 class="text.center">Pago de Préstamos</h1>
+		<h1 class="text-center">Pago de Préstamos</h1>
 
 				<!-- TRAEMOS DESDE EL SERVLET LOS PRESTAMOS Y LA CUOTAS DEL METODO DOGET -->
 				<!-- 
 					Prestamo prestamo = (Prestamo) request.getAttribute("prestamo") 
 			    	List<Cuota> cuotas = (List<Cuota>) request.getAttribute("cuotas")	
 				 -->
+				 
+		<!-- NOMBRE DE RECEPCION DE CLIENTE -->		 
+		<div class="alert alert-secondary mt-4" role="alert">
+			<strong>CLIENTE:</strong> MARIA LAURA
+		</div>		 
+		<!-- INFORME ESTADO DE CUENTA QUE TIENE EL PRESTAMO -->		 
 		<div class="alert alert-info mt-4" role="alert">
             <strong>Saldo Disponible en Cuenta:</strong> $<span id="saldoDisponible">12,000.00</span>
         </div>
@@ -32,7 +38,7 @@
 			<input type="hidden" name="idPrestamo" value="metodo para traer el id de Prestamo">
 			<fieldset class="border p-3">
 				<legend class="w-auto">Cuota a Pagar</legend>
-				<table id="tabla-cuotas" class="table table-striped">
+				<table id="tabla-cuotas" class="table table-striped table-bordered">
 					<thead class="thead-dark">
 						<tr>
 							<th>Numero de Cuota</th>
@@ -44,7 +50,8 @@
 					<tbody>
 						<!-- ACA TRAEMOS CON UN FOR LA INFO DESDE EL DOGET PARA PONER EN LA TABLA
 							EJ: 
-							for(Cuota cuota : cuotas){
+							List<Cuota> cuotas = (List<Cuota>) request.getAttribute("cuotas"); // CAMBIO: Se obtiene la lista de cuotas
+							for (Cuota cuota : cuotas) {
 								String nroCuota = cuota.getNroCuota();
 								String fechaVenc = cuota.getFechaVencimiento();
 								double importeMensual = prestamo.getImporteMensual();						
@@ -68,20 +75,42 @@
                                 <input type="checkbox" name="cuotas" value="2">
                             </td>
                         </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>2023-06-01</td>
+                            <td>$4,000.00</td>
+                            <td>
+                                <input type="checkbox" name="cuotas" value="2">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>2023-06-01</td>
+                            <td>$4,000.00</td>
+                            <td>
+                                <input type="checkbox" name="cuotas" value="2">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>2023-06-01</td>
+                            <td>$4,000.00</td>
+                            <td>
+                                <input type="checkbox" name="cuotas" value="2">
+                            </td>
+                        </tr>
 						 <!-- } CERRAMOS EL FOR -->	 											  
 					</tbody>							
 				</table>		
 			</fieldset>
 				<div class="mt-3">
 					<input class="btn btn-success" type="submit" value="Pagar Seleccionadas">
-					<input class="btn btn-secondary" type="submit" value="Volver">
+					<input class="btn btn-secondary" type="button" value="Volver" onclick="window.location.href='Prestamo.jsp';">
 				</div>		
 		</form>
 	</div>
 	
-	<!-- DATATABLE -->
-    <script src="https://cdn.datatables.net/2.1.8/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript">
+	 <script type="text/javascript">
         $(document).ready(function() {
             $('#tabla-cuotas').DataTable({
                 language: {
@@ -90,5 +119,9 @@
             });
         });
     </script>
+
+    <!-- BOOTSTRAP JS Y DEPENDENCIAS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
