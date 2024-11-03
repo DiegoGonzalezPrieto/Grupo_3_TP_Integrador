@@ -35,7 +35,7 @@ pageEncoding="ISO-8859-1"%>
                 </div>
 
                 <div class="d-flex justify-content-between">
-                    <button type="submit" class="btn btn-success">Transferir</button>
+                    <button type="submit" class="btn btn-success" onclick="return confirm('¿Confirma la transferencia?')">Transferir</button>
                     <button type="reset" class="btn btn-warning">Borrar campos</button>
                     <button type="button" onclick="window.history.back()" class="btn btn-danger">Volver</button>
                 </div>
