@@ -3,28 +3,40 @@
 <!DOCTYPE>
 <html lang="es">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>pago de Préstamos</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<title>pago de Préstamos</title>
+	
+	<!--  BOOTSTRAP CSS -->
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	
+	<!--  JQUERY Y DATATABLE -->
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="https://cdn.datatables.net/2.1.8/css/jquery.dataTables.min.css" rel="stylesheet">
+
 </head>
 <body>
-<h1>Pago de Préstamos</h1>
+	<div class="container mt-5">
+		<h1 class="text.center">Pago de Préstamos</h1>
 
-	<!-- TRAEMOS DESDE EL SERVLET LOS PRESTAMOS Y LA CUOTAS DEL METODO DOGET -->
-	<!-- 
-		Prestamo prestamo = (Prestamo) request.getAttribute("prestamo") 
-    	List<Cuota> cuotas = (List<Cuota>) request.getAttribute("cuotas")	
-	 -->
-
-<h2>Detalles del Prestamo</h2>
-	<form action="ProcesarPagoServlet" method="post">
-		<input type="hidden" name="idPrestamo" value="metodo para traer el id de Prestamo">
-			<fieldset>
-				<legend>Cuota a Pagar</legend>
-				<table border="1">
-					<thead>
+				<!-- TRAEMOS DESDE EL SERVLET LOS PRESTAMOS Y LA CUOTAS DEL METODO DOGET -->
+				<!-- 
+					Prestamo prestamo = (Prestamo) request.getAttribute("prestamo") 
+			    	List<Cuota> cuotas = (List<Cuota>) request.getAttribute("cuotas")	
+				 -->
+		<div class="alert alert-info mt-4" role="alert">
+            <strong>Saldo Disponible en Cuenta:</strong> $<span id="saldoDisponible">12,000.00</span>
+        </div>
+		
+		<h2 class="mt-4">Detalles del Prestamo</h2>
+		<form action="ProcesarPagoServlet" method="post">
+			<input type="hidden" name="idPrestamo" value="metodo para traer el id de Prestamo">
+			<fieldset class="border p-3">
+				<legend class="w-auto">Cuota a Pagar</legend>
+				<table id="tabla-cuotas" class="table table-striped">
+					<thead class="thead-dark">
 						<tr>
 							<th>Numero de Cuota</th>
-							<th>Fecha Vencimiento</th>
+							<th>Fecha Solicitud</th>
 							<th>Monto</th>
 							<th>Pagar</th>
 						</tr>
@@ -39,25 +51,44 @@
 						 -->
 						 
 						 <tr>
-						 <!--  
-						 	<td>"mostrar variable nroCuota" </td>
-						 	<td>"mostrar variable fechaVenc" </td>
-						 	<td>"mostrar variable importeMensual" </td>
-						 -->
+						  
+						 	<td>1 </td>
+						 	<td>2024-2-01 </td>
+						 	<td>$1,000.00 </td>
+						 							 
 						 	<td> 
-						 		<input type="checkbox" name="cuotas" value="">
+						 		<input type="checkbox" name="cuotas" value="1">
 						 	</td>						 	
 						 </tr>
-						 <!-- } CERRAMOS EL FOR -->	 
-											  
+						 <tr>
+                            <td>2</td>
+                            <td>2023-06-01</td>
+                            <td>$4,000.00</td>
+                            <td>
+                                <input type="checkbox" name="cuotas" value="2">
+                            </td>
+                        </tr>
+						 <!-- } CERRAMOS EL FOR -->	 											  
 					</tbody>							
 				</table>		
 			</fieldset>
-			
-			<input type="submit" value="Pagar Seleccionadas">
-			<input type="submit" value="Volver">
-			
+				<div class="mt-3">
+					<input class="btn btn-success" type="submit" value="Pagar Seleccionadas">
+					<input class="btn btn-secondary" type="submit" value="Volver">
+				</div>		
+		</form>
+	</div>
 	
-	</form>
+	<!-- DATATABLE -->
+    <script src="https://cdn.datatables.net/2.1.8/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#tabla-cuotas').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
+                }
+            });
+        });
+    </script>
 </body>
 </html>
