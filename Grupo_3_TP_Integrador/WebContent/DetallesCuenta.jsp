@@ -1,159 +1,170 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE>
 <html lang="es">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Detalles de Cuenta</title>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
-    <link href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Detalles de Cuenta</title>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+<link
+	href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css"
+	rel="stylesheet">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
 
 <style>
-        .dataTables_wrapper .dataTables_length {
-            float: left;
-            margin-right: 20px;
-        }
-        
-        .dataTables_wrapper .dataTables_filter {
-            float: none;
-            display: inline-block;
-        }
-        
-        .filter-group {
-            float: right;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        
-        .filter-group input {
-            width: 120px;
-        }
-        
-        .dataTables_wrapper .row:first-child {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .filter-label {
-            margin-bottom: 0;
-            white-space: nowrap;
-        }
-    </style>
+.dataTables_wrapper .dataTables_length {
+	float: left;
+	margin-right: 20px;
+}
+
+.dataTables_wrapper .dataTables_filter {
+	float: none;
+	display: inline-block;
+}
+
+.filter-group {
+	float: right;
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.filter-group input {
+	width: 120px;
+}
+
+.dataTables_wrapper .row:first-child {
+	display: flex;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+
+.filter-label {
+	margin-bottom: 0;
+	white-space: nowrap;
+}
+</style>
 </head>
 <body>
-<div class="container mt-4">
-    <div class="card">
-        <div class="card-header bg-white">
-            <div>
-                <h4 class="card-header bg-primary text-white">Movimientos de Cuenta</h4>
-            </div>
-            
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label class="form-label text-muted">Tipo de Cuenta</label>
-                    <p class="fw-bold mb-2">Caja de Ahorro</p>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label text-muted">Número de Cuenta</label>
-                    <p class="fw-bold mb-2">1234567890</p>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label text-muted">CBU</label>
-                    <p class="fw-bold mb-2">0123456789012345678901</p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="card-body">
-            <div class="mb-3 clearfix">
-                <div class="filter-group">
-                    <label class="filter-label">Filtrar:</label>
-                    <input type="number" id="min" name="min" class="form-control" placeholder="Imp. mínimo">
-                    <input type="number" id="max" name="max" class="form-control" placeholder="Imp. máximo">
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table id="tabla-movimientos" class="table table-striped table-hover">
-                    <thead class="table-light">
-                        <tr>
-                            <th class="text-center">Fecha</th>
-                            <th class="text-center">Detalle</th>
-                            <th class="text-end">Importe</th>
-                            <th class="text-center">Tipo de Movimiento</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="text-center">01/03/2024</td>
-                            <td class="text-center">Depósito inicial</td>
-                            <td class="text-end text-success">10000.00</td>
-                            <td class="text-center">Deposito</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">02/03/2024</td>
-                            <td class="text-center">Transferencia saliente</td>
-                            <td class="text-end text-danger">-1500.00</td>
-                            <td class="text-center">Transferencia</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">03/03/2024</td>
-                            <td class="text-center">Préstamo aprobado</td>
-                            <td class="text-end text-success">5000.00</td>
-                            <td class="text-center">Prestamo</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">04/03/2024</td>
-                            <td class="text-center">Pago cuota préstamo</td>
-                            <td class="text-end text-danger">-800.00</td>
-                            <td class="text-center">Pago Prestamo</td>
-                        </tr>
-                    </tbody>
-                </table>
-               	<form action="HomeCliente.jsp" method="GET">
-	                <div class="text-center mt-4">
-	                    <button type="submit" class="btn btn-primary">Volver a Home</button>
-	                </div>
-	            </form>
-            </div>
-        </div>
-    </div>
-</div>
+	<%@ include file="BarraMenu.jsp"%>
+	<div class="container mt-4">
+		<div class="card">
+			<div class="card-header bg-white">
+				<div>
+					<h4 class="card-header bg-primary text-white">Movimientos de
+						Cuenta</h4>
+				</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script type="text/javascript">
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label class="form-label text-muted">Tipo de Cuenta</label>
+						<p class="fw-bold mb-2">Caja de Ahorro</p>
+					</div>
+					<div class="col-md-4">
+						<label class="form-label text-muted">Número de Cuenta</label>
+						<p class="fw-bold mb-2">1234567890</p>
+					</div>
+					<div class="col-md-4">
+						<label class="form-label text-muted">CBU</label>
+						<p class="fw-bold mb-2">0123456789012345678901</p>
+					</div>
+				</div>
+			</div>
 
-let table = new DataTable('#tabla-movimientos', {
-    language: {
-        url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
-    }
-});
+			<div class="card-body">
+				<div class="mb-3 clearfix">
+					<div class="filter-group">
+						<label class="filter-label">Filtrar:</label> <input type="number"
+							id="min" name="min" class="form-control"
+							placeholder="Imp. mínimo"> <input type="number" id="max"
+							name="max" class="form-control" placeholder="Imp. máximo">
+					</div>
+				</div>
+				<div class="table-responsive">
+					<table id="tabla-movimientos"
+						class="table table-striped table-hover">
+						<thead class="table-light">
+							<tr>
+								<th class="text-center">Fecha</th>
+								<th class="text-center">Detalle</th>
+								<th class="text-end">Importe</th>
+								<th class="text-center">Tipo de Movimiento</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="text-center">01/03/2024</td>
+								<td class="text-center">Depósito inicial</td>
+								<td class="text-end text-success">10000.00</td>
+								<td class="text-center">Deposito</td>
+							</tr>
+							<tr>
+								<td class="text-center">02/03/2024</td>
+								<td class="text-center">Transferencia saliente</td>
+								<td class="text-end text-danger">-1500.00</td>
+								<td class="text-center">Transferencia</td>
+							</tr>
+							<tr>
+								<td class="text-center">03/03/2024</td>
+								<td class="text-center">Préstamo aprobado</td>
+								<td class="text-end text-success">5000.00</td>
+								<td class="text-center">Prestamo</td>
+							</tr>
+							<tr>
+								<td class="text-center">04/03/2024</td>
+								<td class="text-center">Pago cuota préstamo</td>
+								<td class="text-end text-danger">-800.00</td>
+								<td class="text-center">Pago Prestamo</td>
+							</tr>
+						</tbody>
+					</table>
+					<form action="HomeCliente.jsp" method="GET">
+						<div class="text-center mt-4">
+							<button type="submit" class="btn btn-primary">Volver a
+								Home</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 
-$.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-    let min = parseFloat($('#min').val());
-    let max = parseFloat($('#max').val());
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script type="text/javascript">
+		let table = new DataTable(
+				'#tabla-movimientos',
+				{
+					language : {
+						url : 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
+					}
+				});
 
-    let importe = parseFloat(data[2].replace('$', '').replace(',', ''));
-    
-    if (
-        (isNaN(min) && isNaN(max)) ||
-        (isNaN(min) && importe <= max) ||
-        (min <= importe && isNaN(max)) ||
-        (min <= importe && importe <= max)
-    ) {
-        return true;
-    }
-    return false;
-});
+		$.fn.dataTable.ext.search
+				.push(function(settings, data, dataIndex) {
+					let min = parseFloat($('#min').val());
+					let max = parseFloat($('#max').val());
 
-$('#min, #max').on('input', function() {
-    table.draw();
-});
-</script>
+					let importe = parseFloat(data[2].replace('$', '').replace(
+							',', ''));
+
+					if ((isNaN(min) && isNaN(max))
+							|| (isNaN(min) && importe <= max)
+							|| (min <= importe && isNaN(max))
+							|| (min <= importe && importe <= max)) {
+						return true;
+					}
+					return false;
+				});
+
+		$('#min, #max').on('input', function() {
+			table.draw();
+		});
+	</script>
 
 </body>
 </html>
