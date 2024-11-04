@@ -29,14 +29,21 @@
 		h2 {
 			margin-top:5px;
 		}
+		label {
+			margin-top:6px;
+		}
+		.container {
+			margin-bottom:40px;
+		}
+		
 	</style>
 	
 </head>
 <body>
     <h1>Gestión de Reportes</h1>
     <div class="container">
-        <!-- Listado de reportes -->
-        <h2>Reportes Generados</h2>
+    <!-- Listaod de reportes -->
+        <h2>Reportes</h2>
         <table id="tablaReportes" class="table table-striped">
             <thead>
                 <tr>
@@ -48,7 +55,6 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Ejemplo con datos estáticos.. -->
                 <tr>
                     <td>1</td>
                     <td>Reporte de Clientes</td>
@@ -97,17 +103,18 @@
 	                <option value="clientes">Reporte de Clientes</option>
 	                <option value="cuentas">Reporte de Cuentas</option>
 	                <option value="prestamos">Reporte de Préstamos</option>
-	            </select><br>
+	            </select>
 	            <label for="fechaInicio">Fecha de Inicio:</label>
 	            <input type="date" id="fechaInicio" name="fechaInicio" class="form-control" required>
 	            <label for="fechaFin">Fecha de Fin:</label>
 	            <input type="date" id="fechaFin" name="fechaFin" class="form-control" required>
-	            <input type="submit" value="Generar Reporte" class="btn btn-primary">
+	            <input type="submit" value="Generar Reporte" class="btn btn-primary"
+	            onclick="return confirm('¿Generar reporte?')">
 	        </div>
         </form>
 	</div>
 
-        <!-- Form para programar unn reporte -->
+    <!-- Form para programar unn reporte -->
 	<div class="container">        
         <h2>Programar Reporte</h2>
         <form action="ProgramarReporteServlet" method="POST">
@@ -117,7 +124,7 @@
 	                <option value="clientes">Reporte de Clientes</option>
 	                <option value="cuentas">Reporte de Cuentas</option>
 	                <option value="prestamos">Reporte de Préstamos</option>
-	            </select><br>
+	            </select>
 	            <label for="frecuencia">Frecuencia:</label>
 	            <select id="frecuencia" name="frecuencia" class="form-select" required>
 	                <option value="semanal">Semanal</option>
@@ -134,7 +141,8 @@
 				    <option value="sabado">Sábado</option>
 				    <option value="domingo">Domingo</option>
 	            </select>
-	            <input type="submit" value="Programar Reporte" class="btn btn-secondary">
+	            <input type="submit" value="Programar Reporte" class="btn btn-secondary" 
+	            onclick="return confirm('¿Programar reporte?')">
             </div>
         </form>
     </div>
