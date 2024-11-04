@@ -24,6 +24,7 @@
 
 </head>
 <body>
+	<%@ include file="BarraMenu.jsp"%>
 	<div class="container">
 		<h1 class="display-3">Autorización de Préstamos</h1>
 
