@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ include file="BarraMenu.jsp"%>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -159,7 +158,7 @@ label {
 	<script type="text/javascript">
 		let table = new DataTable('#tablaReportes', {
 			language : {
-				url : '//cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
+				url : 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
 			}
 		});
 	</script>

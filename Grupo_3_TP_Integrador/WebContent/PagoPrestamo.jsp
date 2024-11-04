@@ -6,18 +6,23 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Pago de Préstamos</title>
 
-<!-- BOOTSTRAP CSS -->
+<!-- BOOTSTRAP -->
 <link
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-	rel="stylesheet">
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+	crossorigin="anonymous">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+	crossorigin="anonymous"></script>
 
-<!-- JQUERY Y DATATABLES PAGINACION ORDENAMIENTO DE COL -->
+<!-- JQuery + Datatables -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
 <link
 	href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css"
 	rel="stylesheet"></link>
-</head>
 <body>
 	<%@ include file="BarraMenu.jsp"%>
 	<div class="container mt-5">
@@ -115,19 +120,15 @@
 	</div>
 
 	<script type="text/javascript">
-		$(document).ready(function() {
-			$('#tabla-cuotas').DataTable({
-				language : {
-					url : '//cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
-				}
-			});
-		});
+		let table = new DataTable(
+				'#tabla-cuotas',
+				{
+					language : {
+						url : 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
+					}
+				});
 	</script>
 
-	<!-- BOOTSTRAP JS Y DEPENDENCIAS -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>

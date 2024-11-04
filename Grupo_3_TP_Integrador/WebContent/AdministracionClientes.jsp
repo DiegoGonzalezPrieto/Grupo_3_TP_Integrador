@@ -139,20 +139,21 @@
 	</div>
 
 
-	<script>
+	<!-- <script>
 		$(document).ready(function() {
 			$('#clientesTable').DataTable({
-				"paging" : true,
-				"searching" : true,
-				"info" : true
+				"
 			});
 		});
-	</script>
+	</script> -->
 	<script type="text/javascript">
 		let table = new DataTable('#clientesTable', {
 			language : {
-				url : '//cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
-			}
+				url : 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
+			},
+			paging : true,
+			searching : true,
+			info : true
 		});
 	</script>
 
