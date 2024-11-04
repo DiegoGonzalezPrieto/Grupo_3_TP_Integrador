@@ -13,28 +13,30 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Banco G3-L4</a>
+        <a class="navbar-brand" href="#" style="margin:30px">Banco G3-L4</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" 
         aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon" ></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <span class="nav-link">
-                    
-                    NombreUsuario
-                    <% 
-                    	//String username = (String) session.getAttribute("username");
-                        //out.print(username);
-                    %>
-                    
-                    </span>
+                    <a class="nav-link" href="DatosCliente.jsp">
+			        
+			        <!-- Provisorio: -->
+			        NombreUsuario
+			        <% 
+			            //String username = (String) session.getAttribute("username");
+			            //out.print(username);
+			        %>
+    				
+    				</a>
                 </li>
                 <% 
                     //String role = (String) session.getAttribute("role");
                     //if ("admin".equals(role)) {
                 %>
+                <!-- 
                 	<li class="nav-item">
                     	<a class="nav-link" href="HomeAdministrador.jsp">Inicio</a>
                 	</li>
@@ -50,20 +52,19 @@
                     <li class="nav-item">
                         <a class="nav-link" href="Reportes.jsp">Reportes</a>
                     </li>
+                 -->
                 <% 
                     //} else if ("cliente".equals(role)) {
                 %>
-                <!-- 
                 	<li class="nav-item">
                         <a class="nav-link" href="HomeCliente.jsp">Mis cuentas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Prestamos.jsp">Préstamos</a>
+                        <a class="nav-link" href="SolicitudPrestamo.jsp">Préstamos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="Perfil.jsp">Perfil</a>
+                        <a class="nav-link" href="DatosCliente.jsp">Perfil</a>
                     </li>
-                 -->
                 <% 
                     //}
                 %>
