@@ -68,6 +68,22 @@
 						    </a>
                         </td>
                     </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Cliente 2</td>
+                        <td>2024-10-31</td>
+                        <td>Cuenta Corriente</td>
+                        <td>987654321</td>
+                        <td>09876543210123456789</td>
+                        <td>$17,631.59</td>
+                        <td>
+                            <a href="ModificarCuentaServlet?id=2" class="btn btn-warning btn-sm">Modificar</a>
+                            <a href="EliminarCuentaServlet?id=2" class="btn btn-danger btn-sm" 
+						    	onclick="return confirm('¿Seguro que desea eliminar esta cuenta?')">
+						        <i class="fa-regular fa-trash-can"></i>
+						    </a>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
