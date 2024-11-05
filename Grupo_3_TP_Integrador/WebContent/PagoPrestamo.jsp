@@ -111,10 +111,11 @@
 				</table>
 			</fieldset>
 			<div class="mt-3">
-				<input class="btn btn-success" type="submit"
-					value="Pagar Seleccionadas"> <input
-					class="btn btn-secondary" type="button" value="Volver"
-					onclick="window.location.href='Prestamo.jsp';">
+				<input class="btn btn-success" type="submit" value="Pagar Seleccionadas">
+				<!--
+				<input class="btn btn-secondary" type="button" value="Volver" onclick="window.location.href='Prestamo.jsp';">
+				 -->
+				 <a href="Prestamo.jsp" class="btn btn-secondary">Volver</a>
 			</div>
 		</form>
 	</div>
