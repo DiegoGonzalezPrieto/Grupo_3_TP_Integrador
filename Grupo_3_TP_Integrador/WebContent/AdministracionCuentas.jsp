@@ -130,20 +130,27 @@
 		</div>
 	</div>
 
+	<%@ include file="Footer.jsp"%>
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 	<script
 		src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 	<script>
-		$(document).ready(function() {
-			$('#cuentasTable').DataTable({
-				"dom" : '<"top"f>rt<"bottom"lp><"clear">',
-				language : {
-					url : 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
-				}
-			});
-		});
+		$(document)
+				.ready(
+						function() {
+							$('#cuentasTable')
+									.DataTable(
+											{
+												"dom" : '<"top"f>rt<"bottom"lp><"clear">',
+												language : {
+													url : 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
+												}
+											});
+						});
 	</script>
 </body>
 </html>
+
+

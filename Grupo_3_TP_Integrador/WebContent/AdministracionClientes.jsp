@@ -137,6 +137,7 @@
 			</div>
 		</div>
 	</div>
+	<%@ include file="Footer.jsp"%>
 
 
 	<!-- <script>
@@ -147,14 +148,16 @@
 		});
 	</script> -->
 	<script type="text/javascript">
-		let table = new DataTable('#clientesTable', {
-			language : {
-				url : 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
-			},
-			paging : true,
-			searching : true,
-			info : true
-		});
+		let table = new DataTable(
+				'#clientesTable',
+				{
+					language : {
+						url : 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
+					},
+					paging : true,
+					searching : true,
+					info : true
+				});
 	</script>
 
 

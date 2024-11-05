@@ -16,7 +16,7 @@
 	crossorigin="anonymous"></script>
 </head>
 <body>
-	<%@ include file="BarraMenu.jsp" %>
+	<%@ include file="BarraMenu.jsp"%>
 	<div class="container">
 		<!-- TODO: mostrar nombre del Cliente. Enlaces con ids del cliente -->
 
@@ -52,5 +52,6 @@
 		</ul>
 
 	</div>
+	<%@ include file="Footer.jsp"%>
 </body>
 </html>
