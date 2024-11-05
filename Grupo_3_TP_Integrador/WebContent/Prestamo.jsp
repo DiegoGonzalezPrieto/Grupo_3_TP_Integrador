@@ -138,7 +138,7 @@
 			</tbody>
 		</table>
 	</div>
-
+	<%@ include file="Footer.jsp"%>
 	<!-- DATATABLE INICIO -->
 	<script type="text/javascript">
 		$(document).ready(function() {

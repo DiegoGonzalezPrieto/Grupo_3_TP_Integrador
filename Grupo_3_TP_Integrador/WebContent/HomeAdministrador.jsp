@@ -16,7 +16,7 @@
 	crossorigin="anonymous"></script>
 </head>
 <body>
-	<%@ include file="BarraMenu.jsp" %>
+	<%@ include file="BarraMenu.jsp"%>
 	<div class="container">
 		<!-- MOSTRAMOS EL ENLACE A LAS OPCIONES QUE TENEMOS DISEÑADAS -->
 		<h1 class="display-3 my-3">Bienvenido, Lucas Cervantez!</h1>
@@ -34,12 +34,12 @@
 
 		<!-- LA IDA ES QUE SEA UN RESUMEN CON CONTADORES DE VARIAS COSAS -->
 		<h2 class="my-3 text-center">Resumen de Actividad</h2>
-		
+
 		<div class="border p-4 rounded-3">
-			
+
 			<div class="row text-center">
 				<div class="col-md-3">
-					<div class="card h-100"> 
+					<div class="card h-100">
 						<div class="card-body">
 							<h5 class="card-title">Clientes Activos</h5>
 							<p class="card-text">1500</p>
@@ -47,7 +47,7 @@
 					</div>
 				</div>
 				<div class="col-md-3">
-					<div class="card h-100"> 
+					<div class="card h-100">
 						<div class="card-body">
 							<h5 class="card-title">Cuentas Abiertas</h5>
 							<p class="card-text">3000</p>
@@ -55,7 +55,7 @@
 					</div>
 				</div>
 				<div class="col-md-3">
-					<div class="card h-100"> 
+					<div class="card h-100">
 						<div class="card-body">
 							<h5 class="card-title">Préstamos Autorizados</h5>
 							<p class="card-text">400</p>
@@ -63,7 +63,7 @@
 					</div>
 				</div>
 				<div class="col-md-3">
-					<div class="card h-100"> 
+					<div class="card h-100">
 						<div class="card-body">
 							<h5 class="card-title">Préstamos Pendientes</h5>
 							<p class="card-text">50</p>
@@ -78,19 +78,20 @@
 		<ul class="nav flex-column">
 			<!-- ACA PODEMOS ITERAR LAS CUENTAS  -->
 			<li class="nav-item my-1"><a class="border nav-link"
-				href="DetallesCuenta.jsp"><span class="text-black">Cuenta 12345</span><br> 
-				<span class="text-black">CBU: 31289756287259</span><br>
-				<span class="text-black">Caja de Ahorro ARS</span></a></li>
+				href="DetallesCuenta.jsp"><span class="text-black">Cuenta
+						12345</span><br> <span class="text-black">CBU: 31289756287259</span><br>
+					<span class="text-black">Caja de Ahorro ARS</span></a></li>
 			<li class="nav-item my-1"><a class="border nav-link"
-				href="DetallesCuenta.jsp"><span class="text-black">Cuenta 67890</span><br> 
-				<span class="text-black">CBU: 5588884393214</span><br>
-				<span class="text-black">Cuenta Corriente</span></a></li>
+				href="DetallesCuenta.jsp"><span class="text-black">Cuenta
+						67890</span><br> <span class="text-black">CBU: 5588884393214</span><br>
+					<span class="text-black">Cuenta Corriente</span></a></li>
 			<li class="nav-item my-1"><a class="border nav-link"
-				href="DetallesCuenta.jsp"><span class="text-black">Cuenta 98765</span><br> 
-				<span class="text-black">CBU: 4577773892535</span><br>
-				<span class="text-black">Caja de Ahorro USD</span></a></li>
+				href="DetallesCuenta.jsp"><span class="text-black">Cuenta
+						98765</span><br> <span class="text-black">CBU: 4577773892535</span><br>
+					<span class="text-black">Caja de Ahorro USD</span></a></li>
 		</ul>
 
 	</div>
+	<%@ include file="Footer.jsp"%>
 </body>
 </html>

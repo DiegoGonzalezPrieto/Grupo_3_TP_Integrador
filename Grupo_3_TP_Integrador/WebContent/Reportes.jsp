@@ -154,13 +154,15 @@ label {
 			</div>
 		</form>
 	</div>
-
+	<%@ include file="Footer.jsp"%>
 	<script type="text/javascript">
-		let table = new DataTable('#tablaReportes', {
-			language : {
-				url : 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
-			}
-		});
+		let table = new DataTable(
+				'#tablaReportes',
+				{
+					language : {
+						url : 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
+					}
+				});
 	</script>
 
 </body>
