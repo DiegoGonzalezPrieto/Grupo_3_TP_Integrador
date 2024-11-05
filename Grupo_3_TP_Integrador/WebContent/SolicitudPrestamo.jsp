@@ -131,9 +131,6 @@
 							value="Solicitar" required name="btnSolicitar"> <input
 							id="btnCancelar" type="button" class="btn btn-danger"
 							value="Cancelar">
-						<!--
-						<input id="btnVolver" type="button" class="btn btn-secondary" value="Volver" onclick="window.location.href='Prestamo.jsp';">
-						-->
 						<a href="Prestamo.jsp" class="btn btn-secondary">Volver</a>
 					</div>
 				</form>

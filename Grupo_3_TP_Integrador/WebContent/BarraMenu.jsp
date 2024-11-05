@@ -16,7 +16,7 @@
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<a class="navbar-brand" href="#" style="margin: 30px">Banco G3-L4</a>
+		<a class="navbar-brand" href="#!" style="margin: 30px">Banco G3-L4</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarNav" aria-controls="navbarNav"
 			aria-expanded="false" aria-label="Toggle navigation">
@@ -35,32 +35,26 @@
 					//String role = (String) session.getAttribute("role");
 					//if ("admin".equals(role)) {
 				%>
-				<!-- 
-                	<li class="nav-item">
-                    	<a class="nav-link" href="HomeAdministrador.jsp">Inicio</a>
-                	</li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="AdministracionClientes.jsp">Clientes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="AdministracionCuentas.jsp">Cuentas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="AutorizacionPrestamos.jsp">Préstamos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="Reportes.jsp">Reportes</a>
-                    </li>
-                 -->
+
+				<li class="nav-item"><a class="nav-link"
+					href="HomeAdministrador.jsp">Inicio (admin)</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="AdministracionClientes.jsp">Adm. de Clientes</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="AdministracionCuentas.jsp">Adm. de Cuentas</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="AutorizacionPrestamos.jsp">Autorización de Préstamos</a></li>
+				<li class="nav-item"><a class="nav-link" href="Reportes.jsp">Reportes</a>
+				</li>
 				<%
 					//} else if ("cliente".equals(role)) {
 				%>
-				<li class="nav-item"><a class="nav-link" href="HomeCliente.jsp">Mis
-						cuentas</a></li>
+				<li class="nav-item"><a class="nav-link" href="HomeCliente.jsp">Inicio (cliente)</a></li>
+				<li class="nav-item"><a class="nav-link" href="Prestamo.jsp">Préstamos</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="SolicitudPrestamo.jsp">Préstamos</a></li>
+					href="DatosCliente.jsp">Mis Datos</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="DatosCliente.jsp">Perfil</a></li>
+					href="Transferencia.jsp">Transferencia</a></li>
 				<%
 					//}
 				%>

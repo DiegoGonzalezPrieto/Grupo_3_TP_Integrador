@@ -26,7 +26,7 @@
 			<li class="nav-item mx-2"><a class="nav-link active"
 				href="Transferencia.jsp">Transferencias</a></li>
 			<li class="nav-item mx-2"><a class="nav-link active"
-				href="SolicitudPrestamo.jsp">Préstamos</a></li>
+				href="Prestamo.jsp">Préstamos</a></li>
 			<li class="nav-item mx-2"><a class="nav-link active"
 				href="PagoPrestamo.jsp">Pago de Cuotas</a></li>
 			<li class="nav-item mx-2"><a class="nav-link active"

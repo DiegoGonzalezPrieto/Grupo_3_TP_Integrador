@@ -51,8 +51,8 @@
 							onclick="return confirm('¿Confirma la transferencia?')">Transferir</button>
 						<button type="reset" class="btn btn-warning">Borrar
 							campos</button>
-						<button type="button" onclick="window.history.back()"
-							class="btn btn-danger">Volver</button>
+						<a href="HomeCliente.jsp"
+							class="btn btn-danger">Volver</a>
 					</div>
 				</form>
 			</div>
