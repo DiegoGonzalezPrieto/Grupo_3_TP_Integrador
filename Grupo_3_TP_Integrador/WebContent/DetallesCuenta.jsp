@@ -6,15 +6,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Detalles de Cuenta</title>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
 <link
 	href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css"
 	rel="stylesheet">
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 	rel="stylesheet">
-
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <style>
 .dataTables_wrapper .dataTables_length {
 	float: left;
@@ -50,7 +50,9 @@
 </style>
 </head>
 <body>
+	
 	<%@ include file="BarraMenu.jsp"%>
+	
 	<div class="container mt-4">
 		<div class="card">
 			<div class="card-header bg-white">
@@ -133,37 +135,35 @@
 		</div>
 	</div>
 
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 	<script type="text/javascript">
-		let table = new DataTable(
-				'#tabla-movimientos',
-				{
-					language : {
-						url : 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
-					}
-				});
+		$(document).ready(function() {
+	        let table = new DataTable('#tabla-movimientos', {
+	            language: {
+	                url: 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-ES.json'
+	            }
+	        });
 
-		$.fn.dataTable.ext.search
-				.push(function(settings, data, dataIndex) {
-					let min = parseFloat($('#min').val());
-					let max = parseFloat($('#max').val());
+	        DataTable.ext.search.push(
+	            function(settings, data, dataIndex) {
+	                let min = parseFloat($('#min').val());
+	                let max = parseFloat($('#max').val());
+	                let importe = parseFloat(data[2].replace(/[^0-9.-]+/g,""));
 
-					let importe = parseFloat(data[2].replace('$', '').replace(
-							',', ''));
+	                if ((isNaN(min) && isNaN(max)) ||
+	                    (isNaN(min) && importe <= max) ||
+	                    (min <= importe && isNaN(max)) ||
+	                    (min <= importe && importe <= max)) {
+	                    return true;
+	                }
+	                return false;
+	            }
+	        );
 
-					if ((isNaN(min) && isNaN(max))
-							|| (isNaN(min) && importe <= max)
-							|| (min <= importe && isNaN(max))
-							|| (min <= importe && importe <= max)) {
-						return true;
-					}
-					return false;
-				});
-
-		$('#min, #max').on('input', function() {
-			table.draw();
-		});
+	        $('#min, #max').on('input', function() {
+	            table.draw();
+	        });
+	    });
 	</script>
 
 </body>
