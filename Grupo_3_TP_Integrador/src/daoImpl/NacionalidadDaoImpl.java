@@ -18,7 +18,7 @@ public class NacionalidadDaoImpl implements NacionalidadDao{
             e.printStackTrace();
         }
 
-        String select = "SELECT id_nacionalidad, nombre FROM nacionalidades WHERE id_nacionalidad = ?;";
+        String select = "SELECT id_nacionalidad, nacionalidad FROM nacionalidades WHERE id_nacionalidad = ?;";
         
         try (Connection conexion = Conexion.getConnection();
                 PreparedStatement statement = conexion.prepareStatement(select)) {
@@ -28,7 +28,7 @@ public class NacionalidadDaoImpl implements NacionalidadDao{
                ResultSet result = statement.executeQuery();
 
                if (result.next()) {
-                   return new Nacionalidad(result.getInt("id_nacionalidad"), result.getString("nombre"));
+                   return new Nacionalidad(result.getInt("id_nacionalidad"), result.getString("nacionalidad"));
                }
 
            } catch (SQLException e) {
@@ -46,7 +46,7 @@ public class NacionalidadDaoImpl implements NacionalidadDao{
                e.printStackTrace();
            }
 
-           String select = "SELECT id_nacionalidad, nombre FROM nacionalidades;";
+           String select = "SELECT id_nacionalidad, nacionalidad FROM nacionalidades;";
            ArrayList<Nacionalidad> resultado = new ArrayList<>();
 
            try (Connection conexion = Conexion.getConnection();
@@ -55,7 +55,7 @@ public class NacionalidadDaoImpl implements NacionalidadDao{
                ResultSet result = statement.executeQuery();
 
                while (result.next()) {
-                   Nacionalidad nacionalidad = new Nacionalidad(result.getInt("id_nacionalidad"), result.getString("nombre"));
+                   Nacionalidad nacionalidad = new Nacionalidad(result.getInt("id_nacionalidad"), result.getString("nacionalidad"));
                    resultado.add(nacionalidad);
                }
 
