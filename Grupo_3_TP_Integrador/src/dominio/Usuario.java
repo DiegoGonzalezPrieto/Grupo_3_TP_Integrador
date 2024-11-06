@@ -4,14 +4,14 @@ public class Usuario {
 	private int id;
     private String nombreUsuario;
     private String pass;
-    private int idTipoUsuario;
+    private TipoUsuario tipoUsuario;
     private boolean estadoUsuario;
 
-    public Usuario(int id, String nombreUsuario, String pass, int idTipoUsuario, boolean estadoUsuario) {
+    public Usuario(int id, String nombreUsuario, String pass, TipoUsuario tipoUsuario, boolean estadoUsuario) {
         this.id = id;
         this.nombreUsuario = nombreUsuario;
         this.pass = pass;
-        this.idTipoUsuario = idTipoUsuario;
+        this.tipoUsuario = tipoUsuario;
         this.estadoUsuario = estadoUsuario;
 
     }
@@ -40,26 +40,30 @@ public class Usuario {
 		this.pass = pass;
 	}
 
-	public int getIdTipoUsuario() {
-		return idTipoUsuario;
+	public TipoUsuario getTipoUsuario() {
+		return tipoUsuario;
 	}
 
-	public void setIdTipoUsuario(int idTipoUsuario) {
-		this.idTipoUsuario = idTipoUsuario;
+	public void setTipoUsuario(TipoUsuario tipoUsuario) {
+		this.tipoUsuario = tipoUsuario;
 	}
 
-	public boolean isEstadoUsuario() {
+	public boolean activo() {
 		return estadoUsuario;
 	}
 
 	public void setEstadoUsuario(boolean estadoUsuario) {
 		this.estadoUsuario = estadoUsuario;
 	}
+	
+	public boolean esAdmin() {
+		return this.tipoUsuario.getId() == 2;
+	}
 
 	@Override
 	public String toString() {
 		return "Usuario [id=" + id + ", nombreUsuario=" + nombreUsuario + ", pass=" + pass + ", idTipoUsuario="
-				+ idTipoUsuario + ", estadoUsuario=" + estadoUsuario + "]";
+				+ tipoUsuario + ", estadoUsuario=" + estadoUsuario + "]";
 	}
 	
 	

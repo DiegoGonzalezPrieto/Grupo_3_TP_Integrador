@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import dao.UsuarioDao;
+import dominio.TipoUsuario;
 import dominio.Usuario;
 
 public class UsuarioDaoImpl implements UsuarioDao {
@@ -29,11 +30,13 @@ public class UsuarioDaoImpl implements UsuarioDao {
             ResultSet result = statement.executeQuery();
 
             if (result.next()) {
+            	TipoUsuarioDaoImpl dao = new TipoUsuarioDaoImpl();
+            	TipoUsuario tipo = dao.buscarPorId(result.getInt("tipo_usuario"));
                 return new Usuario(
                     result.getInt("id_usuario"),
                     result.getString("nombre_usuario"),
                     result.getString("pass"),
-                    result.getInt("tipo_usuario"),
+                    tipo,
                     result.getBoolean("estado_usuario")
                 );
             }
@@ -56,6 +59,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
         String select = "SELECT id_usuario, nombre_usuario, pass, tipo_usuario, estado_usuario "
         		+ "FROM usuarios WHERE estado_usuario = 1;";
         ArrayList<Usuario> resultado = new ArrayList<>();
+        ArrayList<TipoUsuario> tipos = new TipoUsuarioDaoImpl().buscarTodos();
 
         try (Connection conexion = Conexion.getConnection();
              PreparedStatement statement = conexion.prepareStatement(select)) {
@@ -63,11 +67,18 @@ public class UsuarioDaoImpl implements UsuarioDao {
             ResultSet result = statement.executeQuery();
 
             while (result.next()) {
+            	TipoUsuario tipo = new TipoUsuario(1, "Cliente");
+            	for (TipoUsuario tipoUsuario : tipos) {
+					if (tipoUsuario.getId() == result.getInt("tipo_usuario")) {
+						tipo = tipoUsuario;
+						break;
+					}
+				}
                 Usuario usuario = new Usuario(
                     result.getInt("id_usuario"),
                     result.getString("nombre_usuario"),
                     result.getString("pass"),
-                    result.getInt("tipo_usuario"),
+                    tipo,
                     result.getBoolean("estado_usuario")
                 );
                 resultado.add(usuario);
@@ -88,10 +99,11 @@ public class UsuarioDaoImpl implements UsuarioDao {
         try (Connection conexion = Conexion.getConnection();
              PreparedStatement statement = conexion.prepareStatement(insert)) {
 
+        	
             statement.setString(1, usuario.getNombreUsuario());
             statement.setString(2, usuario.getPass());
-            statement.setInt(3, usuario.getIdTipoUsuario());
-            statement.setBoolean(4, usuario.isEstadoUsuario());
+            statement.setInt(3, usuario.getTipoUsuario().getId());
+            statement.setBoolean(4, usuario.activo());
 
             statement.executeUpdate();
 
@@ -110,8 +122,8 @@ public class UsuarioDaoImpl implements UsuarioDao {
 
             statement.setString(1, usuario.getNombreUsuario());
             statement.setString(2, usuario.getPass());
-            statement.setInt(3, usuario.getIdTipoUsuario());
-            statement.setBoolean(4, usuario.isEstadoUsuario());
+            statement.setInt(3, usuario.getTipoUsuario().getId());
+            statement.setBoolean(4, usuario.activo());
             statement.setInt(5, usuario.getId());
 
             statement.executeUpdate();
