@@ -19,6 +19,9 @@ public class Cliente extends Usuario {
 	private Provincia provincia;
 	private TipoUsuario tipoUsuario;
 	
+	public Cliente() {
+		
+	}
 	
 	
 	/*Un cliente tiene un DNI, CUIL, nombre, apellido, sexo, nacionalidad,

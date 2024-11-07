@@ -2,11 +2,15 @@ package daoImpl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import dao.ClienteDao;
 import dao.UsuarioDao;
 import dominio.Cliente;
+import dominio.Localidad;
+import dominio.Nacionalidad;
+import dominio.Provincia;
 
 public class ClienteDaoImpl implements ClienteDao {
 	
@@ -98,15 +102,101 @@ public class ClienteDaoImpl implements ClienteDao {
 	}
 
 	@Override
-	public ClienteDaoImpl encontrarPorId(int id) {
+	public Cliente encontrarPorId(int id) {
 		
-		return null;
+		String selectCliente = "SELECT * FROM clientes WHERE idCliente = ?";
+								//faltan los joins para los nombres de localidad, provincia y nacionalidad
+	    try {
+	        Class.forName("com.mysql.cj.jdbc.Driver");
+	    } catch (ClassNotFoundException e) {
+	        e.printStackTrace();
+	        return null;
+	    }
+
+	    try (Connection conexion = Conexion.getConnection();
+	         PreparedStatement statement = conexion.prepareStatement(selectCliente)) {
+	        statement.setInt(1, id); 
+	        ResultSet resultSet = statement.executeQuery();
+	        if (resultSet.next()) {
+	        	 Cliente cliente = new Cliente();
+	             cliente.setIdCliente(resultSet.getInt("id_Cliente"));
+	             cliente.setDni(resultSet.getString("dni"));
+	             cliente.setCuil(resultSet.getString("cuil"));
+	             cliente.setNombre(resultSet.getString("nombre"));
+	             cliente.setApellido(resultSet.getString("apellido"));
+	             cliente.setCorreoElectronico(resultSet.getString("email"));
+	             cliente.setTelefono(resultSet.getString("telefono"));
+	             cliente.setGenero(resultSet.getString("sexo"));
+	             cliente.setFechaNacimiento(resultSet.getDate("fecha_nacimiento"));
+	             cliente.setDireccion(resultSet.getString("direccion"));
+	             Nacionalidad nacionalidad = new Nacionalidad(resultSet.getInt("nacionalidad_id"), resultSet.getString("nacionalidad"));
+	             //nacionalidad.setId(resultSet.getInt("nacionalidad_id")); 
+	             //nacionalidad.setNombre(resultSet.getString("nacionalidad_nombre")); 
+	             cliente.setNacionalidad(nacionalidad);
+	             Provincia provincia = new Provincia(resultSet.getInt("id_provincia"), resultSet.getString("provincia"));
+	             //provincia.setId(resultSet.getInt("id_provincia")); 
+	             //provincia.setNombre(resultSet.getString("provincia")); 
+	             cliente.setProvincia(provincia);
+	             Localidad localidad = new Localidad(resultSet.getInt("localidad_id"), resultSet.getString("localidad"), provincia);
+	             //localidad.setId(resultSet.getInt("id_localidad")); 
+	             //localidad.setNombre(resultSet.getString("localidad_nombre")); 
+	             cliente.setLocalidad(localidad);
+	             return cliente;
+	        } else {
+	            return null;
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return null;
+	    }
 	}
 
 	@Override
-	public ClienteDaoImpl encontrarPorNombre(String nombre) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Cliente encontrarPorNombre(String nombre) {
+		
+		String selectCliente = "SELECT * FROM clientes WHERE nombre = ?"; 
+        					// Faltan los JOINs para los nombres de localidad, provincia y nacionalidad
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(selectCliente)) {
+		
+			statement.setString(1, nombre); 
+			ResultSet resultSet = statement.executeQuery();
+			
+			if (resultSet.next()) {
+				Cliente cliente = new Cliente();
+				cliente.setIdCliente(resultSet.getInt("id_Cliente"));
+				cliente.setDni(resultSet.getString("dni"));
+				cliente.setCuil(resultSet.getString("cuil"));
+				cliente.setNombre(resultSet.getString("nombre"));
+				cliente.setApellido(resultSet.getString("apellido"));
+				cliente.setCorreoElectronico(resultSet.getString("email"));
+				cliente.setTelefono(resultSet.getString("telefono"));
+				cliente.setGenero(resultSet.getString("sexo"));
+				cliente.setFechaNacimiento(resultSet.getDate("fecha_nacimiento"));
+				cliente.setDireccion(resultSet.getString("direccion"));		
+				Nacionalidad nacionalidad = new Nacionalidad(resultSet.getInt("nacionalidad_id"), resultSet.getString("nacionalidad"));
+				cliente.setNacionalidad(nacionalidad);		
+				Provincia provincia = new Provincia(resultSet.getInt("id_provincia"), resultSet.getString("provincia"));
+				cliente.setProvincia(provincia);
+				Localidad localidad = new Localidad(resultSet.getInt("localidad_id"), resultSet.getString("localidad"), provincia);
+				cliente.setLocalidad(localidad);				
+				return cliente;
+				} else {
+				return null;
+			}
+			
+			} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+			}
+				}
 
-}
+	}

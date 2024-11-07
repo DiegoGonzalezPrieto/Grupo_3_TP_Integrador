@@ -8,7 +8,7 @@ public interface ClienteDao {
 	public boolean update(int id, Cliente c);
 	public boolean delete(int id);
 	
-	public ClienteDao encontrarPorId(int id);
-	public ClienteDao encontrarPorNombre(String nombre);
+	public Cliente encontrarPorId(int id);
+	public Cliente encontrarPorNombre(String nombre);
 
 }
