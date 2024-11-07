@@ -7,6 +7,7 @@ import negocio.ClienteNegocio;
 public class ClienteNegocioImpl implements ClienteNegocio {
 
 	private ClienteDaoImpl clienteDao = new ClienteDaoImpl();
+	
 	@Override
 	public void insert(Cliente c) {
 		clienteDao.insert(c);
