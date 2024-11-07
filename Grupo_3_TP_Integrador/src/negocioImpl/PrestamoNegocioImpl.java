@@ -15,9 +15,23 @@ public class PrestamoNegocioImpl implements PrestamoNegocio {
 	///ATRIBUTOS
 	
 	private PrestamoDao pDao = new PrestamoDaoImpl();	
-	//private CuotaNegocio cuotaNeg = new CuotaNegImpl();
-	//private CuentaNegocio cuentaNeg = new CuentaNegocioImpl();
+	//private CuotaNegocio cuotaNeg = new CuotaNegImpl(); esto para el metodo de aprobar prestamo
+	//private CuentaNegocio cuentaNeg = new CuentaNegocioImpl(); esto para el metodo aprobar prestamo
 	
+	
+	
+	//-------------------------------METODOS LOCALES------------------------------------//
+	
+	public boolean aprobarPrestamo(Prestamo prestamo) throws SQLException{
+		
+		boolean aprobacion = false;
+		
+		return aprobacion;
+		
+	}
+	
+	
+	//-------------------------------METODOS DML ------------------------------------//
 	
 	@Override
 	public boolean crearPrestamo(Prestamo prestamo) throws SQLException {
@@ -50,76 +64,174 @@ public class PrestamoNegocioImpl implements PrestamoNegocio {
 		
 	}
 
+	//-------------------------------METODOS PARA LISTAR ------------------------------------//
+	
 	@Override
 	public Prestamo obtenerPrestamoPorId(int idPrestamo) throws SQLException {
 		
-		return null;
+		try {
+			return pDao.obtenerPrestamoPorId(idPrestamo);
+		} 
+		catch (SQLException ex) {
+			throw ex;
+		}
+		catch (Exception ex) {
+			throw ex;
+		}
 	}
 
 	@Override
 	public ArrayList<Prestamo> listarPrestamosXCliente(int idCliente) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		try {
+			return pDao.listarPrestamosXCliente(idCliente);
+		} 
+		catch (SQLException ex) {
+			throw ex;
+		}
+		catch (Exception ex) {
+			throw ex;
+		}
 	}
 
 	@Override
 	public ArrayList<Prestamo> listarTodosLosPrestamos() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		try {
+			return pDao.listarTodosLosPrestamos();
+		} 
+		catch (SQLException ex) {
+			throw ex;
+		}
+		catch (Exception ex) {
+			throw ex;
+		}
 	}
 
 	@Override
 	public ArrayList<Prestamo> listarTodosLosPrestamosAprobados() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		try {
+			return pDao.listarTodosLosPrestamosAprobados();
+		} 
+		catch (SQLException ex) {
+			throw ex;
+		}
+		catch (Exception ex) {
+			throw ex;
+		}
 	}
 
 	@Override
 	public ArrayList<Prestamo> listarTodosLosPrestamosRechazados() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		try {
+			return pDao.listarTodosLosPrestamosRechazados();
+		} 
+		catch (SQLException ex) {
+			throw ex;
+		}
+		catch (Exception ex) {
+			throw ex;
+		}
 	}
 
 	@Override
-	public ArrayList<Prestamo> listarTodosLosPrestamosEnEvaluacio() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Prestamo> listarTodosLosPrestamosEnProceso() throws SQLException {
+		
+		try {
+			return pDao.listarTodosLosPrestamosEnProceso();
+		} 
+		catch (SQLException ex) {
+			throw ex;
+		}
+		catch (Exception ex) {
+			throw ex;
+		}
 	}
 
 	@Override
 	public int contarPrestamosAprobados() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		try {
+			return pDao.contarPrestamosAprobados();
+		} 
+		catch (SQLException ex) {
+			throw ex;
+		}
+		catch (Exception ex) {
+			throw ex;
+		}
 	}
 
 	@Override
 	public int contarPrestamosRechazados() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		try {
+			return pDao.contarPrestamosRechazados();
+		} 
+		catch (SQLException ex) {
+			throw ex;
+		}
+		catch (Exception ex) {
+			throw ex;
+		}
 	}
 
 	@Override
 	public int contarPrestamosEnEvaluacion() throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		try {
+			return pDao.contarPrestamosEnEvaluacion();
+		} 
+		catch (SQLException ex) {
+			throw ex;
+		}
+		catch (Exception ex) {
+			throw ex;
+		}
 	}
 
 	@Override
 	public BigDecimal sumarPrestamosAprobados() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		try {
+			return pDao.sumarPrestamosAprobados();
+		} 
+		catch (SQLException ex) {
+			throw ex;
+		}
+		catch (Exception ex) {
+			throw ex;
+		}
 	}
 
 	@Override
 	public BigDecimal sumarPrestamosRechazados() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		try {
+			return pDao.sumarPrestamosRechazados();
+		} 
+		catch (SQLException ex) {
+			throw ex;
+		}
+		catch (Exception ex) {
+			throw ex;
+		}
 	}
 
 	@Override
 	public BigDecimal sumarPrestamosEnEvaluacion() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		try {
+			return pDao.sumarPrestamosEnEvaluacion();
+		} 
+		catch (SQLException ex) {
+			throw ex;
+		}
+		catch (Exception ex) {
+			throw ex;
+		}
 	}
 
 }

@@ -9,6 +9,10 @@ public class EstadoPrestamo {
 		this.id = id;
 		this.estado = estado;
 	}
+	
+	public EstadoPrestamo() {
+		
+	}
 
 	public int getId() {
 		return id;

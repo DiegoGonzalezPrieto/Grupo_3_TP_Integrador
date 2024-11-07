@@ -14,30 +14,37 @@ public class Prestamo {
 	private int mesesPlazo;
 	private BigDecimal importeMensual;
 	private int cuotas;
-	private Date fechaValidacion;
 	private EstadoPrestamo estadoValidacion;
 	
 	//CONSTRUCTOR POR REFERENCIA
 	
 	public Prestamo (int id, Cliente cliente, Cuenta cuenta, Date fechaAltaPrestamo, BigDecimal importePrestamo,
-	int mesesPlazo,	BigDecimal importeMensual, int cuotas, Date fechaValidacion, EstadoPrestamo estadoValidacion) 
-	{
+	int mesesPlazo,	BigDecimal importeMensual, int cuotas, EstadoPrestamo estadoValidacion) 
+	{	
+		super();
 		this.id = id;
 		this.cliente= cliente;
 		this.cuenta = cuenta;
 		this.fechaAltaPrestamo = fechaAltaPrestamo;
 		this.importePrestamo = importePrestamo;
 		this.cuotas = cuotas;
-		this.fechaValidacion = fechaValidacion;
 		this.estadoValidacion = estadoValidacion;
 		
 	}
 	
-	//CONSTRUCTOR VACIO
-	
+	//CONSTRUCTOR VACIO	
+
 	public Prestamo () {}
 	
 	//GETTER AND SETTER
+	
+	public EstadoPrestamo getEstadoValidacion() {
+		return estadoValidacion;
+	}
+	
+	public void setEstadoValidacion(EstadoPrestamo estadoValidacion) {
+		this.estadoValidacion = estadoValidacion;
+	}
 
 	public int getId() {
 		return id;
@@ -103,22 +110,14 @@ public class Prestamo {
 		this.cuotas = cuotas;
 	}
 
-	public Date getFechaValidacion() {
-		return fechaValidacion;
-	}
-
-	public void setFechaValidacion(Date fechaValidacion) {
-		this.fechaValidacion = fechaValidacion;
-	}
-
-	
+		
 	//TOSTRING
 	
 	@Override
 	public String toString() {
 		return "Prestamo [id=" + id + ", cliente=" + cliente + ", fechaAltaPrestamo=" + fechaAltaPrestamo
 				+ ", importePrestamo=" + importePrestamo + ", mesesPlazo=" + mesesPlazo + ", importeMensual="
-				+ importeMensual + ", cuotas=" + cuotas + ", fechaValidacion=" + fechaValidacion + ", estadoValidacion="
+				+ importeMensual + ", cuotas=" + cuotas + ", fechaValidacion=" + ", estadoValidacion="
 				+ estadoValidacion + "]";
 	};
 	

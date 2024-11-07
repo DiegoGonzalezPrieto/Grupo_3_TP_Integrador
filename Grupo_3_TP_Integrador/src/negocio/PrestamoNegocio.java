@@ -18,7 +18,7 @@ public interface PrestamoNegocio {
 	public ArrayList<Prestamo> listarTodosLosPrestamos() throws SQLException;
 	public ArrayList<Prestamo> listarTodosLosPrestamosAprobados() throws SQLException;
 	public ArrayList<Prestamo> listarTodosLosPrestamosRechazados() throws SQLException;
-	public ArrayList<Prestamo> listarTodosLosPrestamosEnEvaluacio() throws SQLException;
+	public ArrayList<Prestamo> listarTodosLosPrestamosEnProceso() throws SQLException;
 	
 	//METODOS PARA INFORME
 	public int contarPrestamosAprobados() throws SQLException;
