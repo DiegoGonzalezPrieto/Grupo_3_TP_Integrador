@@ -104,8 +104,25 @@ public class ClienteDaoImpl implements ClienteDao {
 	@Override
 	public Cliente encontrarPorId(int id) {
 		
-		String selectCliente = "SELECT * FROM clientes WHERE idCliente = ?";
-								//faltan los joins para los nombres de localidad, provincia y nacionalidad
+		String selectCliente = "Select \r\n" + 
+								"	C.id_cliente As 'ID'," + 
+								"    C.dni As 'DNI'," + 
+								"    C.cuil As 'CUIL'," + 
+								"    C.nombre As 'Nombre'," + 
+								"    C.apellido As 'Apellido'," + 
+								"    C.email as 'E-mail'," + 
+								"    C.telefono As 'Telefono'," + 
+								"    C.sexo as 'Genero'," + 
+								"    C.fecha_nacimiento As 'Fecha de nacimiento' ," + 
+								"    C.direccion As 'Dirección'," + 
+								"    N.nacionalidad As 'Nacionalidad'," + 
+								"    P.provincia As 'Provincia'" + 
+								"from clientes" + 
+								"	Inner Join nacionalidades N on N.id_nacionalidad = C.id_nacionalidad" + 
+								"	Inner Join provincias P on P.id_provincia = C.id_provincia" + 
+								"	Inner Join localidades L on L.id_localidad = C.id_localidad" + 
+								"Where C.id_cliente = ?";
+								
 	    try {
 	        Class.forName("com.mysql.cj.jdbc.Driver");
 	    } catch (ClassNotFoundException e) {
@@ -155,8 +172,25 @@ public class ClienteDaoImpl implements ClienteDao {
 	@Override
 	public Cliente encontrarPorNombre(String nombre) {
 		
-		String selectCliente = "SELECT * FROM clientes WHERE nombre = ?"; 
-        					// Faltan los JOINs para los nombres de localidad, provincia y nacionalidad
+		String selectCliente = "Select \r\n" + 
+								"	C.id_cliente As 'ID'," + 
+								"    C.dni As 'DNI'," + 
+								"    C.cuil As 'CUIL'," + 
+								"    C.nombre As 'Nombre'," + 
+								"    C.apellido As 'Apellido'," + 
+								"    C.email as 'E-mail'," + 
+								"    C.telefono As 'Telefono'," + 
+								"    C.sexo as 'Genero'," + 
+								"    C.fecha_nacimiento As 'Fecha de nacimiento' ," + 
+								"    C.direccion As 'Dirección'," + 
+								"    N.nacionalidad As 'Nacionalidad'," + 
+								"    P.provincia As 'Provincia'" + 
+								"from clientes C" + 
+								"	Inner Join nacionalidades N on N.id_nacionalidad = C.id_nacionalidad" + 
+								"	Inner Join provincias P on P.id_provincia = C.id_provincia" + 
+								"	Inner Join localidades L on L.id_localidad = C.id_localidad" + 
+								"Where C.nombre = ?"; 
+        					
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
