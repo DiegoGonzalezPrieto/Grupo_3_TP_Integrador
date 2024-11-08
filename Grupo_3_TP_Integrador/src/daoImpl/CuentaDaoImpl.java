@@ -47,7 +47,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
     @Override
     public boolean update(Cuenta cuenta) {
-        String update = "UPDATE cuentas SET id_tipo_cuenta = ?, saldo = ?, activa = ? WHERE id = ?";
+        String update = "UPDATE cuentas SET id_tipo_cuenta = ?, saldo = ?, activa = ? WHERE id_cuenta = ?";
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
