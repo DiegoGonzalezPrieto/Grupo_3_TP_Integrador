@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import dao.ClienteDao;
 import dao.UsuarioDao;
@@ -11,6 +12,8 @@ import dominio.Cliente;
 import dominio.Localidad;
 import dominio.Nacionalidad;
 import dominio.Provincia;
+import dominio.TipoUsuario;
+import dominio.Usuario;
 
 public class ClienteDaoImpl implements ClienteDao {
 	
@@ -27,9 +30,9 @@ public class ClienteDaoImpl implements ClienteDao {
 
 	@Override
 	public boolean insert(Cliente c) {
-		String insert = "INSERT INTO clientes (idCliente, dni, cuil, nombre, apellido, correoElectronico, telefono, "
-                + "genero, nacionalidad, fechaNacimiento, direccion, localidad, provincia, tipoUsuario) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";	
+		String insert = "INSERT INTO clientes (id_cliente, dni, cuil, nombre, apellido, email, telefono, "
+                + "sexo, nacionalidad, fecha_nacimiento, direccion, localidad, provincia) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";	
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -50,7 +53,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	        statement.setString(11, c.getDireccion());
 	        statement.setInt(12, c.getLocalidad().getId());
 	        statement.setInt(13, c.getProvincia().getId());
-	        statement.setInt(14, c.getTipoUsuario().getId());
+	       
 			int rowsAffected = statement.executeUpdate();
 			return rowsAffected > 0;
 
@@ -62,8 +65,8 @@ public class ClienteDaoImpl implements ClienteDao {
 
 	@Override
 	public boolean update(int id, Cliente c) {
-		String updateCliente = "UPDATE clientes SET dni = ?, cuil = ?, nombre = ?, apellido = ?, correoElectronico = ?, "
-                + "telefono = ?, genero = ?, nacionalidad = ?, fechaNacimiento = ?, direccion = ?, "
+		String updateCliente = "UPDATE clientes SET dni = ?, cuil = ?, nombre = ?, apellido = ?, email = ?, "
+                + "telefono = ?, sexo = ?, nacionalidad = ?, fecha_nacimiento = ?, direccion = ?, "
                 + "localidad = ?, provincia = ? WHERE idCliente = ?";
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -97,7 +100,10 @@ public class ClienteDaoImpl implements ClienteDao {
 
 	@Override
 	public boolean delete(int id) {
-		
+		UsuarioDaoImpl usuDao = new UsuarioDaoImpl(); 
+		Cliente cliente = new Cliente();
+		cliente = encontrarPorId(id);
+		usuDao.eliminarUsuario(cliente.getId());
 		return false;
 	}
 
@@ -117,6 +123,7 @@ public class ClienteDaoImpl implements ClienteDao {
 								"    C.direccion As 'Dirección'," + 
 								"    N.nacionalidad As 'Nacionalidad'," + 
 								"    P.provincia As 'Provincia'" + 
+								"	 L.localidad As 'Localidad" +
 								"from clientes" + 
 								"	Inner Join nacionalidades N on N.id_nacionalidad = C.id_nacionalidad" + 
 								"	Inner Join provincias P on P.id_provincia = C.id_provincia" + 
@@ -172,8 +179,8 @@ public class ClienteDaoImpl implements ClienteDao {
 	@Override
 	public Cliente encontrarPorNombre(String nombre) {
 		
-		String selectCliente = "Select \r\n" + 
-								"	C.id_cliente As 'ID'," + 
+		String selectCliente = "Select" + 
+								"  	 C.id_cliente As 'ID'," + 
 								"    C.dni As 'DNI'," + 
 								"    C.cuil As 'CUIL'," + 
 								"    C.nombre As 'Nombre'," + 
@@ -185,6 +192,7 @@ public class ClienteDaoImpl implements ClienteDao {
 								"    C.direccion As 'Dirección'," + 
 								"    N.nacionalidad As 'Nacionalidad'," + 
 								"    P.provincia As 'Provincia'" + 
+								"	 L.localidad As 'Localidad" +
 								"from clientes C" + 
 								"	Inner Join nacionalidades N on N.id_nacionalidad = C.id_nacionalidad" + 
 								"	Inner Join provincias P on P.id_provincia = C.id_provincia" + 
@@ -216,11 +224,11 @@ public class ClienteDaoImpl implements ClienteDao {
 				cliente.setGenero(resultSet.getString("sexo"));
 				cliente.setFechaNacimiento(resultSet.getDate("fecha_nacimiento"));
 				cliente.setDireccion(resultSet.getString("direccion"));		
-				Nacionalidad nacionalidad = new Nacionalidad(resultSet.getInt("nacionalidad_id"), resultSet.getString("nacionalidad"));
+				Nacionalidad nacionalidad = new Nacionalidad(resultSet.getInt("id_nacionalidad"), resultSet.getString("nacionalidad"));
 				cliente.setNacionalidad(nacionalidad);		
 				Provincia provincia = new Provincia(resultSet.getInt("id_provincia"), resultSet.getString("provincia"));
 				cliente.setProvincia(provincia);
-				Localidad localidad = new Localidad(resultSet.getInt("localidad_id"), resultSet.getString("localidad"), provincia);
+				Localidad localidad = new Localidad(resultSet.getInt("id_localidad"), resultSet.getString("localidad"), provincia);
 				cliente.setLocalidad(localidad);				
 				return cliente;
 				} else {
@@ -233,4 +241,86 @@ public class ClienteDaoImpl implements ClienteDao {
 			}
 				}
 
+	@Override
+	public ArrayList<Cliente> buscarTodos() {
+		
+		try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        String select = "Select" + 
+				"  	 C.id_cliente As 'ID'," + 
+				"    C.dni As 'DNI'," + 
+				"    C.cuil As 'CUIL'," + 
+				"    C.nombre As 'Nombre'," + 
+				"    C.apellido As 'Apellido'," + 
+				"    C.email as 'E-mail'," + 
+				"    C.telefono As 'Telefono'," + 
+				"    C.sexo as 'Genero'," + 
+				"    C.fecha_nacimiento As 'Fecha de nacimiento' ," + 
+				"    C.direccion As 'Dirección'," + 
+				"	 L.localidad As 'Localidad" +
+				"    N.nacionalidad As 'Nacionalidad'," + 
+				"    P.provincia As 'Provincia'" + 
+				"from clientes C";
+        
+        ArrayList<Cliente> listado = new ArrayList<>();
+        ArrayList<Nacionalidad> naciones = new NacionalidadDaoImpl().buscarTodos();
+        ArrayList<Localidad> localidades = new LocalidadDaoImpl().buscarTodos();
+        ArrayList<Provincia> provincias = new ProvinciaDaoImpl().buscarTodos();
+        
+        try (Connection conexion = Conexion.getConnection();
+             PreparedStatement statement = conexion.prepareStatement(select)) {
+
+            ResultSet result = statement.executeQuery();
+
+          while (result.next()) {
+        	 
+        	  Nacionalidad n = null;
+        	  Provincia p = null;
+        	  Localidad l = null;
+        	  for(Nacionalidad nacion : naciones) {
+        		  if(nacion.getId() == result.getInt("id_nacionalidad")) {
+        			  n = new Nacionalidad(nacion.getId(), nacion.getNombre());
+        			  break;
+        		  }
+        	  }
+        	  for(Provincia provincia : provincias) {
+        		  if(provincia.getId() == result.getInt("id_provincia")) {
+        			  p = new Provincia(provincia.getId(), provincia.getNombre());
+        			  break;
+        		  }
+        	  }
+        	  for(Localidad localidad : localidades) {
+        		  if(localidad.getId() == result.getInt("id_localidad")) {
+        			  l = new Localidad(result.getInt("id_localidad") , result.getString("localidad"), p);
+        			  break;
+        		  }
+        	  }
+        	  Cliente cliente = new Cliente();
+        	  cliente.setId(result.getInt("id_cliente"));
+        	  cliente.setDni(result.getString("DNI"));
+        	  cliente.setCuil(result.getString("cuil"));
+        	  cliente.setNombre(result.getString("nombre"));
+        	  cliente.setApellido(result.getString("apellido"));
+        	  cliente.setCorreoElectronico(result.getString("email"));
+        	  cliente.setTelefono(result.getString("telefono"));
+        	  cliente.setGenero(result.getString("sexo"));
+        	  cliente.setFechaNacimiento(result.getDate("fecha_nacimiento"));
+        	  cliente.setNacionalidad(n);
+        	  cliente.setLocalidad(l);
+        	  cliente.setProvincia(p);
+      
+              listado.add(cliente);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            
+        }
+        return listado;
 	}
+
+}

@@ -1,5 +1,7 @@
 package negocioImpl;
 
+import java.util.ArrayList;
+
 import daoImpl.ClienteDaoImpl;
 import dominio.Cliente;
 import negocio.ClienteNegocio;
@@ -24,6 +26,25 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 		clienteDao.delete(id);
 		
 	}
+
+	@Override
+	public Cliente buscarPorId(int id) {
+		return clienteDao.encontrarPorId(id);
+		
+	}
+
+	@Override
+	public ArrayList<Cliente> listar() {
+		return clienteDao.buscarTodos();
+		
+	}
+
+	@Override
+	public Cliente buscarPorNombre(String nombre) {
+		return clienteDao.encontrarPorNombre(nombre);
+	}
+
+
 
 }
 

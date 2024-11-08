@@ -1,5 +1,7 @@
 package dao;
 
+import java.util.ArrayList;
+
 import dominio.Cliente;
 
 public interface ClienteDao {
@@ -10,5 +12,7 @@ public interface ClienteDao {
 	
 	public Cliente encontrarPorId(int id);
 	public Cliente encontrarPorNombre(String nombre);
+	
+	public ArrayList<Cliente> buscarTodos();
 
 }
