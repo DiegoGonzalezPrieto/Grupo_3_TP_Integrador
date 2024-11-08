@@ -73,7 +73,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
     @Override
     public boolean delete(int id) {
-        String delete = "UPDATE cuentas SET activa = false WHERE id = ?";
+        String delete = "UPDATE cuentas SET estado_cuenta = false WHERE id_cuenta = 1";
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -95,9 +95,9 @@ public class CuentaDaoImpl implements CuentaDao {
 
     @Override
     public Cuenta encontrarPorId(int id) {
-        String encontrarPorId = "SELECT c.*, cl.nombre as nombre_cliente, tc.descripcion as tipo_cuenta " +
-                       "FROM cuentas c INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente " +
-                       "INNER JOIN tipos_cuenta tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta WHERE c.id = ?";
+        String encontrarPorId = "SELECT c.*, cl.nombre as nombre_cliente, tc.tipo_cuenta as tipo_cuenta " + 
+        		"FROM cuentas c INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente " + 
+        		"INNER JOIN tipos_cuenta tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta WHERE c.id_cuenta = ?";
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -189,7 +189,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
     @Override
     public int encontrarCuentaActivaPorCliente(int idCliente) {
-        String cuentaActiva = "SELECT COUNT(*) FROM cuentas WHERE id_cliente = ? AND activa = true";
+        String cuentaActiva = "SELECT COUNT(*) as cantidad FROM cuentas WHERE id_cliente = ? AND activa = true";
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -216,7 +216,7 @@ public class CuentaDaoImpl implements CuentaDao {
     
 	@Override
 	public boolean existeCBU(String cbu) {
-		String exiteCBU = "SELECT COUNT(*) FROM cuentas WHERE cbu = ? AND id != ?";
+		String exiteCBU = "SELECT COUNT(*) FROM cuentas WHERE cbu = ? AND id_cuenta != ?";
 	    
 	    try {
 	        Class.forName("com.mysql.jdbc.Driver");
