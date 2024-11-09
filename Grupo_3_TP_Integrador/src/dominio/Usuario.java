@@ -66,5 +66,8 @@ public class Usuario {
 				+ tipoUsuario + ", estadoUsuario=" + estadoUsuario + "]";
 	}
 	
+	public Usuario() {
+		
+	}
 	
 }
