@@ -5,9 +5,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-
-
+import java.util.Date;
 
 import dao.CuotaDao;
 import dominio.Cuota;
@@ -16,18 +16,18 @@ public class CuotaDaoImp implements CuotaDao {
 	
 	//ATRIBUTOS
 	//private PreparedStatement st;
-	//private ResultSet rs;
+	private ResultSet rs;
 	
 	
 	//CONSULTAS SQL
 	
 	private static final String insert = "INSERT INTO cuotas (id_prestamo, numero_cuota, monto_pagado, fecha_pago, estado_pago) VALUES (?, ?, ?, ?, ?)";
-	private static final String updateEstado = "UPDATE cuotas SET estado_pago = ? WHERE id_cuota= ?";
+	private static final String registrarPago = "UPDATE cuotas SET estado_pago = ? WHERE id_cuota= ?";
 	
-	private static final String obtenerCuotaPorId;
-	private static final String listarCuotasPrestamo;
-	private static final String listarCuotasPrestamoPagado;
-	private static final String listarCuotasPrestamoPendiente;
+	private static final String obtenerCuotaPorId = "SELECT (C.id_cuota, C.id_prestamo, C.numero_cuota, C.monto_pagado, C.fecha_pago, C.estado_pago, P.id_cliente, P.fecha_alta_prestamo, P.importe_prestamo  from cuotas as C INNER JOIN prestamos as P on C.id_prestamo = P.id_prestamo where C.id_cuota = ?";
+	private static final String listarCuotasPorIdPrestamo = "SELECT C.id_cuota, C.id_prestamo, C.numero_cuota, C.monto_pagado, C.fecha_pago, C.estado_pago, P.fecha_alta_prestamo FROM cuotas as C INNER JOIN prestamos as P ON C.id_prestamo = P.id_prestamo WHERE P.id_prestamo = ?";
+	private static final String listarCuotasPagadoPorIdPrestamo = "SELECT C.id_cuota, C.id_prestamo, C.numero_cuota, C.monto_pagado, C.fecha_pago, C.estado_pago, P.id_cuenta, P.id_cliente FROM cuotas as C INNER JOIN prestamos AS P ON  C.id_prestamo = P.id_prestamo WHERE C.id_prestamo = ? and C.estado_pago = 1";
+	private static final String listarCuotasPendientePorIdPrestamo = "SELECT C.id_cuota, C.id_prestamo, C.numero_cuota, C.monto_pagado, C.fecha_pago, C.estado_pago, P.id_cuenta, P.id_cliente FROM cuotas as C INNER JOIN prestamos AS P ON  C.id_prestamo = P.id_prestamo WHERE C.id_prestamo = ? and C.estado_pago = 0";
 	
 	private static final String contarCuotasPagas = " SELECT CASE WHEN COUNT(*) IS NULL THEN 0 ELSE COUNT(*) END AS cuenta FROM cuotas AS C INNER JOIN prestamos AS P ON C.id_prestamo = P.id_prestamo WHERE C.id_Prestamo = ? AND C.estado_pago = 1";
 	private static final String contarCuotasPendientes = " SELECT CASE WHEN COUNT(*) IS NULL THEN 0 ELSE COUNT(*) END AS cuenta FROM cuotas AS C INNER JOIN prestamos AS P ON C.id_prestamo = P.id_prestamo WHERE C.id_Prestamo = ? AND C.estado_pago = 0";
@@ -75,7 +75,7 @@ public class CuotaDaoImp implements CuotaDao {
 	
 	
 	@Override
-	public boolean updateEstado(int idCuota, int estado) throws SQLException {
+	public boolean registrarPago(int idCuota, int estado) throws SQLException {
 		// CONFIGURACION ESTANDAR PARA TRABAJAR CON JDBC
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -86,7 +86,7 @@ public class CuotaDaoImp implements CuotaDao {
 		// DESARROLLO DE METODO
 		
 		try (Connection conexion = Conexion.getConnection();
-				PreparedStatement statement = conexion.prepareStatement(updateEstado)) {
+				PreparedStatement statement = conexion.prepareStatement(registrarPago)) {
 
 			statement.setInt(1, estado);
 			statement.setInt(2, idCuota);
@@ -121,26 +121,63 @@ public class CuotaDaoImp implements CuotaDao {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+		
 		// DECLARACION DE VARIABLE
 		Cuota cuota = new Cuota ();
 		
 		// DESARROLLO DE METODO
-		return null;
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(obtenerCuotaPorId)) {
+			
+			
+			statement.setInt(1, idCuota);
+			rs = statement.executeQuery();
+			
+			if(rs.next()) {
+				
+				cuota = getCuota(rs);
+			}
+			
+			return cuota;
+			
+		}
+		
+				
 	}
 
 	@Override
-	public ArrayList<Cuota> listarCuotasPrestamo(int idPrestamo) throws SQLException {
+	public ArrayList<Cuota> listarCuotasPorIdPrestamo(int idPrestamo) throws SQLException {
 		// CONFIGURACION ESTANDAR PARA TRABAJAR CON JDBC
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+		
+		
 		// DECLARACION DE VARIABLES
 		ArrayList<Cuota> cuotaPorPrestamo = new ArrayList<Cuota>();
 		
 		// DESARROLLO DE METODO
-		return null;
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(listarCuotasPorIdPrestamo)) {
+			
+			statement.setInt(1, idPrestamo);
+			rs = statement.executeQuery();
+			while (rs.next()) {
+				cuotaPorPrestamo.add(getCuota(rs));
+			}
+			return cuotaPorPrestamo;
+		}
+		catch (SQLException ex) {
+			throw ex;
+		}
+		catch (Exception ex) {
+			throw ex;
+		}
+		
+		
+		
 	}
 
 	@Override
@@ -152,10 +189,27 @@ public class CuotaDaoImp implements CuotaDao {
 			e.printStackTrace();
 		}
 		// DECLARACION DE VARIABLES
-				ArrayList<Cuota> cuotaPorPrestamo = new ArrayList<Cuota>();
+				ArrayList<Cuota> cuotasPagas = new ArrayList<Cuota>();
 		
 		// DESARROLLO DE METODO
-		return null;
+		try (Connection conexion = Conexion.getConnection();
+			  PreparedStatement statement = conexion.prepareStatement(listarCuotasPagadoPorIdPrestamo)) {
+					
+				statement.setInt(1, idPrestamo);
+				rs = statement.executeQuery();
+				
+				while (rs.next()) {
+						cuotasPagas.add(getCuota(rs));
+				}
+					return cuotasPagas;
+				}
+				catch (SQLException ex) {
+					throw ex;
+				}
+				catch (Exception ex) {
+					throw ex;
+				}		
+		
 	}
 
 	@Override
@@ -166,11 +220,33 @@ public class CuotaDaoImp implements CuotaDao {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+		
 		// DECLARACION DE VARIABLES
-				ArrayList<Cuota> cuotaPorPrestamo = new ArrayList<Cuota>();
+		ArrayList<Cuota> cuotasImpagas = new ArrayList<Cuota>();
 				
 		// DESARROLLO DE METODO
-		return null;
+		try (Connection conexion = Conexion.getConnection();
+			  PreparedStatement statement = conexion.prepareStatement(listarCuotasPendientePorIdPrestamo)) {
+							
+			  statement.setInt(1, idPrestamo);
+			  rs = statement.executeQuery();
+						
+			  while (rs.next())
+			  {
+				cuotasImpagas.add(getCuota(rs));
+			  }
+				return cuotasImpagas;
+			  }
+						
+		catch (SQLException ex) 
+		{
+			throw ex;
+		}
+		catch (Exception ex) 
+		{
+			throw ex;
+		}		
+				
 	}
 
 	
@@ -393,10 +469,35 @@ public class CuotaDaoImp implements CuotaDao {
 		
 		//DECLARO LA CUOTA
 		Cuota cuota = new Cuota();
+		Prestamo prestamo = new Prestamo ();
 		
+		
+		try {
+			
+			//ASIGNO PRESTAMO
+			prestamo.setId(rs.getInt("id_prestamo"));
+			prestamo.setCliente().setId(rs.getInt("id_cliente"));
+			prestamo.setFechaAltaPrestamo(rs.getDate("fecha_alta_prestamo"));
+			prestamo.setImportePrestamo(rs.getBigDecimal("importe_prestamo"));
+			
+			//COMPOSICION CUOTA
+			cuota.setId(rs.getInt("id_cuota"));
+			cuota.setPrestamo(prestamo);
+			cuota.setNumeroCuota(rs.getInt("numero_cuota"));
+			cuota.setMontoPagado(rs.getBigDecimal("monto_pagado"));
+			cuota.setFechaPago(rs.getDate("fecha_pago"));
+			cuota.setEstadoPago(rs.getBoolean("estado_pago"));		
+			
+		}
+		
+		catch (SQLException ex) {
+			throw ex;
+		}
+		catch (Exception ex) {
+			throw ex;
+		}
 		
 		return cuota;
 	}
-	
 
 }
