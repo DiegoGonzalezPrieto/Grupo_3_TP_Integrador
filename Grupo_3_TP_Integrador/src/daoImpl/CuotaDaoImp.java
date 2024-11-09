@@ -24,7 +24,7 @@ public class CuotaDaoImp implements CuotaDao {
 	private static final String insert = "INSERT INTO cuotas (id_prestamo, numero_cuota, monto_pagado, fecha_pago, estado_pago) VALUES (?, ?, ?, ?, ?)";
 	private static final String registrarPago = "UPDATE cuotas SET estado_pago = ? WHERE id_cuota= ?";
 	
-	private static final String obtenerCuotaPorId = "SELECT (C.id_cuota, C.id_prestamo, C.numero_cuota, C.monto_pagado, C.fecha_pago, C.estado_pago, P.id_cliente, P.fecha_alta_prestamo, P.importe_prestamo  from cuotas as C INNER JOIN prestamos as P on C.id_prestamo = P.id_prestamo where C.id_cuota = ?";
+	private static final String obtenerCuotaPorId = "SELECT C.id_cuota, C.id_prestamo, C.numero_cuota, C.monto_pagado, C.fecha_pago, C.estado_pago, P.id_cliente, P.fecha_alta_prestamo, P.importe_prestamo  from cuotas as C INNER JOIN prestamos as P on C.id_prestamo = P.id_prestamo where C.id_cuota = ?";
 	private static final String listarCuotasPorIdPrestamo = "SELECT C.id_cuota, C.id_prestamo, C.numero_cuota, C.monto_pagado, C.fecha_pago, C.estado_pago, P.fecha_alta_prestamo FROM cuotas as C INNER JOIN prestamos as P ON C.id_prestamo = P.id_prestamo WHERE P.id_prestamo = ?";
 	private static final String listarCuotasPagadoPorIdPrestamo = "SELECT C.id_cuota, C.id_prestamo, C.numero_cuota, C.monto_pagado, C.fecha_pago, C.estado_pago, P.id_cuenta, P.id_cliente FROM cuotas as C INNER JOIN prestamos AS P ON  C.id_prestamo = P.id_prestamo WHERE C.id_prestamo = ? and C.estado_pago = 1";
 	private static final String listarCuotasPendientePorIdPrestamo = "SELECT C.id_cuota, C.id_prestamo, C.numero_cuota, C.monto_pagado, C.fecha_pago, C.estado_pago, P.id_cuenta, P.id_cliente FROM cuotas as C INNER JOIN prestamos AS P ON  C.id_prestamo = P.id_prestamo WHERE C.id_prestamo = ? and C.estado_pago = 0";
@@ -32,8 +32,8 @@ public class CuotaDaoImp implements CuotaDao {
 	private static final String contarCuotasPagas = " SELECT CASE WHEN COUNT(*) IS NULL THEN 0 ELSE COUNT(*) END AS cuenta FROM cuotas AS C INNER JOIN prestamos AS P ON C.id_prestamo = P.id_prestamo WHERE C.id_Prestamo = ? AND C.estado_pago = 1";
 	private static final String contarCuotasPendientes = " SELECT CASE WHEN COUNT(*) IS NULL THEN 0 ELSE COUNT(*) END AS cuenta FROM cuotas AS C INNER JOIN prestamos AS P ON C.id_prestamo = P.id_prestamo WHERE C.id_Prestamo = ? AND C.estado_pago = 0";
 	private static final String contarCuotas = " SELECT CASE WHEN COUNT(*) IS NULL THEN 0 ELSE COUNT(*) END AS cuenta FROM cuotas AS C INNER JOIN prestamos AS P ON C.id_prestamo = P.id_prestamo WHERE P.id_prestamo= ? ";
-	private static final String sumarCuotasPagas = "SELECT COALESCE(SUM(C.monto_pagado) * -1, 0) AS suma FROM cuotas AS C INNER JOIN prestamos AS P ON C.id_prestamo = P.id_prestamo WHERE C.id_prestamo = ? AND C.estado_pago = 1";
-	private static final String sumarCuotasPendientes = "SELECT COALESCE(SUM(C.monto_pagado) * -1, 0) AS suma FROM cuotas AS C INNER JOIN prestamos AS P ON C.id_prestamo = P.id_prestamo WHERE C.id_prestamo = ? AND C.estado_pago = 0";
+	private static final String sumarCuotasPagas = "SELECT COALESCE(SUM(C.monto_pagado), 0) AS suma FROM cuotas AS C INNER JOIN prestamos AS P ON C.id_prestamo = P.id_prestamo WHERE C.id_prestamo = ? AND C.estado_pago = 1";
+	private static final String sumarCuotasPendientes = "SELECT COALESCE(SUM(C.monto_pagado) , 0) AS suma FROM cuotas AS C INNER JOIN prestamos AS P ON C.id_prestamo = P.id_prestamo WHERE C.id_prestamo = ? AND C.estado_pago = 0";
 	private static final String sumarCuotas = "SELECT COALESCE(SUM(P.importe_cuota), 0) AS suma FROM cuotas AS C INNER JOIN prestamos AS P ON C.id_prestamo = P.id_prestamo WHERE C.id_prestamo = ?";
 			
 	//------------------------------METODO DML-----------------------------//		
