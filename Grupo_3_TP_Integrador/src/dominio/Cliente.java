@@ -17,13 +17,23 @@ public class Cliente extends Usuario {
 	private String direccion;
 	private Localidad localidad;
 	private Provincia provincia;
-	private TipoUsuario tipoUsuario;
+	
 	
 	public Cliente() {
 		
 	}
 	
 	
+	@Override
+	public String toString() {
+		return "Cliente [idCliente=" + idCliente + ", dni=" + dni + ", cuil=" + cuil + ", nombre=" + nombre
+				+ ", apellido=" + apellido + ", correoElectronico=" + correoElectronico + ", telefono=" + telefono
+				+ ", genero=" + genero + ", nacionalidad=" + nacionalidad + ", fechaNacimiento=" + fechaNacimiento
+				+ ", direccion=" + direccion + ", localidad=" + localidad + ", provincia=" + provincia
+				+ "]";
+	}
+
+
 	/*Un cliente tiene un DNI, CUIL, nombre, apellido, sexo, nacionalidad,
 	fecha de nacimiento, dirección, localidad, provincia, correo
 	electrónico, teléfono, un usuario y contraseña para acceder a la
@@ -110,11 +120,6 @@ public class Cliente extends Usuario {
 	public void setProvincia(Provincia provincia) {
 		this.provincia = provincia;
 	}
-	public TipoUsuario getTipoUsuario() {
-		return tipoUsuario;
-	}
-	public void setTipoUsuario(TipoUsuario tipoUsuario) {
-		this.tipoUsuario = tipoUsuario;
-	}
+	
 
 }

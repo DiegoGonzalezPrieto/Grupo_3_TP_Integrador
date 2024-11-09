@@ -31,7 +31,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	@Override
 	public boolean insert(Cliente c) {
 		String insert = "INSERT INTO clientes (id_cliente, dni, cuil, nombre, apellido, email, telefono, "
-                + "sexo, nacionalidad, fecha_nacimiento, direccion, localidad, provincia) "
+                + "sexo, id_nacionalidad, fecha_nacimiento, direccion, id_localidad, id_provincia) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";	
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -66,8 +66,8 @@ public class ClienteDaoImpl implements ClienteDao {
 	@Override
 	public boolean update(int id, Cliente c) {
 		String updateCliente = "UPDATE clientes SET dni = ?, cuil = ?, nombre = ?, apellido = ?, email = ?, "
-                + "telefono = ?, sexo = ?, nacionalidad = ?, fecha_nacimiento = ?, direccion = ?, "
-                + "localidad = ?, provincia = ? WHERE idCliente = ?";
+                + "telefono = ?, sexo = ?, id_nacionalidad = ?, fecha_nacimiento = ?, direccion = ?, "
+                + "id_localidad = ?, id_provincia = ? WHERE idCliente = ?";
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -111,20 +111,20 @@ public class ClienteDaoImpl implements ClienteDao {
 	public Cliente encontrarPorId(int id) {
 		
 		String selectCliente = "Select \r\n" + 
-								"	C.id_cliente As 'ID'," + 
-								"    C.dni As 'DNI'," + 
-								"    C.cuil As 'CUIL'," + 
-								"    C.nombre As 'Nombre'," + 
-								"    C.apellido As 'Apellido'," + 
+								"	C.id_cliente As 'ID', " + 
+								"    C.dni As 'DNI', " + 
+								"    C.cuil As 'CUIL', " + 
+								"    C.nombre As 'Nombre', " + 
+								"    C.apellido As 'Apellido', " + 
 								"    C.email as 'E-mail'," + 
-								"    C.telefono As 'Telefono'," + 
+								"    C.telefono As 'Telefono', " + 
 								"    C.sexo as 'Genero'," + 
-								"    C.fecha_nacimiento As 'Fecha de nacimiento' ," + 
-								"    C.direccion As 'Dirección'," + 
-								"    N.nacionalidad As 'Nacionalidad'," + 
-								"    P.provincia As 'Provincia'" + 
+								"    C.fecha_nacimiento As 'Fecha de nacimiento', " + 
+								"    C.direccion As 'Dirección', " + 
+								"    N.nacionalidad As 'Nacionalidad', " + 
+								"    P.provincia As 'Provincia', " + 
 								"	 L.localidad As 'Localidad" +
-								"from clientes" + 
+								"from clientes C" + 
 								"	Inner Join nacionalidades N on N.id_nacionalidad = C.id_nacionalidad" + 
 								"	Inner Join provincias P on P.id_provincia = C.id_provincia" + 
 								"	Inner Join localidades L on L.id_localidad = C.id_localidad" + 
@@ -261,9 +261,9 @@ public class ClienteDaoImpl implements ClienteDao {
 				"    C.sexo as 'Genero'," + 
 				"    C.fecha_nacimiento As 'Fecha de nacimiento' ," + 
 				"    C.direccion As 'Dirección'," + 
-				"	 L.localidad As 'Localidad" +
-				"    N.nacionalidad As 'Nacionalidad'," + 
-				"    P.provincia As 'Provincia'" + 
+				"	 C.id_localidad As 'Localidad" +
+				"    C.id_nacionalidad As 'Nacionalidad'," + 
+				"    C.id_provincia As 'Provincia'" + 
 				"from clientes C";
         
         ArrayList<Cliente> listado = new ArrayList<>();
