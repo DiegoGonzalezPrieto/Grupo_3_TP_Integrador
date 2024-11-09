@@ -29,12 +29,12 @@ public class PrestamoDaoImpl implements PrestamoDao{
 	private static final String updateEstado = "UPDATE prestamos SET id_estado_prestamo = ? WHERE id_prestamo = ?";
 	
 	//CONSULTA DE LISTA
-	private static final String obtenerPrestamoPorId ="Select P.id_cliente,P.id_cuenta, P.fecha_alta_prestamo, P.importe_prestamo, P.meses_plazo, P.importe_cuota, P.cantidad_cuota, P.id_estado_prestamo, C.nombre, C.apellido from prestamos as P INNER JOIN clientes as C on P.id_cleinte = C.id_cliente WHERE P.id_cliente = ? ";
-	private static final String listarPrestamosXCliente = "Select P.id_cliente,P.id_cuenta, P.fecha_alta_prestamo, P.importe_prestamo, P.meses_plazo, P.importe_cuota, P.cantidad_cuota, P.id_estado_prestamo, C.nombre, C.apellido, Ep.estado_prestamo from prestamos as P INNER JOIN clientes as C on P.id_cleinte = C.id_cliente INNER JOIN estados_prestamos as EP on P.id_estado_prestamo = EP.id_estado_prestamo WHERE C.id_cliente = ?";
-	private static final String listarTodosLosPrestamos = "Select id_cliente, id_cuenta, fecha_alta_prestamo, importe_prestamo, meses_plazo,importe_cuota, cantidad_cuota, id_estado_prestamo from prestamos ";
-	private static final String listarTodosLosPrestamosAprobados = "SELECT id_cliente, id_cuenta, fecha_alta_prestamo, importe_prestamo, meses_plazo,importe_cuota, cantidad_cuota, id_estado_prestamo from prestamos where id_estado_prestamo = 2";
-	private static final String listarTodosLosPrestamosRechazados = "SELECT id_cliente, id_cuenta, fecha_alta_prestamo, importe_prestamo, meses_plazo,importe_cuota, cantidad_cuota, id_estado_prestamo from prestamos where id_estado_prestamo = 3";
-	private static final String listarTodosLosPrestamosEnEvaluacion = "SELECT id_cliente, id_cuenta, fecha_alta_prestamo, importe_prestamo, meses_plazo,importe_cuota, cantidad_cuota, id_estado_prestamo from prestamos where id_estado_prestamo = 1";
+	private static final String obtenerPrestamoPorId ="Select P.id_cliente,P.id_cuenta, P.fecha_alta_prestamo, P.importe_prestamo, P.meses_plazo, P.importe_cuota, P.cantidad_cuotas, P.id_estado_prestamo, C.nombre, C.apellido from prestamos as P INNER JOIN clientes as C on P.id_cliente = C.id_cliente WHERE P.id_prestamo = ? ";
+	private static final String listarPrestamosXCliente = "Select P.id_prestamo, P.id_cliente,P.id_cuenta, P.fecha_alta_prestamo, P.importe_prestamo, P.meses_plazo, P.importe_cuota, P.cantidad_cuota, P.id_estado_prestamo, C.nombre, C.apellido, Ep.estado_prestamo from prestamos as P INNER JOIN clientes as C on P.id_cliente = C.id_cliente INNER JOIN estados_prestamos as EP on P.id_estado_prestamo = EP.id_estado_prestamo WHERE C.id_cliente = ?";
+	private static final String listarTodosLosPrestamos = "Select id_prestamo,id_cliente, id_cuenta, fecha_alta_prestamo, importe_prestamo, meses_plazo, importe_cuota, cantidad_cuotas, id_estado_prestamo from prestamos ";
+	private static final String listarTodosLosPrestamosAprobados = "SELECT id_prestamo,id_cliente, id_cuenta, fecha_alta_prestamo, importe_prestamo, meses_plazo,importe_cuota, cantidad_cuotas, id_estado_prestamo from prestamos where id_estado_prestamo = 2";
+	private static final String listarTodosLosPrestamosRechazados = "SELECT id_prestamo, id_cliente, id_cuenta, fecha_alta_prestamo, importe_prestamo, meses_plazo,importe_cuota, cantidad_cuotas, id_estado_prestamo from prestamos where id_estado_prestamo = 3";
+	private static final String listarTodosLosPrestamosEnEvaluacion = "SELECT id_prestamo, id_cliente, id_cuenta, fecha_alta_prestamo, importe_prestamo, meses_plazo,importe_cuota, cantidad_cuotas, id_estado_prestamo from prestamos where id_estado_prestamo = 1";
 	
 	//CONSULTAS PARA INFORMES O REPORTES
 	private static final String contarAprobados = "SELECT CASE WHEN COUNT(*) IS NULL THEN 0  ELSE COUNT(*) END AS cantidad FROM prestamos WHERE id_estado_prestamo = 2";
@@ -534,17 +534,14 @@ public class PrestamoDaoImpl implements PrestamoDao{
 		//OBJETO CLIENTE
 		Cliente cliente = new Cliente();
 		cliente.setIdCliente(rs.getInt("id_cliente"));
-		cliente.setNombre(rs.getString("nombre_cliente"));
-		
-		//OBJETO TIPO DE CENTA
-		TipoCuenta tipocuenta = new TipoCuenta();
-		tipocuenta.setId(rs.getInt("id_tipo_cuenta"));
-		tipocuenta.setNombre(rs.getString("tipo_cuenta"));		
+		cliente.setNombre(rs.getString("nombre"));
+		cliente.setApellido(rs.getString("apellido"));
+			
 		
 		//OBJETO CUENTA
 		Cuenta cuenta = new Cuenta();
-		cuenta.setId(rs.getInt("id"));
-		cuenta.setTipoCuenta(tipocuenta);
+		cuenta.setId(rs.getInt("id_cuenta"));
+		
 				
 		//OBJETO ESTADO PRESTAMO
 		EstadoPrestamo estado = new EstadoPrestamo ();
@@ -554,6 +551,7 @@ public class PrestamoDaoImpl implements PrestamoDao{
 			
 		//COMPOSICION
 		
+		prestamo.setId(rs.getInt("id_prestamo"));
 		prestamo.setCliente(cliente);
 		prestamo.setCuenta(cuenta);
 		prestamo.setFechaAltaPrestamo(rs.getDate("fecha_alta_prestamo"));
