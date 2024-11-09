@@ -1,3 +1,4 @@
+<%@page import="dominio.Usuario"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -18,9 +19,12 @@
 <body>
 	<div class="container">
 
+
+
 		<h1 class="display-3 my-3">Login</h1>
 
-		<form action="" method="POST" class="w-50 border border-2 rounded p-4">
+		<form action="LoginServlet" method="POST"
+			class="w-50 border border-2 rounded p-4">
 			<label for="usuario" class="form-label">Usuario</label> <input
 				type="text" placeholder="Usuario" id="usuario" name="usuario"
 				required class="form-control"> <br> <label

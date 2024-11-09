@@ -1,3 +1,4 @@
+<%@page import="dominio.Usuario"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -15,6 +16,14 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
+
+	<%
+		Usuario usuario = (Usuario) session.getAttribute("usuario");
+		if (usuario == null) {
+
+			response.sendRedirect("Login.jsp");
+		}
+	%>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<a class="navbar-brand" href="#!" style="margin: 30px">Banco G3-L4</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -24,20 +33,20 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav ml-auto">
-				<li class="nav-item"><a class="nav-link"
-					href="DatosCliente.jsp"> <!-- Provisorio: --> NombreUsuario <%
- 	//String username = (String) session.getAttribute("username");
- 	//out.print(username);
- %>
-
-				</a></li>
 				<%
-					//String role = (String) session.getAttribute("role");
-					//if ("admin".equals(role)) {
+					if (usuario != null) {
+				%>
+				<li class="nav-item"><a class="nav-link"
+					href=<%=usuario.esAdmin() ? "HomeAdministrador.jsp" : "DatosCliente.jsp"%>>
+						<%=usuario.getNombreUsuario()%></a></li>
+
+
+				<%
+					if (usuario != null && usuario.esAdmin()) {
 				%>
 
 				<li class="nav-item"><a class="nav-link"
-					href="HomeAdministrador.jsp">Inicio (admin)</a></li>
+					href="HomeAdministrador.jsp">Inicio</a></li>
 				<li class="nav-item"><a class="nav-link"
 					href="AdministracionClientes.jsp">Adm. de Clientes</a></li>
 				<li class="nav-item"><a class="nav-link"
@@ -47,18 +56,21 @@
 				<li class="nav-item"><a class="nav-link" href="Reportes.jsp">Reportes</a>
 				</li>
 				<%
-					//} else if ("cliente".equals(role)) {
+					} else {
 				%>
-				<li class="nav-item"><a class="nav-link" href="HomeCliente.jsp">Inicio (cliente)</a></li>
+				<li class="nav-item"><a class="nav-link" href="HomeCliente.jsp">Inicio</a></li>
 				<li class="nav-item"><a class="nav-link" href="Prestamo.jsp">Préstamos</a></li>
 				<li class="nav-item"><a class="nav-link"
 					href="DatosCliente.jsp">Mis Datos</a></li>
 				<li class="nav-item"><a class="nav-link"
 					href="Transferencia.jsp">Transferencia</a></li>
 				<%
-					//}
+					}
 				%>
-				<li class="nav-item"><a class="nav-link" href="Login.jsp"><i
+				<%
+					}
+				%>
+				<li class="nav-item"><a class="nav-link" href="LoginServlet"><i
 						class="fas fa-sign-out-alt"></i></a></li>
 			</ul>
 		</div>
