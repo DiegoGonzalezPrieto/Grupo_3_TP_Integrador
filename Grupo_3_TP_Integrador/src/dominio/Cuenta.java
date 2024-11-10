@@ -29,6 +29,13 @@ public class Cuenta {
         this.cbu = cbu;
     }
 
+	@Override
+	public String toString() {
+		return "Cuenta [id=" + id + ", cliente=" + cliente + ", tipoCuenta=" + tipoCuenta + ", fechaCreacion="
+				+ fechaCreacion + ", numeroCuenta=" + numeroCuenta + ", cbu=" + cbu + ", saldo=" + saldo + ", activa="
+				+ activa + "]";
+	}
+
 	public int getId() {
 		return id;
 	}
