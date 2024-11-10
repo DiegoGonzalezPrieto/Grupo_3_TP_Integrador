@@ -1,3 +1,5 @@
+<%@ page import = "dominio.Cliente" %>
+<!-- <%@ /page import = "dominio.Cuenta" %> -->
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -20,6 +22,10 @@
 	<div class="container">
 		<!-- MOSTRAMOS EL ENLACE A LAS OPCIONES QUE TENEMOS DISEÑADAS -->
 		<h1 class="display-3 my-3">Bienvenido, Lucas Cervantez!</h1>
+		<h1>Bienvenido, 
+			<%= ((Cliente) request.getAttribute("cliente")).getNombre() %>
+		 	<%= ((Cliente) request.getAttribute("cliente")).getApellido() %>
+		 </h1>
 
 		<ul class="nav nav-pills nav-fill m-3">
 			<li class="nav-item mx-2"><a class="nav-link active"
@@ -32,7 +38,7 @@
 				href="Reportes.jsp">Reportes</a></li>
 		</ul>
 
-		<!-- LA IDA ES QUE SEA UN RESUMEN CON CONTADORES DE VARIAS COSAS -->
+		<!-- LA IDEA ES QUE SEA UN RESUMEN CON CONTADORES DE VARIAS COSAS -->
 		<h2 class="my-3 text-center">Resumen de Actividad</h2>
 
 		<div class="border p-4 rounded-3">
@@ -42,7 +48,9 @@
 					<div class="card h-100">
 						<div class="card-body">
 							<h5 class="card-title">Clientes Activos</h5>
-							<p class="card-text">1500</p>
+							<p class="card-text">
+								<%= request.getAttribute("clientesActivos") %>
+							</p>
 						</div>
 					</div>
 				</div>
@@ -50,7 +58,9 @@
 					<div class="card h-100">
 						<div class="card-body">
 							<h5 class="card-title">Cuentas Abiertas</h5>
-							<p class="card-text">3000</p>
+							<p class="card-text">
+								<%= request.getAttribute("cuentasAbiertas") %>
+							</p>
 						</div>
 					</div>
 				</div>
@@ -58,7 +68,9 @@
 					<div class="card h-100">
 						<div class="card-body">
 							<h5 class="card-title">Préstamos Autorizados</h5>
-							<p class="card-text">400</p>
+							<p class="card-text">
+								<%= request.getAttribute("prestamosAutorizados") %>
+							</p>
 						</div>
 					</div>
 				</div>
@@ -66,7 +78,9 @@
 					<div class="card h-100">
 						<div class="card-body">
 							<h5 class="card-title">Préstamos Pendientes</h5>
-							<p class="card-text">50</p>
+							<p class="card-text">
+								<%= request.getAttribute("prestamosPendientes") %>
+							</p>
 						</div>
 					</div>
 				</div>
@@ -76,7 +90,22 @@
 		<!-- LA IDEA ES QUE MUESTRE LAS ULTIMAS CUENTAS CREADAS (TRAER CUENTAS ULTIMO ID) -->
 		<h2 class="my-3">Cuentas Recientes</h2>
 		<ul class="nav flex-column">
-			<!-- ACA PODEMOS ITERAR LAS CUENTAS  -->
+			<%
+			List<Cuenta> cuentasRecientes = (List<Cuenta>) request.getAttribute("cuentasRecientes");
+			for (Cuenta cuenta : cuentasRecientes) {
+            %>
+            
+            <li class="nav-item my-1">
+            	<a class="border nav-link" href="DetallesCuenta.jsp">
+            	<span class="text-black">Cuenta: <%= cuenta.getId() %></span><br>
+            	<span class="text-black"><%= cuenta.getTipo().getNombre() %></span><br>
+            	<span class="text-black">Cliente: <%= cuenta.getCliente().getNombre() %></span><br>
+            	<span class="text-black">Saldo: <%= cuenta.getSaldo() %></span></a></li>
+		</ul>
+		
+		<!-- 
+		<ul class="nav flex-column">
+			ACA PODEMOS ITERAR LAS CUENTAS
 			<li class="nav-item my-1"><a class="border nav-link"
 				href="DetallesCuenta.jsp"><span class="text-black">Cuenta
 						12345</span><br> <span class="text-black">CBU: 31289756287259</span><br>
@@ -90,6 +119,10 @@
 						98765</span><br> <span class="text-black">CBU: 4577773892535</span><br>
 					<span class="text-black">Caja de Ahorro USD</span></a></li>
 		</ul>
+		 -->
+		 	<%
+                }
+            %>
 
 	</div>
 	<%@ include file="Footer.jsp"%>
