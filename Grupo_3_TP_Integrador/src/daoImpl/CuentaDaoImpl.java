@@ -47,7 +47,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
     @Override
     public boolean update(Cuenta cuenta) {
-        String update = "UPDATE cuentas SET id_tipo_cuenta = ?, saldo = ?, activa = ? WHERE id_cuenta = ?";
+        String update = "UPDATE cuentas SET id_tipo_cuenta = ?, saldo = ?, estado_cuenta = ? WHERE id_cuenta = ?";
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -189,7 +189,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
     @Override
     public int encontrarCuentaActivaPorCliente(int idCliente) {
-        String cuentaActiva = "SELECT COUNT(*) as cantidad FROM cuentas WHERE id_cliente = ? AND activa = true";
+        String cuentaActiva = "SELECT COUNT(*) as cantidad FROM cuentas WHERE id_cliente = ? AND estado_cuenta = true";
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -271,7 +271,7 @@ public class CuentaDaoImpl implements CuentaDao {
     
 	private Cuenta mapResultSetDeCuenta(ResultSet rs) throws SQLException {
 	    Cuenta cuenta = new Cuenta();
-	    cuenta.setId(rs.getInt("id"));
+	    cuenta.setId(rs.getInt("id_cuenta"));
 	    
 	    Cliente cliente = new Cliente();
 	    cliente.setId_cliente(rs.getInt("id_cliente"));
@@ -287,7 +287,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	    cuenta.setNumeroCuenta(rs.getLong("numero_cuenta"));
 	    cuenta.setCbu(rs.getString("cbu"));
 	    cuenta.setSaldo(rs.getBigDecimal("saldo"));
-	    cuenta.setActiva(rs.getBoolean("activa"));
+	    cuenta.setActiva(rs.getBoolean("estado_cuenta"));
 	    
 	    return cuenta;
 	}
