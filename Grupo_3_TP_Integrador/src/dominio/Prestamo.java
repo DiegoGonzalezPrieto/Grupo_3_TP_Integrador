@@ -117,7 +117,7 @@ public class Prestamo {
 	public String toString() {
 		return "Prestamo [id=" + id + ", cliente=" + cliente + ", fechaAltaPrestamo=" + fechaAltaPrestamo
 				+ ", importePrestamo=" + importePrestamo + ", mesesPlazo=" + mesesPlazo + ", importeMensual="
-				+ importeMensual + ", cuotas=" + cuotas + ", fechaValidacion=" + ", estadoValidacion="
+				+ importeMensual + ", cuotas=" + cuotas + ", estadoValidacion="
 				+ estadoValidacion + "]";
 	};
 	

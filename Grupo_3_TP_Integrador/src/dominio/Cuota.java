@@ -75,6 +75,12 @@ public class Cuota {
 	public void setEstadoPago(boolean estadoPago) {
 		this.estadoPago = estadoPago;
 	}
+
+	@Override
+	public String toString() {
+		return "Cuota [Id=" + Id + ", prestamo=" + prestamo + ", numeroCuota=" + numeroCuota + ", montoPagado="
+				+ montoPagado + ", fechaPago=" + fechaPago + ", estadoPago=" + estadoPago + "]";
+	}
 	
 	
 

@@ -10,7 +10,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import dao.CuotaDao;
+import dao.PrestamoDao;
+import dominio.Cliente;
+import dominio.Cuenta;
 import dominio.Cuota;
+import dominio.EstadoPrestamo;
 import dominio.Prestamo;
 
 public class CuotaDaoImp implements CuotaDao {
@@ -470,16 +474,14 @@ public class CuotaDaoImp implements CuotaDao {
 		
 		//DECLARO LA CUOTA
 		Cuota cuota = new Cuota();
-		Prestamo prestamo = new Prestamo ();
+		PrestamoDao pDao = new PrestamoDaoImpl();
 		
 		
 		try {
 			
+			
 			//ASIGNO PRESTAMO
-			prestamo.setId(rs.getInt("id_prestamo"));
-			prestamo.getCliente().setId(rs.getInt("id_cliente"));
-			prestamo.setFechaAltaPrestamo(rs.getDate("fecha_alta_prestamo"));
-			prestamo.setImportePrestamo(rs.getBigDecimal("importe_prestamo"));
+			Prestamo prestamo = pDao.obtenerPrestamoPorId(rs.getInt("id_prestamo"));							
 			
 			//COMPOSICION CUOTA
 			cuota.setId(rs.getInt("id_cuota"));
