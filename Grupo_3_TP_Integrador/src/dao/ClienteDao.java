@@ -14,5 +14,6 @@ public interface ClienteDao {
 	public Cliente encontrarPorNombre(String nombre);
 	
 	public ArrayList<Cliente> buscarTodos();
+	public ArrayList<Cliente> buscarTodosActivos();
 
 }

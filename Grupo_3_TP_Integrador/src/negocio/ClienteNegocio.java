@@ -13,7 +13,8 @@ public interface ClienteNegocio {
     
     Cliente buscarPorNombre(String nombre);
     Cliente buscarPorId(int id);
-    ArrayList<Cliente> listar();
+    ArrayList<Cliente> listarTodos();
+    ArrayList<Cliente> listarActivos();
     
 }
 
