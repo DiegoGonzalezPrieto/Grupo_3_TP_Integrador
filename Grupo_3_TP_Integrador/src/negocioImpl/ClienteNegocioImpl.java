@@ -18,7 +18,7 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 
 	@Override
 	public void update(Cliente c) {
-		clienteDao.update(c.getId(), c);
+		clienteDao.update(c.getIdCliente(), c);
 	}
 
 	@Override
@@ -33,10 +33,20 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 		
 	}
 
+	/**
+	 * Busca todos los clientes (activos e inactivos).
+	 * */
 	@Override
-	public ArrayList<Cliente> listar() {
+	public ArrayList<Cliente> listarTodos() {
 		return clienteDao.buscarTodos();
-		
+	}
+	
+	/**
+	 * Busca solo los clientes activos.
+	 * */
+	@Override
+	public ArrayList<Cliente> listarActivos() {
+		return clienteDao.buscarTodosActivos();
 	}
 
 	@Override
