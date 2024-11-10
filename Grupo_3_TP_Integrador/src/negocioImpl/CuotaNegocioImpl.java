@@ -9,7 +9,7 @@ import dao.CuotaDao;
 import daoImpl.CuotaDaoImp;
 import dominio.Cuota;
 import negocio.CuotaNegocio;
-import negocio.Prestamo;
+import dominio.Prestamo;
 
 public class CuotaNegocioImpl implements CuotaNegocio {
 	
@@ -189,5 +189,7 @@ public class CuotaNegocioImpl implements CuotaNegocio {
 			throw ex;
 		}
 	}
+
+	
 
 }

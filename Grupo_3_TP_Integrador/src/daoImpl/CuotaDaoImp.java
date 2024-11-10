@@ -11,6 +11,7 @@ import java.util.Date;
 
 import dao.CuotaDao;
 import dominio.Cuota;
+import dominio.Prestamo;
 
 public class CuotaDaoImp implements CuotaDao {
 	
@@ -465,7 +466,7 @@ public class CuotaDaoImp implements CuotaDao {
 	
 	//METODO PARA MEJORAR LA CAPTURA DE INFO POR COMPOSICION
 	
-	private Cuota getCuota (ResultSet rs) {
+	private Cuota getCuota (ResultSet rs) throws SQLException {
 		
 		//DECLARO LA CUOTA
 		Cuota cuota = new Cuota();
@@ -476,7 +477,7 @@ public class CuotaDaoImp implements CuotaDao {
 			
 			//ASIGNO PRESTAMO
 			prestamo.setId(rs.getInt("id_prestamo"));
-			prestamo.setCliente().setId(rs.getInt("id_cliente"));
+			prestamo.getCliente().setId(rs.getInt("id_cliente"));
 			prestamo.setFechaAltaPrestamo(rs.getDate("fecha_alta_prestamo"));
 			prestamo.setImportePrestamo(rs.getBigDecimal("importe_prestamo"));
 			

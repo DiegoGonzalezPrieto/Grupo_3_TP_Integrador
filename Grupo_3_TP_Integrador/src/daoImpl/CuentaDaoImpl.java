@@ -29,7 +29,7 @@ public class CuentaDaoImpl implements CuentaDao {
         try (Connection conexion = Conexion.getConnection();
              PreparedStatement statement = conexion.prepareStatement(insert)) {
             
-            statement.setInt(1, cuenta.getCliente().getId_cliente());
+            statement.setInt(1, cuenta.getCliente().getIdCliente());
             statement.setInt(2, cuenta.getTipoCuenta().getId());
             statement.setDate(3, cuenta.getFechaCreacion());
             statement.setLong(4, cuenta.getNumeroCuenta());
@@ -274,7 +274,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	    cuenta.setId(rs.getInt("id"));
 	    
 	    Cliente cliente = new Cliente();
-	    cliente.setId_cliente(rs.getInt("id_cliente"));
+	    cliente.setIdCliente(rs.getInt("id_cliente"));
 	    cliente.setNombre(rs.getString("nombre_cliente"));
 	    cuenta.setCliente(cliente);
 	    

@@ -6,26 +6,36 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
+import dao.ClienteDao;
+import dao.CuentaDao;
+import dao.EstadoPrestamoDao;
 import dao.PrestamoDao;
 import dominio.Cliente;
+import dominio.Cuenta;
 import dominio.EstadoPrestamo;
 import dominio.Prestamo;
-import dominio.Seguro;
-import dominio.TipoCuenta;
-import dominio.TipoSeguro;
+
 
 public class PrestamoDaoImpl implements PrestamoDao{
 	
 	/// ATRIBUTOS PARA TRABAJAR LA CONEXION
 	
-	///private PreparedStatement st;
 	private ResultSet rs;
 	
+	private final ClienteDao clienteDao = new ClienteDaoImpl();
+	private final CuentaDao cuentaDao = new CuentaDaoImpl();
+	private final EstadoPrestamoDao estadoPrestamoDao = new EstadoPrestamoDaoImpl();
+	
+	///CONSTRUCTOR
+	
+	
+	
+	
 	/// CONSULTAS BASE DE DATOS
+	
 	// CONSULTA DML:
-	private static final String insert = "INSERT INTO prestamos (id_cliente, id_cuenta, fecha_alta_prestamo, importe_prestamo, meses_plazo, importe_cuota, cantidad_cuotas, id_estado_prestamo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, )";
+	private static final String insert = "INSERT INTO prestamos (id_cliente, id_cuenta, fecha_alta_prestamo, importe_prestamo, meses_plazo, importe_cuota, cantidad_cuotas, id_estado_prestamo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String updateEstado = "UPDATE prestamos SET id_estado_prestamo = ? WHERE id_prestamo = ?";
 	
 	//CONSULTA DE LISTA
@@ -71,10 +81,7 @@ public class PrestamoDaoImpl implements PrestamoDao{
 			statement.setInt(7, prestamo.getCuotas()); 
 			statement.setInt(8, prestamo.getEstadoValidacion().getId()); 
 			
-			int filasAfectadas = statement.executeUpdate();
-			if(filasAfectadas >0) {
-				return true;
-			}
+			return statement.executeUpdate() > 0;
 			
 		}		
 		catch (SQLException ex) {
@@ -84,7 +91,7 @@ public class PrestamoDaoImpl implements PrestamoDao{
 			throw ex;
 		}		
 		
-		return false;
+		
 	}
 
 	
@@ -107,12 +114,7 @@ public class PrestamoDaoImpl implements PrestamoDao{
 			statement.setInt(1, estadoPrestamo);
 			statement.setInt(2, idPrestamo);
 			
-			int filasAfectadas = statement.executeUpdate();
-			
-			if (filasAfectadas>0) {
-				return true;				
-			}		
-			
+			return statement.executeUpdate() > 0;
 		}
 		catch(SQLException ex) {
 			throw ex;
@@ -120,7 +122,7 @@ public class PrestamoDaoImpl implements PrestamoDao{
 		catch(Exception ex) {
 			throw ex;
 		}
-		return false;
+		
 	}
 
 	
@@ -136,22 +138,21 @@ public class PrestamoDaoImpl implements PrestamoDao{
 		}
 		
 		//DECLARACION DE VARIABLES
-		Prestamo prestamo = new Prestamo();
+		//Prestamo prestamo = new Prestamo();
 		
 		//DESARROLLO DE METODO 
 		try (Connection conexion = Conexion.getConnection();
 				PreparedStatement statement = conexion.prepareStatement(obtenerPrestamoPorId)) {
 			
-			statement.setInt(1, idPrestamo);
+			statement.setInt(1,idPrestamo);
 			rs = statement.executeQuery();
 			
-			if(rs.next()) {
+			if(rs.next()) {	
 				
-				prestamo = getPrestamo(rs);
-				
+				return getPrestamo(rs);				
 			}
 		
-			return prestamo;		
+			return null;		
 		}
 		
 	}
@@ -248,7 +249,7 @@ public class PrestamoDaoImpl implements PrestamoDao{
 		try (Connection conexion = Conexion.getConnection();
 			 PreparedStatement statement = conexion.prepareStatement(listarTodosLosPrestamosAprobados)) {
 							
-			rs = statement.executeQuery();
+			 rs = statement.executeQuery();
 							
 				while(rs.next())
 				{
@@ -524,31 +525,16 @@ public class PrestamoDaoImpl implements PrestamoDao{
 	
 	//METODO PARA MEJORAR LA CAPTURA DE INFO POR COMPOSICION
 	
-	private Prestamo getPrestamo(ResultSet rs ) {
+	private Prestamo getPrestamo(ResultSet rs ) throws SQLException {
 		
 		//DECLARO EL PRESTAMO
 		Prestamo prestamo = new Prestamo();
 		
-		//DECLARO LOS OBJETOS QUE COMPONEN A PRESTAMO
-		
-		//OBJETO CLIENTE
-		Cliente cliente = new Cliente();
-		cliente.setIdCliente(rs.getInt("id_cliente"));
-		cliente.setNombre(rs.getString("nombre"));
-		cliente.setApellido(rs.getString("apellido"));
-			
-		
-		//OBJETO CUENTA
-		Cuenta cuenta = new Cuenta();
-		cuenta.setId(rs.getInt("id_cuenta"));
-		
-				
-		//OBJETO ESTADO PRESTAMO
-		EstadoPrestamo estado = new EstadoPrestamo ();
-		estado.setId(rs.getInt("id_estado_prestamo"));
-		estado.setNombre(rs.getString("estado_prestamo"));
-		
-			
+		//DECLARO LOS OBJETOS QUE COMPONEN A PRESTAMO Y LOS TRAIGO USANDO SU INTERFAZ DAO
+		Cliente cliente = clienteDao.encontrarPorId(rs.getInt("id_cliente"));
+		Cuenta cuenta = cuentaDao.encontrarPorId(rs.getInt("id_cuenta"));
+		EstadoPrestamo estado = estadoPrestamoDao.buscarPorId(rs.getInt("id_estado_prestamo"));
+					
 		//COMPOSICION
 		
 		prestamo.setId(rs.getInt("id_prestamo"));
