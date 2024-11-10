@@ -29,7 +29,7 @@ public class CuentaDaoImpl implements CuentaDao {
         try (Connection conexion = Conexion.getConnection();
              PreparedStatement statement = conexion.prepareStatement(insert)) {
             
-            statement.setInt(1, cuenta.getCliente().getId_cliente());
+            statement.setInt(1, cuenta.getCliente().getIdCliente());
             statement.setInt(2, cuenta.getTipoCuenta().getId());
             statement.setDate(3, cuenta.getFechaCreacion());
             statement.setLong(4, cuenta.getNumeroCuenta());
@@ -270,17 +270,19 @@ public class CuentaDaoImpl implements CuentaDao {
     }
     
 	private Cuenta mapResultSetDeCuenta(ResultSet rs) throws SQLException {
-	    Cuenta cuenta = new Cuenta();
+
+		Cuenta cuenta = new Cuenta();
 	    cuenta.setId(rs.getInt("id_cuenta"));
 	    
 	    Cliente cliente = new Cliente();
-	    cliente.setId_cliente(rs.getInt("id_cliente"));
+	    cliente.setIdCliente(rs.getInt("id_cliente"));
 	    cliente.setNombre(rs.getString("nombre_cliente"));
 	    cuenta.setCliente(cliente);
 	    
-	    TipoCuenta tipoCuenta = new TipoCuenta();
-	    tipoCuenta.setId(rs.getInt("id_tipo_cuenta"));
-	    tipoCuenta.setNombre(rs.getString("tipo_cuenta"));
+	    TipoCuenta tipoCuenta = new TipoCuenta(rs.getInt("id_tipo_cuenta"), rs.getString("tipo_cuenta"));
+	    
+	    //tipoCuenta.setId(rs.getInt("id_tipo_cuenta"));
+	    //tipoCuenta.setNombre(rs.getString("tipo_cuenta"));
 	    cuenta.setTipoCuenta(tipoCuenta);
 	    
 	    cuenta.setFechaCreacion(rs.getDate("fecha_creacion"));

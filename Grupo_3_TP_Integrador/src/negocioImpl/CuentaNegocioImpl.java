@@ -18,7 +18,7 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 
     @Override
     public boolean crearCuenta(Cuenta cuenta) {
-        if (!puedeCrearCuenta(cuenta.getCliente().getId_cliente())) {
+        if (!puedeCrearCuenta(cuenta.getCliente().getIdCliente())) {
             return false;
         }
         
