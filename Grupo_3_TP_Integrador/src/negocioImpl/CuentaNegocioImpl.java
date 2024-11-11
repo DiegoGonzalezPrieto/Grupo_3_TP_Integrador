@@ -101,7 +101,7 @@ public class CuentaNegocioImpl implements CuentaNegocio {
     }
 
     public int totalCuentasAbiertas() {
-    	return cuentaDao.contarCuentasAbiertas();
+    	return cuentaDao.obtenerTodos().size();
     }
 
     public List<Cuenta> listarCuentasRecientes(){

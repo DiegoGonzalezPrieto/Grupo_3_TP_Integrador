@@ -13,6 +13,7 @@ import dominio.Cuenta;
 import dominio.TipoCuenta;
 
 public class CuentaDaoImpl implements CuentaDao {
+	
 	private static final int idCuentaExcluir = 0;
 
 	@Override
@@ -127,10 +128,10 @@ public class CuentaDaoImpl implements CuentaDao {
     @Override
     public List<Cuenta> obtenerTodos() {
         List<Cuenta> listaCuentas = new ArrayList<>();
-        String obtenerTodos = "SELECT c.*, cl.nombre as nombre_cliente, cl.apellido as apellido_cliente, tc.tipo_cuenta as tipo_cuenta " +
-                       "FROM cuentas c " +
-                       "INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente " +
-                       "INNER JOIN tipos_cuenta tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta";
+        String obtenerTodos = "SELECT c.*, cl.nombre as nombre_cliente, cl.apellido as apellido_cliente, "
+        		+ "tc.tipo_cuenta as tipo_cuenta FROM cuentas c "
+        		+ "INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente "
+        		+ "INNER JOIN tipos_cuenta tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta";
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -139,7 +140,7 @@ public class CuentaDaoImpl implements CuentaDao {
         }
         
         try (Connection conexion = Conexion.getConnection();
-             PreparedStatement statement = conexion.prepareStatement(obtenerTodos)) {
+        		PreparedStatement statement = conexion.prepareStatement(obtenerTodos)) {
             
             ResultSet rs = statement.executeQuery();
             
@@ -281,11 +282,12 @@ public class CuentaDaoImpl implements CuentaDao {
 	    Cliente cliente = new Cliente();
 	    cliente.setIdCliente(rs.getInt("id_cliente"));
 	    cliente.setNombre(rs.getString("nombre_cliente"));
+	    //FLOR dice: Necesito agregar esta linea para HomeAdminServlet:
+	    //cliente.setApellido(rs.getString("apellido_cliente"));
 	    cuenta.setCliente(cliente);
 
 	    TipoCuenta tipoCuenta = new TipoCuenta(rs.getInt("id_tipo_cuenta"), rs.getString("tipo_cuenta"));
 	    
-
 	    cuenta.setTipoCuenta(tipoCuenta);
 	    
 	    cuenta.setFechaCreacion(rs.getDate("fecha_creacion"));
@@ -298,24 +300,6 @@ public class CuentaDaoImpl implements CuentaDao {
 	    return cuenta;
 	}
 
-	public int contarCuentasAbiertas() {
-	    int cont = 0;
-	    String sql = "SELECT COUNT(*) FROM cuentas WHERE activa = true";
-	    
-	    try (Connection conexion = Conexion.getConnection();
-	         PreparedStatement statement = conexion.prepareStatement(sql);
-	         ResultSet resultSet = statement.executeQuery()) {
-	        
-	        if (resultSet.next()) {
-	            cont = resultSet.getInt(1);
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	    
-	    return cont;
-	}
-	
 	public List<Cuenta> obtenerCuentasRecientes() {
 	    List<Cuenta> cuentasRecientes = new ArrayList<>();
 	    String sql = "SELECT c.*, cl.nombre as nombre_cliente, cl.apellido as apellido_cliente, " +
@@ -323,7 +307,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	                 "FROM cuentas c " +
 	                 "INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente " +
 	                 "INNER JOIN tipos_cuenta tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta " +
-	                 "ORDER BY c.fecha_creacion DESC LIMIT 3";
+	                 "ORDER BY c.fecha_creacion DESC LIMIT 3";//FLOR dice: Me gustaría que DESC LIMIT sean 5, no 3. Para mostrar en Home-Admin.
 	    
 	    try {
 	        Class.forName("com.mysql.jdbc.Driver");
@@ -345,7 +329,6 @@ public class CuentaDaoImpl implements CuentaDao {
 	    
 	    return cuentasRecientes;
 	}
-
 
 
 }
