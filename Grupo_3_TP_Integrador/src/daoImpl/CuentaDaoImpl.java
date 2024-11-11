@@ -186,7 +186,6 @@ public class CuentaDaoImpl implements CuentaDao {
         return listaCuentas;
     }
 
-
     @Override
     public int encontrarCuentaActivaPorCliente(int idCliente) {
         String cuentaActiva = "SELECT COUNT(*) as cantidad FROM cuentas WHERE id_cliente = ? AND estado_cuenta = true";
@@ -293,4 +292,55 @@ public class CuentaDaoImpl implements CuentaDao {
 	    
 	    return cuenta;
 	}
+
+	public int contarCuentasAbiertas() {
+	    int cont = 0;
+	    String sql = "SELECT COUNT(*) FROM cuentas WHERE activa = true";
+	    
+	    try (Connection conexion = Conexion.getConnection();
+	         PreparedStatement statement = conexion.prepareStatement(sql);
+	         ResultSet resultSet = statement.executeQuery()) {
+	        
+	        if (resultSet.next()) {
+	            cont = resultSet.getInt(1);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return cont;
+	}
+	
+	public List<Cuenta> obtenerCuentasRecientes() {
+	    List<Cuenta> cuentasRecientes = new ArrayList<>();
+	    String sql = "SELECT c.*, cl.nombre as nombre_cliente, cl.apellido as apellido_cliente, " +
+	                 "tc.tipo_cuenta as tipo_cuenta " +
+	                 "FROM cuentas c " +
+	                 "INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente " +
+	                 "INNER JOIN tipos_cuenta tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta " +
+	                 "ORDER BY c.fecha_creacion DESC LIMIT 3";
+	    
+	    try {
+	        Class.forName("com.mysql.jdbc.Driver");
+	    } catch (ClassNotFoundException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    try (Connection conexion = Conexion.getConnection();
+	         PreparedStatement statement = conexion.prepareStatement(sql);
+	         ResultSet rs = statement.executeQuery()) {
+	        
+	        while (rs.next()) {
+	            cuentasRecientes.add(mapResultSetDeCuenta(rs));
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return cuentasRecientes;
+	}
+
+
+
 }

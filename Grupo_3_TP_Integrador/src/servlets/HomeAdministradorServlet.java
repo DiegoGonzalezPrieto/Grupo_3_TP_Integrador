@@ -13,7 +13,9 @@ import javax.servlet.http.HttpSession;
 
 import dominio.Cliente;
 import dominio.Usuario;
-//import dominio.Cuenta;
+import negocioImpl.ClienteNegocioImpl;
+import negocioImpl.CuentaNegocioImpl;
+import dominio.Cuenta;
 
 @WebServlet("/HomeAdministradorServlet")
 public class HomeAdministradorServlet extends HttpServlet {
@@ -27,27 +29,29 @@ public class HomeAdministradorServlet extends HttpServlet {
             return;
         }
         
-        //ClienteNegocioImpl clienteNegocio = new ClienteNegocioImpl();
-        //Cliente cliente = clienteNegocio.buscarPorIdUsuario(usuario.getId());
-
-        //CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
+        ClienteNegocioImpl clienteNegocio = new ClienteNegocioImpl();
+        CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
         //PrestamoNegocioImpl prestamoNegocio = new PrestamoNegocioImpl();
 
         int clientesActivos = clienteNegocio.contarClientesActivos();
-        int cuentasAbiertas = cuentaNegocio.contarCuentasAbiertas();
-        int prestamosAutorizados = prestamoNegocio.contarPrestamosAutorizados();
-        int prestamosPendientes = prestamoNegocio.contarPrestamosPendientes();
-        List<Cuenta> cuentasRecientes = cuentaNegocio.obtenerCuentasRecientes();
-
-        // Pasar los datos a la vista
+        int cuentasAbiertas = cuentaNegocio.totalCuentasAbiertas();
+        //int prestamosAutorizados = prestamoNegocio.contarPrestamosAutorizados();.
+        int prestamosAutorizados = 268;
+        //int prestamosPendientes = prestamoNegocio.contarPrestamosPendientes();
+        int prestamosPendientes = 130;
+        List<Cuenta> cuentasRecientes = cuentaNegocio.listarCuentasRecientes();
+        
         request.setAttribute("clientesActivos", clientesActivos);
         request.setAttribute("cuentasAbiertas", cuentasAbiertas);
         request.setAttribute("prestamosAutorizados", prestamosAutorizados);
         request.setAttribute("prestamosPendientes", prestamosPendientes);
         request.setAttribute("cuentasRecientes", cuentasRecientes);
-
-        // Redirigir a la vista
+        
         RequestDispatcher rd = request.getRequestDispatcher("HomeAdministrador.jsp");
         rd.forward(request, response);
+    }
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response);
     }
 }

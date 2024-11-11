@@ -25,12 +25,10 @@
 
 		<form action="LoginServlet" method="POST"
 			class="w-50 border border-2 rounded p-4">
-			<label for="usuario" class="form-label">Usuario</label> <input
-				type="text" placeholder="Usuario" id="usuario" name="usuario"
-				required class="form-control"> <br> <label
-				for="password" class="form-label">Contraseña</label> <input
-				type="password" placeholder="Contraseña" id="password"
-				name="password" required class="form-control"> <br>
+			<label for="usuario" class="form-label">Usuario</label> 
+			<input type="text" placeholder="Usuario" id="usuario" name="usuario" required class="form-control"><br>
+			<label for="password" class="form-label">Contraseña</label>
+			<input type="password" placeholder="Contraseña" id="password" name="password" required class="form-control"><br>
 			<div class="text-center">
 				<button type="submit" class="btn btn-dark">Ingresar</button>
 			</div>

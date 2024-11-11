@@ -86,6 +86,7 @@ public class LoginServlet extends HttpServlet {
 	
 	
 	String obtenerRuta(Usuario usuario) {
-		return usuario.esAdmin() ? "HomeAdministrador.jsp" : "HomeCliente.jsp";
+		//return usuario.esAdmin() ? "HomeAdministradorServlet" : "HomeClienteServlet";
+		return usuario.esAdmin() ? "HomeAdministradorServlet" : "HomeCliente.jsp";
 	}
 }
