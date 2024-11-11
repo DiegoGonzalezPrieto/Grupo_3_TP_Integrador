@@ -282,6 +282,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	    Cliente cliente = new Cliente();
 	    cliente.setIdCliente(rs.getInt("id_cliente"));
 	    cliente.setNombre(rs.getString("nombre_cliente"));
+	    cliente.setApellido(rs.getString("apellido_cliente"));
 	    cuenta.setCliente(cliente);
 
 	    TipoCuenta tipoCuenta = new TipoCuenta(rs.getInt("id_tipo_cuenta"), rs.getString("tipo_cuenta"));
