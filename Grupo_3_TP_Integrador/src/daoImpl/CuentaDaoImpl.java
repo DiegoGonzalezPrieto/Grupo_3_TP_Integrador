@@ -47,7 +47,9 @@ public class CuentaDaoImpl implements CuentaDao {
 
     @Override
     public boolean update(Cuenta cuenta) {
+
         String update = "UPDATE cuentas SET id_tipo_cuenta = ?, saldo = ?, estado_cuenta = ? WHERE id_cuenta = ?";
+
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -188,7 +190,9 @@ public class CuentaDaoImpl implements CuentaDao {
 
     @Override
     public int encontrarCuentaActivaPorCliente(int idCliente) {
+
         String cuentaActiva = "SELECT COUNT(*) as cantidad FROM cuentas WHERE id_cliente = ? AND estado_cuenta = true";
+
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -270,18 +274,18 @@ public class CuentaDaoImpl implements CuentaDao {
     
 	private Cuenta mapResultSetDeCuenta(ResultSet rs) throws SQLException {
 
-		Cuenta cuenta = new Cuenta();
+		  Cuenta cuenta = new Cuenta();
 	    cuenta.setId(rs.getInt("id_cuenta"));
+
 	    
 	    Cliente cliente = new Cliente();
 	    cliente.setIdCliente(rs.getInt("id_cliente"));
 	    cliente.setNombre(rs.getString("nombre_cliente"));
 	    cuenta.setCliente(cliente);
-	    
+
 	    TipoCuenta tipoCuenta = new TipoCuenta(rs.getInt("id_tipo_cuenta"), rs.getString("tipo_cuenta"));
 	    
-	    //tipoCuenta.setId(rs.getInt("id_tipo_cuenta"));
-	    //tipoCuenta.setNombre(rs.getString("tipo_cuenta"));
+
 	    cuenta.setTipoCuenta(tipoCuenta);
 	    
 	    cuenta.setFechaCreacion(rs.getDate("fecha_creacion"));
@@ -289,6 +293,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	    cuenta.setCbu(rs.getString("cbu"));
 	    cuenta.setSaldo(rs.getBigDecimal("saldo"));
 	    cuenta.setActiva(rs.getBoolean("estado_cuenta"));
+
 	    
 	    return cuenta;
 	}

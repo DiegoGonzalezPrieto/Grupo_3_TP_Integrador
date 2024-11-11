@@ -9,6 +9,10 @@ public class TipoCuenta {
 		this.id = id;
 		this.nombre = nombre;
 	}
+	
+	public TipoCuenta() {
+		
+	}
 
 	public int getId() {
 		return id;
