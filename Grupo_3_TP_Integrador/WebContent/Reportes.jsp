@@ -108,17 +108,19 @@ label {
 		<form action="GenerarReporteServlet" method="POST">
 			<div class="mb-3">
 				<label for="tipoReporte">Tipo de Reporte:</label> <select
-					id="tipoReporte" name="tipoReporte" class="form-select">
+					id="tipoReporte" name="tipoReporte" class="form-select" required
+					onchange="reporteSeleccionado(this.value)">
 					<option value="clientes">Reporte de Clientes</option>
 					<option value="cuentas">Reporte de Cuentas</option>
 					<option value="prestamos">Reporte de Préstamos</option>
 				</select> <label for="fechaInicio">Fecha de Inicio:</label> <input
 					type="date" id="fechaInicio" name="fechaInicio"
-					class="form-control" required> <label for="fechaFin">Fecha
-					de Fin:</label> <input type="date" id="fechaFin" name="fechaFin"
-					class="form-control" required> <input type="submit"
-					value="Generar Reporte" class="btn btn-primary"
-					onclick="return confirm('¿Generar reporte?')">
+					class="form-control" required onclick="this.showPicker()"
+					onchange="fechaFin.min = fechaInicio.value"> <label
+					for="fechaFin">Fecha de Fin:</label> <input type="date"
+					id="fechaFin" name="fechaFin" class="form-control" required
+					onclick="this.showPicker()"> <input type="submit"
+					value="Generar Reporte" class="btn btn-primary">
 			</div>
 		</form>
 	</div>
@@ -154,7 +156,30 @@ label {
 			</div>
 		</form>
 	</div>
+
+
 	<%@ include file="Footer.jsp"%>
+	<script type="text/javascript">
+		// init seleccion de fechas
+		if (tipoReporte.value === 'clientes') {
+			fechaInicio.disabled = true;
+			fechaFin.disabled = true;
+		}
+		fechaInicio.max = new Date().toISOString().split("T")[0];
+		fechaFin.max = new Date().toISOString().split("T")[0];
+
+		// Cambios en formulario según tipo de reporte:
+		function reporteSeleccionado(reporte) {
+			console.log("reporte: ", reporte)
+			if (reporte === 'clientes') {
+				fechaInicio.disabled = true;
+				fechaFin.disabled = true;
+			} else {
+				fechaInicio.disabled = false;
+				fechaFin.disabled = false;
+			}
+		}
+	</script>
 	<script type="text/javascript">
 		let table = new DataTable(
 				'#tablaReportes',
