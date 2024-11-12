@@ -23,7 +23,7 @@ public class CuentaNegocioImpl implements CuentaNegocio {
         }
         
         if (cuentaDao.existeCBU(cuenta.getCbu()) || 
-            !validarNumeroCuenta(cuenta.getNumeroCuenta())) {
+            !validarNumeroCuenta(cuenta.getNumeroCuenta()) || !validarCBU(cuenta.getCbu())) {
             return false;
         }
         

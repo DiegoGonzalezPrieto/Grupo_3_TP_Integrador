@@ -51,6 +51,20 @@
 <body>
 	<%@ include file="BarraMenu.jsp"%>
 <div class="container mt-4">
+	<%
+	   String mensaje = (String) request.getAttribute("mensaje");
+	   String tipoMensaje = (String) request.getAttribute("tipoMensaje");
+	   if(mensaje != null && tipoMensaje != null) {
+	%>
+	   <div class="alert alert-<%=tipoMensaje%> alert-dismissible fade show" role="alert">
+	       <%=mensaje%>
+	       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	           <span aria-hidden="true">&times;</span>
+	       </button>
+	   </div>
+	<%
+	   }
+	%>
 	<h1>Administración de Cuentas</h1>
 
 	<div class="mt-4">
@@ -145,12 +159,12 @@
 				
 		        <div class="form-group">
 		            <label for="numeroCuenta">Número de Cuenta:</label>
-		            <input type="text" id="numeroCuenta" name="numeroCuenta" class="form-control" required>
+		            <input type="text" id="numeroCuenta" name="numeroCuenta" class="form-control" pattern="[0-9]{6,20}" title="El número de cuenta debe tener entre 6 y 20 dígitos numéricos" required>
 		        </div>
 		
 		        <div class="form-group">
 		            <label for="cbu">CBU:</label>
-		            <input type="text" id="cbu" name="cbu" class="form-control" required>
+		            <input type="text" id="cbu" name="cbu" class="form-control" pattern="[0-9]{22}" minlength="22" maxlength="22" title="El CBU debe tener exactamente 22 dígitos numéricos" required>
 		        </div>
 		
 		        <div class="form-group">

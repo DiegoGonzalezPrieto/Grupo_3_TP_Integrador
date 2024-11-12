@@ -75,7 +75,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
     @Override
     public boolean delete(int id) {
-        String delete = "UPDATE cuentas SET estado_cuenta = false WHERE id_cuenta = 1";
+        String delete = "UPDATE cuentas SET estado_cuenta = false WHERE id_cuenta = ?";
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
