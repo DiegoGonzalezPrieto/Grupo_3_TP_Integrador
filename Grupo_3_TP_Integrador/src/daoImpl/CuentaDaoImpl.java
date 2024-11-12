@@ -48,7 +48,7 @@ public class CuentaDaoImpl implements CuentaDao {
     @Override
     public boolean update(Cuenta cuenta) {
 
-        String update = "UPDATE cuentas SET id_tipo_cuenta = ?, saldo = ?, estado_cuenta = ? WHERE id_cuenta = ?";
+        String update = "UPDATE cuentas SET id_tipo_cuenta = ?, saldo = ? WHERE id_cuenta = ?";
 
         
         try {
@@ -62,8 +62,7 @@ public class CuentaDaoImpl implements CuentaDao {
             
             statement.setInt(1, cuenta.getTipoCuenta().getId());
             statement.setBigDecimal(2, cuenta.getSaldo());
-            statement.setBoolean(3, cuenta.Activa());
-            statement.setInt(4, cuenta.getId());
+            statement.setInt(3, cuenta.getId());
             
             return statement.executeUpdate() > 0;
             
@@ -97,7 +96,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
     @Override
     public Cuenta encontrarPorId(int id) {
-        String encontrarPorId = "SELECT c.*, cl.nombre as nombre_cliente, tc.tipo_cuenta as tipo_cuenta " + 
+        String encontrarPorId = "SELECT c.*, cl.nombre as nombre_cliente, cl.apellido as apellido_cliente, tc.tipo_cuenta as tipo_cuenta " + 
         		"FROM cuentas c INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente " + 
         		"INNER JOIN tipos_cuenta tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta WHERE c.id_cuenta = ?";
         

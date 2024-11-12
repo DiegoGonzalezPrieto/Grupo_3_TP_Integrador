@@ -99,11 +99,11 @@
 	                        $<%=String.format("%,.2f", cuenta.getSaldo())%>
 	                    </td>
 	                    <td>
-	                        <a href="ModificarCuentaServlet?id=<%=cuenta.getId()%>" class="btn btn-warning btn-sm">
-	                            Modificar
+	                        <a href="ModificarCuentaServlet?id=<%=cuenta.getId()%>" class="btn btn-outline-primary">
+	                            <i class="fas fa-edit"></i>
 	                        </a>
 	                        <a href="EliminarCuentaServlet?id=<%=cuenta.getId()%>" 
-	                           class="btn btn-danger btn-sm"
+	                           class="btn btn-outline-danger"
 	                           onclick="return confirm('¿Seguro que desea eliminar esta cuenta?')">
 	                            <i class="fa-regular fa-trash-can"></i>
 	                        </a>
@@ -175,8 +175,10 @@
 		                   value="10000" readonly>
 		            <small class="form-text text-muted">El saldo inicial es fijo de $10,000</small>
 		        </div>
-		
-		        <button type="submit" class="btn btn-primary">Agregar Cuenta</button>
+				<div class="d-flex justify-content-center mb-3">
+				    <button type="submit" class="btn btn-outline-success">Agregar Cuenta</button>
+				</div>
+
 		    </form>
 	</div>
 </div>
