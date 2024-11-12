@@ -18,29 +18,31 @@ import negocioImpl.PrestamoNegocioImpl;
 
 @WebServlet("/AutorizacionPrestamoServlet")
 public class AutorizacionPrestamoServlet extends HttpServlet {
+	
+	//DECLARACION DE VARIABLES
 	private static final long serialVersionUID = 1L;
-    private PrestamoNegocio pNeg = new PrestamoNegocioImpl();   
-   
+    private PrestamoNegocio pNeg = new PrestamoNegocioImpl(); 
+    static final int APROBADO = 2;
+    static final int RECHAZADO = 3;
+    
+    
     public AutorizacionPrestamoServlet() {
         super();
         
     }
-
+    
+    private boolean validarParametros(String idPrestamo, String accion) {
+    	 return idPrestamo != null && !idPrestamo.isEmpty() && accion != null && !accion.isEmpty();
+    }
+    
+    
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		try {
 			
 			//OBTENER TODOS LOS PRESTAMOS
-			ArrayList<Prestamo> todosLosPrestamos = new ArrayList<Prestamo>();
-			todosLosPrestamos=pNeg.listarTodosLosPrestamos();
-			
-			if(todosLosPrestamos == null || todosLosPrestamos.isEmpty()) {
-				System.out.println("no hay prestamos");
-			}
-			else {
-				System.out.println("se encontraron prestamos");
-			}
+			ArrayList<Prestamo> todosLosPrestamos = pNeg.listarTodosLosPrestamos();
 			request.setAttribute("listaPrestamos", todosLosPrestamos);
 								
 			//MANDA LA INFO AL JSP.
@@ -48,7 +50,7 @@ public class AutorizacionPrestamoServlet extends HttpServlet {
 			rd.forward(request, response); 
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			response.sendRedirect("error.jsp?mensaje=Error al Obtener los Prestamos");
 		}
 		
 	}
@@ -61,7 +63,7 @@ public class AutorizacionPrestamoServlet extends HttpServlet {
 		
 		///VERIFICO QUE NO LLEGUE VACIO O NULL
 		
-		if(idPrestamo == null || idPrestamo.isEmpty() || accion == null || accion.isEmpty()) {
+		if(!validarParametros(idPrestamo,accion)) {
 			response.sendRedirect("error.jsp?mensaje=Parametros invalidos");
 			return;
 		}
@@ -77,20 +79,24 @@ public class AutorizacionPrestamoServlet extends HttpServlet {
 				return;
 			}
 			
-			//PRESTAMO APROBADO
+			//MANEJO DE PRESTAMO 
 			
 			if("Aprobar".equals(accion)) {
 				pNeg.aprobarPrestamo(prestamo);
+				//pNeg.actualizarEstadoSolicitud(prestamo.getId(),APROBADO);
 			}
 			else if ("Rechazar".equals(accion)) {
-				pNeg.actualizarEstadoSolicitud(prestamo.getId(),3);
+				pNeg.actualizarEstadoSolicitud(prestamo.getId(),RECHAZADO);
 			}
 			else {
 				response.sendRedirect("error.jsp?mensaje=Accion no valida");
 				return;
 			}
-			
-			response.sendRedirect("AutorizacionPrestamosServet"); // ENVIO AL SERVLET PARA QUE VUELVA A CARGAR LA LISTA Y APAREZCA COMO CORRESPONDE
+
+			request.setAttribute("mensajeExito", "La solicitud fue procesada correctamente");
+			RequestDispatcher rd = request.getRequestDispatcher("/AutorizacionPrestamos.jsp");
+			rd.forward(request, response);
+			//response.sendRedirect("AutorizacionPrestamoServlet"); // ENVIO AL SERVLET PARA QUE VUELVA A CARGAR LA LISTA Y APAREZCA COMO CORRESPONDE
 		}
 		catch(NumberFormatException e) {
 			response.sendRedirect("error.jsp?mensaje= ID de prestamo invalido");
