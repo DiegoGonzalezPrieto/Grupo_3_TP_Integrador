@@ -1,3 +1,5 @@
+<%@page import="java.util.List"%>
+<%@page import="dominio.Prestamo"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -26,10 +28,20 @@
 <body>
 	<%@ include file="BarraMenu.jsp"%>
 	<div class="container">
-		<h1 class="display-3">Autorización de Préstamos</h1>
-
-		<!-- TODO: obtener préstamos y mostrarlos -->
-		<!-- TODO: Si está pendiente, mostrar los botones de Acción, con enlace al Servlet correspondiente-->
+		<h1 class="display-3">Autorización de Préstamos</h1>		
+		
+		<%
+            List<Prestamo> prestamos = (List<Prestamo>) request.getAttribute("listaPrestamos");
+            if (prestamos == null || prestamos.isEmpty()) {
+        %>
+            <p>No hay préstamos disponibles.</p>
+            
+        <% }else{ %>     
+        
+            <p>Se encontraron <%= prestamos.size() %> préstamos.</p>
+            
+        <% } %>    
+       
 		<table id="tabla-prestamos" class="table table-striped">
 			<thead>
 				<tr>
@@ -42,39 +54,47 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>Alba Martínez</td>
-					<td>Caja de Ahorro ARS - CBU: 23234755095</td>
-					<td>$ 20.000.000</td>
-					<td>24</td>
-					<td class="text-center text-bg-secondary">Pendiente</td>
-					<td>
+					<!-- OBTENGO LA LISTA DEL SERVLET  -->	
+					<%
+						
+						if(prestamos != null){
+							for(Prestamo p : prestamos) {	
+								
+					%>
+					
+				<tr>	
+					<td><%=p.getCliente().getNombre() %></td>
+					<td><%=p.getCuenta().getNumeroCuenta() %></td>
+					<td><%=p.getImportePrestamo() %></td>
+					<td><%=p.getCuotas() %></td>
+					<td class="text-center <%if (p.getEstadoValidacion().getNombre().equals("Pendiente")) { %> text-bg-secondary 
+					<% } else if (p.getEstadoValidacion().getNombre().equals("Autorizado")){ %>text-bg-success
+					<% } else if (p.getEstadoValidacion().getNombre().equals("Rechazado")){ %>text-bg-danger<% } %>">
+					
+					<%= p.getEstadoValidacion().getNombre() %>
+					
+					</td>
+					<td class ="text-center">
+						
+						<% if (p.getEstadoValidacion().getNombre().equals("Pendiente")){ %>
 						<div class="btn-group btn-group-sm" role="group">
 							<a class="btn btn-outline-success"
-								href="AprobarPrestamoServlet?id=23"
+								href="AprobarPrestamoServlet?id=<%= p.getId() %>&accion=Aprobar"
 								onclick="return confirm('¿Está seguro de que desea Autorizar el préstamo?')">Aprobar</a>
 							<a class="btn btn-outline-danger"
-								href="RechazarPrestamoServlet?id=23"
+								href="RechazarPrestamoServlet?id=<%= p.getId() %>&accion=Rechazar"
 								onclick="return confirm('¿Está seguro de que desea Rechazar el préstamo?')">Rechazar</a>
 						</div>
+						<%} else { %>
+							<span>-</span>	
+						<%} %>								
 					</td>
-				</tr>
-				<tr>
-					<td>Jorge Pérez</td>
-					<td>Cuenta Corriente - CBU: 55589376482</td>
-					<td>$ 5.000.000</td>
-					<td>6</td>
-					<td class="text-center text-bg-success">Aprobado</td>
-					<td class="text-center">-</td>
-				</tr>
-				<tr>
-					<td>Mauro Gómez</td>
-					<td>Cuenta Corriente - CBU: 233684955</td>
-					<td>$ 150.000.000</td>
-					<td>36</td>
-					<td class="text-center text-bg-danger">Rechazado</td>
-					<td class="text-center">-</td>
-				</tr>
+				</tr>	
+				<%
+							}
+						}
+				%>
+								
 			</tbody>
 		</table>
 	</div>
