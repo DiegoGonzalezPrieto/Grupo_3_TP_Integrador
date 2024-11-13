@@ -1,5 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+	
+	<% if (request.getAttribute("listaC") == null) { %>
+    <script>
+        window.location.href = "AdministracionClientesServlet";
+    </script>
+<% } %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="dominio.Cliente" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -48,78 +56,72 @@
 
 			<div class="tab-pane fade show active" id="clientes" role="tabpanel"
 				aria-labelledby="clientes-tab">
-				<form action="AdministracionClientesServlet" method="POST"
-					class="mb-4">
-					<div class="input-group mb-3">
-						<input type="text" id="filtro" name="filtro" class="form-control"
-							placeholder="Buscar cliente">
-						<button type="submit" class="btn btn-primary">Buscar</button>
-					</div>
+					<a href="GestionDatosServlet"><input type="submit" name="btnNuevo" class="btn btn-success btn-sm" value="Nuevo cliente"></a>
+				
+				
+				
+				<form action="AdministracionClientesServlet" method="POST" class="mb-4">
+					
 					<div class="mb-3">
-						<button type="submit" class="btn btn-success">Nuevo
-							cliente</button>
-					</div>
-				</form>
-
+						
+						
+					</div>				
+				<%
+					ArrayList<Cliente> listaClientes = null;
+					if(request.getAttribute("listaC") != null){
+						listaClientes = (ArrayList<Cliente>) request.getAttribute("listaC");
+					}
+				%>			
 				<table id="clientesTable" class="table table-striped table-bordered"
 					style="width: 80%">
 					<thead class="table-dark">
 						<tr>
-							<th>DNI</th>
-							<th>CUIL</th>
+							<th>ID</th>
+							<th>DNI</th>	
 							<th>Nombre</th>
 							<th>Apellido</th>
 							<th>Sexo</th>
-							<th>Nacionalidad</th>
-							<th>Fecha de Nacimiento</th>
 							<th>Dirección</th>
 							<th>Localidad</th>
 							<th>Provincia</th>
 							<th>Correo Electrónico</th>
 							<th>Teléfono</th>
+							<th>Nacionalidad</th>
+							<th>Detalles</th>
 							<th>Editar</th>
 							<th>Eliminar</th>
 						</tr>
 					</thead>
 					<tbody>
-
+				<% 
+					if(listaClientes != null)
+					for(Cliente cli : listaClientes)
+					{
+						if(cli.activo()){				
+					%>
 						<tr>
-							<td>30567890</td>
-							<td>20-30567890-5</td>
-							<td>Lucía</td>
-							<td>Pérez</td>
-							<td>F</td>
-							<td>Argentina</td>
-							<td>1990-04-12</td>
-							<td>Calle Falsa 123</td>
-							<td>Buenos Aires</td>
-							<td>Buenos Aires</td>
-							<td>lucia.perez@example.com</td>
-							<td>+54 11 1234-5678</td>
-							<td><button class="btn btn-warning btn-sm">Editar</button></td>
-							<td><button class="btn btn-danger btn-sm">Eliminar</button></td>
+							<td><%=cli.getId() %></td>
+							<td><%=cli.getDni() %></td>							
+							<td><%=cli.getNombre() %></td>
+							<td><%=cli.getApellido() %></td>
+							<td><%=cli.getGenero() %></td>
+							<td><%=cli.getDireccion() %></td>
+							<td><%=cli.getLocalidad().getNombre() %></td>
+							<td><%=cli.getProvincia().getNombre() %></td>
+							<td><%=cli.getCorreoElectronico() %></td>
+							<td><%=cli.getTelefono() %></td>
+							<td><%=cli.getNacionalidad().getNombre() %></td>
+							
+							<td><button type="submit" name="action" value="ver" class="btn btn-info btn-sm" formaction="GestionDatosServlet?clienteId=<%=cli.getId() %>">Ver</button></td>
+                        	<td><button type="submit" name="action" value="editar" class="btn btn-warning btn-sm" formaction="GestionDatosServlet?clienteId=<%=cli.getId() %>">Editar</button></td>
+                        	<td><button type="submit" name="action" value="eliminar" class="btn btn-danger btn-sm" formaction="GestionDatosServlet?clienteId=<%=cli.getId() %>">Eliminar</button></td>
 						</tr>
-						<tr>
-							<td>30567890</td>
-							<td>20-30567890-5</td>
-							<td>Lucía</td>
-							<td>Pérez</td>
-							<td>F</td>
-							<td>Argentina</td>
-							<td>1990-04-12</td>
-							<td>Calle Falsa 123</td>
-							<td>Buenos Aires</td>
-							<td>Buenos Aires</td>
-							<td>lucia.perez@example.com</td>
-							<td>+54 11 1234-5678</td>
-							<td><button class="btn btn-warning btn-sm">Editar</button></td>
-							<td><button class="btn btn-danger btn-sm">Eliminar</button></td>
-						</tr>
-
+				<%} } %>
 					</tbody>
 				</table>
+				</form>
+					
 			</div>
-
 
 			<div class="tab-pane fade" id="usuarios" role="tabpanel"
 				aria-labelledby="usuarios-tab">
@@ -137,6 +139,8 @@
 			</div>
 		</div>
 	</div>
+	
+	
 	<%@ include file="Footer.jsp"%>
 
 
