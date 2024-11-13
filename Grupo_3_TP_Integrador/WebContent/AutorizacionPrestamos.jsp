@@ -69,11 +69,13 @@
 		<table id="tabla-prestamos" class="table table-striped">
 			<thead>
 				<tr>
-					<th scope="col">Nombre del Cliente</th>
-					<th scope="col">Cuenta a Depositar</th>
-					<th scope="col">Monto Solicitado</th>
-					<th scope="col">Cantidad de Cuotas</th>
-					<th scope="col">Estado</th>
+					<th scope="col" class="text-center">Nombre del Cliente</th>
+					<th scope="col" class="text-center">Apellido del Cliente</th>
+					<th scope="col" class="text-center">Cuenta a Depositar</th>
+					<th scope="col" class="text-center">Monto Solicitado</th>
+					<th scope="col" class="text-center">Fecha Solicitado</th>
+					<th scope="col" class="text-center">Cantidad de Cuotas</th>
+					<th scope="col" class="text-center">Estado</th>
 					<th scope="col" class="text-center">Acción</th>
 				</tr>
 			</thead>
@@ -88,8 +90,10 @@
 					
 				<tr>	
 					<td class="text-center"><%=p.getCliente().getNombre() %></td>
+					<td class="text-center"><%=p.getCliente().getApellido() %></td>
 					<td class="text-center"><%=p.getCuenta().getNumeroCuenta() %></td>
 					<td class="text-center">$ <%=p.getImportePrestamo() %></td>
+					<td class="text-center"><%=p.getFechaAltaPrestamo() %></td>
 					<td class="text-center"><%=p.getCuotas() %></td>
 					<td class="text-center <%if (p.getEstadoValidacion().getNombre().equals("Pendiente")) { %> text-bg-secondary 
 					<% } else if (p.getEstadoValidacion().getNombre().equals("Autorizado")){ %>text-bg-success

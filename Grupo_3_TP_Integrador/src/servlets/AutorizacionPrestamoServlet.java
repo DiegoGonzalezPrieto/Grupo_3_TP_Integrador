@@ -96,7 +96,7 @@ public class AutorizacionPrestamoServlet extends HttpServlet {
 			request.setAttribute("mensajeExito", "La solicitud fue procesada correctamente");
 			RequestDispatcher rd = request.getRequestDispatcher("/AutorizacionPrestamos.jsp");
 			rd.forward(request, response);
-			//response.sendRedirect("AutorizacionPrestamoServlet"); // ENVIO AL SERVLET PARA QUE VUELVA A CARGAR LA LISTA Y APAREZCA COMO CORRESPONDE
+			
 		}
 		catch(NumberFormatException e) {
 			response.sendRedirect("error.jsp?mensaje= ID de prestamo invalido");
