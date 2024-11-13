@@ -46,6 +46,14 @@
 				<button type="submit" class="btn btn-dark">Ingresar</button>
 			</div>
 		</form>
+		<% 
+		String error = (String) request.getAttribute("error");
+		if (error != null && !error.isEmpty()) {
+		%>
+			<p style="color:red;"><%= error %></p>
+		<% 
+		}
+		%>
 	</div>
 </body>
 </html>
