@@ -13,6 +13,7 @@ import dominio.Cuenta;
 import dominio.TipoCuenta;
 
 public class CuentaDaoImpl implements CuentaDao {
+	
 	private static final int idCuentaExcluir = 0;
 
 	@Override
@@ -126,10 +127,11 @@ public class CuentaDaoImpl implements CuentaDao {
     @Override
     public List<Cuenta> obtenerTodos() {
         List<Cuenta> listaCuentas = new ArrayList<>();
-        String obtenerTodos = "SELECT c.*, cl.nombre as nombre_cliente, cl.apellido as apellido_cliente, tc.tipo_cuenta as tipo_cuenta " +
-                       "FROM cuentas c " +
-                       "INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente " +
-                       "INNER JOIN tipos_cuenta tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta WHERE c.estado_cuenta = 1";
+
+        String obtenerTodos = "SELECT c.*, cl.nombre as nombre_cliente, cl.apellido as apellido_cliente, "
+        		+ "tc.tipo_cuenta as tipo_cuenta FROM cuentas c "
+        		+ "INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente "
+        		+ "INNER JOIN tipos_cuenta tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta";
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -138,7 +140,7 @@ public class CuentaDaoImpl implements CuentaDao {
         }
         
         try (Connection conexion = Conexion.getConnection();
-             PreparedStatement statement = conexion.prepareStatement(obtenerTodos)) {
+        		PreparedStatement statement = conexion.prepareStatement(obtenerTodos)) {
             
             ResultSet rs = statement.executeQuery();
             
@@ -186,7 +188,6 @@ public class CuentaDaoImpl implements CuentaDao {
         
         return listaCuentas;
     }
-
 
     @Override
     public int encontrarCuentaActivaPorCliente(int idCliente) {
@@ -335,11 +336,11 @@ public class CuentaDaoImpl implements CuentaDao {
 	    cliente.setIdCliente(rs.getInt("id_cliente"));
 	    cliente.setNombre(rs.getString("nombre_cliente"));
 	    cliente.setApellido(rs.getString("apellido_cliente"));
+
 	    cuenta.setCliente(cliente);
 
 	    TipoCuenta tipoCuenta = new TipoCuenta(rs.getInt("id_tipo_cuenta"), rs.getString("tipo_cuenta"));
 	    
-
 	    cuenta.setTipoCuenta(tipoCuenta);
 	    
 	    cuenta.setFechaCreacion(rs.getDate("fecha_creacion"));
@@ -351,4 +352,36 @@ public class CuentaDaoImpl implements CuentaDao {
 	    
 	    return cuenta;
 	}
+
+	public List<Cuenta> obtenerCuentasRecientes() {
+	    List<Cuenta> cuentasRecientes = new ArrayList<>();
+	    String sql = "SELECT c.*, cl.nombre as nombre_cliente, cl.apellido as apellido_cliente, " +
+	                 "tc.tipo_cuenta as tipo_cuenta " +
+	                 "FROM cuentas c " +
+	                 "INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente " +
+	                 "INNER JOIN tipos_cuenta tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta " +
+	                 "ORDER BY c.fecha_creacion DESC LIMIT 3";//FLOR dice: Me gustaría que DESC LIMIT sean 5, no 3. Para mostrar en Home-Admin.
+	    
+	    try {
+	        Class.forName("com.mysql.jdbc.Driver");
+	    } catch (ClassNotFoundException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    try (Connection conexion = Conexion.getConnection();
+	         PreparedStatement statement = conexion.prepareStatement(sql);
+	         ResultSet rs = statement.executeQuery()) {
+	        
+	        while (rs.next()) {
+	            cuentasRecientes.add(mapResultSetDeCuenta(rs));
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return cuentasRecientes;
+	}
+
+
 }

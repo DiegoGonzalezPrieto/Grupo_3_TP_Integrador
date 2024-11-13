@@ -13,6 +13,7 @@ public interface CuentaDao {
     List<Cuenta> obtenerTodos();
     List<Cuenta> obtenerTodoPorCliente(int idCliente);
     int encontrarCuentaActivaPorCliente(int idCliente);
+    List<Cuenta> obtenerCuentasRecientes();
     
     boolean existeCBU(String cbu);
     boolean existeNumeroCuenta(Long numeroCuenta);

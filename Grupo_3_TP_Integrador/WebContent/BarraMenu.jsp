@@ -37,7 +37,7 @@
 					if (usuario != null) {
 				%>
 				<li class="nav-item"><a class="nav-link"
-					href=<%=usuario.esAdmin() ? "HomeAdministrador.jsp" : "DatosCliente.jsp"%>>
+					href=<%=usuario.esAdmin() ? "HomeAdministradorServlet" : "DatosCliente.jsp"%>>
 						<%=usuario.getNombreUsuario()%></a></li>
 
 
@@ -46,7 +46,7 @@
 				%>
 
 				<li class="nav-item"><a class="nav-link"
-					href="HomeAdministrador.jsp">Inicio</a></li>
+					href="HomeAdministradorServlet">Inicio</a></li>
 				<li class="nav-item"><a class="nav-link"
 					href="AdministracionClientes.jsp">Adm. de Clientes</a></li>
 				<li class="nav-item"><a class="nav-link"

@@ -10,6 +10,7 @@ import negocio.CuentaNegocio;
 public class CuentaNegocioImpl implements CuentaNegocio {
     
     private CuentaDao cuentaDao;
+    
     private static final int MAX_CUENTAS_ACTIVAS = 3;
     
     public CuentaNegocioImpl() {
@@ -110,4 +111,13 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 		String ultimoCBU = cuentaDao.obtenerUltimoCBU();
 		return ultimoCBU;
 	}
+
+    public int totalCuentasAbiertas() {
+    	return cuentaDao.obtenerTodos().size();
+    }
+
+    public List<Cuenta> listarCuentasRecientes(){
+    	return cuentaDao.obtenerCuentasRecientes();
+    }
+    
 }
