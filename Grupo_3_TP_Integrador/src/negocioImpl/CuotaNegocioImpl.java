@@ -1,9 +1,11 @@
 package negocioImpl;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import dao.CuotaDao;
 import daoImpl.CuotaDaoImp;
@@ -22,6 +24,7 @@ public class CuotaNegocioImpl implements CuotaNegocio {
 	public boolean agregarCuotas(Prestamo prestamo) throws SQLException {
 		
 		Cuota cuota = new Cuota();
+		
 		try {
 			
 			boolean cuotasGeneradas = false;
@@ -29,6 +32,13 @@ public class CuotaNegocioImpl implements CuotaNegocio {
 				
 				cuota.setPrestamo(prestamo);
 				cuota.setNumeroCuota(i);
+				cuota.setMontoPagado(prestamo.getImporteMensual());
+
+				//FECHA CASTEADA A 1900-1-1.
+				Calendar C  = Calendar.getInstance();
+				C.set(1900, Calendar.JANUARY, 1);
+				cuota.setFechaPago(new java.sql.Date(C.getTimeInMillis()));
+				
 										
 				cuotaDao.insert(cuota);
 				if(i == prestamo.getCuotas()) {

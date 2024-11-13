@@ -33,13 +33,14 @@ public class PrestamoNegocioImpl implements PrestamoNegocio {
 			//VERIFICAMOS QUE EL PRESTAMO ESTE PENDIENTE 
 			if(prestamo.getEstadoValidacion().getId() == 1) {
 			
-			//1 PASO: CAMBIAR EL ESTADO DEL PRESTAMO A ACEPTADO 	
-			boolean actualizarEstado = actualizarEstadoSolicitud(prestamo.getId(),2);
-			// 2 PASO: CREAMOS LAS CUOTAS PARA EL PRESTAMO.
+			// 1 PASO: CREAMOS LAS CUOTAS PARA EL PRESTAMO.
 			boolean generarCuotas = cNeg.agregarCuotas(prestamo); 
 			
-				if(actualizarEstado && generarCuotas) {
+				if(generarCuotas) {
 			
+					//2 PASO: CAMBIAR EL ESTADO DEL PRESTAMO A ACEPTADO 	
+					boolean actualizarEstado = actualizarEstadoSolicitud(prestamo.getId(),2);
+					
 					//3 TRAEMOS EL SALDO Y DEL PRESTAMO Y LA CUENTA A ACREDITAR
 					saldoPrestamo = prestamo.getImportePrestamo();
 					cuenta = cuNeg.obtenerCuentaPorId(prestamo.getCuenta().getId());
