@@ -27,7 +27,6 @@ public interface PrestamoNegocio {
 	public BigDecimal sumarPrestamosAprobados()throws SQLException;
 	public BigDecimal sumarPrestamosRechazados()throws SQLException;
 	public BigDecimal sumarPrestamosEnEvaluacion()throws SQLException;
-	public Boolean aprobarPrestamo(Prestamo prestamo) throws SQLException;
 	
 
 }
