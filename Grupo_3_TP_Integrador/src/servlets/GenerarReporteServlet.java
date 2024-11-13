@@ -3,38 +3,30 @@ package servlets;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import dominio.Cliente;
-import dominio.Cuenta;
-import dominio.Nacionalidad;
-import dominio.Provincia;
+import dominio.ReporteGuardado;
 import negocio.ClienteNegocio;
 import negocio.CuentaNegocio;
 import negocio.PrestamoNegocio;
 import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.CuentaNegocioImpl;
-import negocioImpl.NacionalidadNegocioImpl;
 import negocioImpl.PrestamoNegocioImpl;
-import negocioImpl.ProvinciaNegocioImpl;
 
 /**
  * Servlet implementation class GenerarReporteServlet
@@ -57,6 +49,12 @@ public class GenerarReporteServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		HttpSession session = request.getSession();
+		if(session.getAttribute("reportes") == null) {
+			session.setAttribute("reportes", new ArrayList<ReporteGuardado>());
+		}
+				
 		request.getRequestDispatcher("Reportes.jsp").forward(request, response);
 	}
 
@@ -67,6 +65,12 @@ public class GenerarReporteServlet extends HttpServlet {
 	@SuppressWarnings("deprecation")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		// crear atributo reportes si no existe
+		HttpSession session = request.getSession();
+		if(session.getAttribute("reportes") == null) {
+			session.setAttribute("reportes", new ArrayList<ReporteGuardado>());
+		}
 
 		String tipoReporte = request.getParameter("tipoReporte");
 		String reporte = "";
@@ -107,11 +111,15 @@ public class GenerarReporteServlet extends HttpServlet {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			String periodo = sdf.format(fechaInicio) + " a " + sdf.format(fechaFin);
 			nombreReporte = "reporte_prestamos_" + periodo + ".txt";
+		}
 
+		if (!reporte.trim().isEmpty()) {
+			request = guardarReporteEnSesion(request, reporte, nombreReporte, tipoReporte);
 		}
 
 		response.setContentType("text/plain");
 		response.setHeader("Content-disposition", "attachment; filename=" + nombreReporte);
+		
 		try (OutputStream out = response.getOutputStream()) {
 			out.write(reporte.getBytes());
 		}
@@ -126,7 +134,7 @@ public class GenerarReporteServlet extends HttpServlet {
 		CuentaNegocio n = new CuentaNegocioImpl();
 		DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(Locale.ITALIAN);
 		df.setMaximumFractionDigits(2);
-		
+
 		// TODO : estadísticas de movimientos
 
 		reporte += "- Cantidad de Cuentas creadas durante el período: "
@@ -150,6 +158,9 @@ public class GenerarReporteServlet extends HttpServlet {
 		df.setMaximumFractionDigits(2);
 
 		try {
+			
+			// TODO : estadísticas de cuotas
+			
 			int cantAprobados = n.contarPrestamosAprobados(fechaInicio, fechaFin);
 			int cantRechazados = n.contarPrestamosRechazados(fechaInicio, fechaFin);
 			int cantPendientes = n.contarPrestamosEnEvaluacion(fechaInicio, fechaFin);
@@ -189,7 +200,6 @@ public class GenerarReporteServlet extends HttpServlet {
 		reporte += "===================\n\n";
 
 		ClienteNegocio nc = new ClienteNegocioImpl();
-		ArrayList<Cliente> clientesActivos = nc.listarActivos();
 
 		// Cantidades
 
@@ -218,23 +228,6 @@ public class GenerarReporteServlet extends HttpServlet {
 			Integer cantidad = nacCantidad.getValue();
 			cantidadPorNacionalidad += "\t* " + nacionalidad + ": " + cantidad.toString() + "\n";
 		}
-//		ArrayList<Nacionalidad> nacionalidades = new NacionalidadNegocioImpl().buscarTodos();
-//
-//		DecimalFormat df = new DecimalFormat();
-//		String porcentajesNacionalidad = "";
-//		df.setMaximumFractionDigits(2);
-//		for (Nacionalidad nacionalidad : nacionalidades) {
-//			int contador = 0;
-//			for (Cliente cli : clientesActivos) {
-//				if (cli.getNacionalidad().getId() == nacionalidad.getId()) {
-//					contador++;
-//				}
-//			}
-//			if (contador > 0) {
-//				porcentajesNacionalidad += "\t* " + nacionalidad.getNombre() + " - "
-//						+ df.format(((float) contador * 100.00 / cantidadActivos)) + "%\n";
-//			}
-//		}
 
 		reporte += "- Cantidad de Clientes (total): " + cantidadTotal + "\n";
 		reporte += "- Cantidad de Clientes Activos: " + cantidadActivos + "\n";
@@ -250,5 +243,28 @@ public class GenerarReporteServlet extends HttpServlet {
 		reporte += "- Nacionalidades de Clientes Activos:\n\n" + cantidadPorNacionalidad;
 
 		return reporte;
+	}
+
+	HttpServletRequest guardarReporteEnSesion(HttpServletRequest request, String reporte, String nombre, String tipo) {
+		HttpSession session = request.getSession();
+		
+		List<ReporteGuardado> reportes = (List<ReporteGuardado>) session.getAttribute("reportes");
+
+		ReporteGuardado reporteGuardado = new ReporteGuardado();
+		reporteGuardado.setContenido(reporte);
+		reporteGuardado.setId(reportes.size() + 1);
+		reporteGuardado.setNombre(nombre);
+		if (tipo.equals("clientes")) {
+			reporteGuardado.setTipo("Reporte de Clientes");
+			reporteGuardado.setFechas(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+		} else {
+			String tipoReporte = tipo.equals("prestamos") ? "Reporte de Préstamos" : "Reporte de Cuentas";
+			reporteGuardado.setTipo(tipoReporte);
+			reporteGuardado.setFechas(request.getParameter("fechaInicio") + " a " + request.getParameter("fechaFin"));
+		}
+
+		reportes.add(reporteGuardado);
+		session.setAttribute("reportes", reportes);
+		return request;
 	}
 }
