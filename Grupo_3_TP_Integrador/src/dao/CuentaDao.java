@@ -17,8 +17,5 @@ public interface CuentaDao {
     
     boolean existeCBU(String cbu);
     boolean existeNumeroCuenta(Long numeroCuenta);
-    
-    Long obtenerUltimoNumeroCuenta();
-    String obtenerUltimoCBU();
 
 }
