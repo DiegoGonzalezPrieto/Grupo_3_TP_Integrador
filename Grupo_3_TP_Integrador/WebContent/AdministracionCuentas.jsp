@@ -1,15 +1,5 @@
-<%@page import="dominio.TipoCuenta"%>
-<%@page import="dominio.Cliente"%>
-<%@page import="dominio.Cuenta"%>
-<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%
-   if(request.getAttribute("listaCuentas") == null) {
-       response.sendRedirect("AdministracionCuentasServlet");
-       return;
-   }
-%>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -50,76 +40,95 @@
 </head>
 <body>
 	<%@ include file="BarraMenu.jsp"%>
-<div class="container mt-4">
-	<%
-	   String mensaje = (String) request.getAttribute("mensaje");
-	   String tipoMensaje = (String) request.getAttribute("tipoMensaje");
-	   if(mensaje != null && tipoMensaje != null) {
-	%>
-	   <div class="alert alert-<%=tipoMensaje%> alert-dismissible fade show" role="alert">
-	       <%=mensaje%>
-	       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-	           <span aria-hidden="true">&times;</span>
-	       </button>
-	   </div>
-	<%
-	   }
-	%>
-	<h1>Administración de Cuentas</h1>
+	<div class="container mt-4">
+		<h1>Administración de Cuentas</h1>
 
-	<div class="mt-4">
-		<h2>Listado de Cuentas</h2>
-		<a href="AgregarCuentaServlet" class="btn btn-outline-success mb-3" >Nueva Cuenta</a>
-		<table id="cuentasTable" class="table table-striped table-bordered">
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Cliente</th>
-					<th>Fecha de Creación</th>
-					<th>Tipo de Cuenta</th>
-					<th>Número de Cuenta</th>
-					<th>CBU</th>
-					<th>Saldo</th>
-					<th>Acciones</th>
-				</tr>
-			</thead>
-			<tbody>
-	            <%
-	                List<Cuenta> listaCuentas = (List<Cuenta>)request.getAttribute("listaCuentas");
-	                if(listaCuentas != null) {
-	                    for(Cuenta cuenta : listaCuentas) {
-	            %>
-	                <tr>
-	                    <td><%=cuenta.getId()%></td>
-	                    <td><%=cuenta.getCliente().getNombre() + " " + cuenta.getCliente().getApellido()%></td>
-	                    <td><%=cuenta.getFechaCreacion()%></td>
-	                    <td><%=cuenta.getTipoCuenta().getNombre()%></td>
-	                    <td><%=cuenta.getNumeroCuenta()%></td>
-	                    <td><%=cuenta.getCbu()%></td>
-	                    <td class="<%=cuenta.getSaldo().doubleValue() >= 0 ? "text-success" : "text-danger"%>">
-	                        $<%=String.format("%,.2f", cuenta.getSaldo())%>
-	                    </td>
-	                    <td>
-	                        <a href="ModificarCuentaServlet?id=<%=cuenta.getId()%>" class="btn btn-outline-primary">
-	                            <i class="fas fa-edit"></i>
-	                        </a>
-	                        <a href="EliminarCuentaServlet?id=<%=cuenta.getId()%>" 
-	                           class="btn btn-outline-danger"
-	                           onclick="return confirm('¿Seguro que desea eliminar esta cuenta?')">
-	                            <i class="fa-regular fa-trash-can"></i>
-	                        </a>
-	                    </td>
-	                </tr>
-	            <%
-	                    }
-	                }
-	            %>
-	        </tbody>
-		</table>
+		<div class="mt-4">
+			<h2>Listado de Cuentas</h2>
+			<table id="cuentasTable" class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Cliente</th>
+						<th>Fecha de Creación</th>
+						<th>Tipo de Cuenta</th>
+						<th>Número de Cuenta</th>
+						<th>CBU</th>
+						<th>Saldo</th>
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>Cliente 1</td>
+						<td>2024-11-01</td>
+						<td>Caja de Ahorro</td>
+						<td>123456789</td>
+						<td>12345678901234567890</td>
+						<td>$10,000</td>
+						<td><a href="ModificarCuentaServlet?id=1"
+							class="btn btn-warning btn-sm">Modificar</a> <a
+							href="EliminarCuentaServlet?id=1" class="btn btn-danger btn-sm"
+							onclick="return confirm('¿Seguro que desea eliminar esta cuenta?')">
+								<i class="fa-regular fa-trash-can"></i>
+						</a></td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Cliente 2</td>
+						<td>2024-10-31</td>
+						<td>Cuenta Corriente</td>
+						<td>987654321</td>
+						<td>09876543210123456789</td>
+						<td>$17,631.59</td>
+						<td><a href="ModificarCuentaServlet?id=2"
+							class="btn btn-warning btn-sm">Modificar</a> <a
+							href="EliminarCuentaServlet?id=2" class="btn btn-danger btn-sm"
+							onclick="return confirm('¿Seguro que desea eliminar esta cuenta?')">
+								<i class="fa-regular fa-trash-can"></i>
+						</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="mt-4">
+			<h2>Agregar Nueva Cuenta</h2>
+			<form action="AgregarCuentaServlet" method="post">
+				<div class="form-group">
+					<label for="cliente">Cliente:</label> <select id="cliente"
+						name="cliente" class="form-control">
+						<option value="1">Cliente 1</option>
+						<option value="2">Cliente 2</option>
+					</select> <a href="AdministracionClientes.jsp">Agregar cliente</a>
+				</div>
+				<div class="form-group">
+					<label for="tipoCuenta">Tipo de Cuenta:</label> <select
+						id="tipoCuenta" name="tipoCuenta" class="form-control">
+						<option value="cajaAhorro">Caja de Ahorro</option>
+						<option value="cuentaCorriente">Cuenta Corriente</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="numeroCuenta">Número de Cuenta:</label> <input
+						type="text" id="numeroCuenta" name="numeroCuenta"
+						class="form-control" required>
+				</div>
+				<div class="form-group">
+					<label for="cbu">CBU:</label> <input type="text" id="cbu"
+						name="cbu" class="form-control" required>
+				</div>
+				<div class="form-group">
+					<label for="saldo">Saldo Inicial:</label> <input type="number"
+						id="saldo" name="saldo" class="form-control" min="10000"
+						step="0.01" placeholder="Ingrese el saldo inicial">
+				</div>
+				<button type="submit" class="btn btn-primary">Agregar
+					Cuenta</button>
+			</form>
+		</div>
 	</div>
-
-	
-</div>
 
 	<%@ include file="Footer.jsp"%>
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
