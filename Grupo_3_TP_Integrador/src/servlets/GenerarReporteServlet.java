@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
@@ -123,22 +124,10 @@ public class GenerarReporteServlet extends HttpServlet {
 		reporte += "========================================\n\n";
 
 		CuentaNegocio n = new CuentaNegocioImpl();
-		// List<Cuenta> cuentasTodas = n.listarTodas();
-		// List<Cuenta> cuentasPeriodo = n.listarTodas();
-		// cuentasPeriodo.removeIf(c -> new
-		// Date(c.getFechaCreacion().getTime()).before(fechaInicio)
-		// || c.getFechaCreacion().after(fechaFin));
-		//
-		// BigDecimal totalSaldo = new BigDecimal(0);
-		// for (Cuenta cuenta : cuentasPeriodo) {
-		// totalSaldo = totalSaldo.add(cuenta.getSaldo());
-		// }
 		DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(Locale.ITALIAN);
 		df.setMaximumFractionDigits(2);
-		// DecimalFormatSymbols dfs = df.getDecimalFormatSymbols();
-		// dfs.setDecimalSeparator(',');
-		// dfs.set
-		// df.setDecimalFormatSymbols(dfs);
+		
+		// TODO : estadísticas de movimientos
 
 		reporte += "- Cantidad de Cuentas creadas durante el período: "
 				+ n.obtenerReporteCantidadDeCuentas(fechaInicio, fechaFin) + "\n\n";
@@ -169,16 +158,23 @@ public class GenerarReporteServlet extends HttpServlet {
 			BigDecimal sumaPendientes = n.sumarPrestamosEnEvaluacion(fechaInicio, fechaFin);
 			BigDecimal promedio = n.getPromedioPrestamos(fechaInicio, fechaFin);
 
-			reporte += "- Cantidad de Prestamos aprobados que fueron creados durante el período: " + cantAprobados + "\n";
-			reporte += "- Cantidad de Prestamos rechazados que fueron creados durante el período: " + cantRechazados + "\n";
-			reporte += "- Cantidad de Prestamos en evaluacion que fueron creados durante el período: " + cantPendientes + "\n\n";
-			
-			reporte += "- Monto total de Prestamos aprobados que fueron creados durante el período: $" + df.format(sumaAprobados) + "\n";
-			reporte += "- Monto total de Prestamos rechazados que fueron creados durante el período: $" + df.format(sumaRechazados) + "\n";
-			reporte += "- Monto total de Prestamos en evaluación que fueron creados durante el período: $" + df.format(sumaPendientes) + "\n\n";
-			
-			reporte += "- Monto promedio de Prestamos que fueron creados durante el período: $" + df.format(promedio) + "\n\n";
-			
+			reporte += "- Cantidad de Prestamos aprobados que fueron creados durante el período: " + cantAprobados
+					+ "\n";
+			reporte += "- Cantidad de Prestamos rechazados que fueron creados durante el período: " + cantRechazados
+					+ "\n";
+			reporte += "- Cantidad de Prestamos en evaluacion que fueron creados durante el período: " + cantPendientes
+					+ "\n\n";
+
+			reporte += "- Monto total de Prestamos aprobados que fueron creados durante el período: $"
+					+ df.format(sumaAprobados) + "\n";
+			reporte += "- Monto total de Prestamos rechazados que fueron creados durante el período: $"
+					+ df.format(sumaRechazados) + "\n";
+			reporte += "- Monto total de Prestamos en evaluación que fueron creados durante el período: $"
+					+ df.format(sumaPendientes) + "\n\n";
+
+			reporte += "- Monto promedio de Prestamos que fueron creados durante el período: $" + df.format(promedio)
+					+ "\n\n";
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			reporte = "Error al generar el reporte.";
@@ -194,81 +190,65 @@ public class GenerarReporteServlet extends HttpServlet {
 
 		ClienteNegocio nc = new ClienteNegocioImpl();
 		ArrayList<Cliente> clientesActivos = nc.listarActivos();
-		ArrayList<Cliente> clientesTodos = nc.listarTodos();
 
 		// Cantidades
 
-		int cantidadTotal = clientesTodos.size();
-		int cantidadActivos = clientesActivos.size();
-		int cantidadInactivos = cantidadTotal - cantidadActivos;
+		int cantidadTotal = nc.contarTodos();
+		int cantidadActivos = nc.contarActivos();
+		int cantidadInactivos = nc.contarInactivos();
 
 		// Edad
 
-		int sumaEdades = 0;
-		for (Cliente cliente : clientesActivos) {
-			sumaEdades += calcularEdad(cliente.getFechaNacimiento());
-		}
-		int edadPromedio = sumaEdades / cantidadActivos;
+		float edadPromedio = nc.obtenerEdadPromedioActivos();
 
 		// Provincia
-		ArrayList<Provincia> provincias = new ProvinciaNegocioImpl().buscarTodos();
-		Provincia provinciaMax = new Provincia(0, "Provincia");
-		int cantidadProvinciaMax = 0;
-		for (Provincia provincia : provincias) {
-			int totalProvincia = 0;
-			for (Cliente cli : clientesActivos) {
-				if (cli.getProvincia().getId() == provincia.getId()) {
-					totalProvincia++;
-				}
-			}
-			if (totalProvincia > cantidadProvinciaMax) {
-				cantidadProvinciaMax = totalProvincia;
-				provinciaMax = provincia;
-			}
+		String cantidadPorProvincia = "";
+		HashMap<String, Integer> clientesPorProvincia = nc.obtenerClientesPorProvincia();
+		for (Entry<String, Integer> provCantidad : clientesPorProvincia.entrySet()) {
+			String provincia = provCantidad.getKey();
+			Integer cantidad = provCantidad.getValue();
+			cantidadPorProvincia += "\t* " + provincia + ": " + cantidad.toString() + "\n";
 		}
 
 		// Nacionalidad
-		ArrayList<Nacionalidad> nacionalidades = new NacionalidadNegocioImpl().buscarTodos();
-
-		String porcentajesNacionalidad = "";
-		DecimalFormat df = new DecimalFormat();
-		df.setMaximumFractionDigits(2);
-		for (Nacionalidad nacionalidad : nacionalidades) {
-			int contador = 0;
-			for (Cliente cli : clientesActivos) {
-				if (cli.getNacionalidad().getId() == nacionalidad.getId()) {
-					contador++;
-				}
-			}
-			if (contador > 0) {
-				porcentajesNacionalidad += "\t* " + nacionalidad.getNombre() + " - "
-						+ df.format(((float) contador * 100.00 / cantidadActivos)) + "%\n";
-			}
+		String cantidadPorNacionalidad = "";
+		HashMap<String, Integer> clientesPorNacionalidad = nc.obtenerClientesPorNacionalidad();
+		for (Entry<String, Integer> nacCantidad : clientesPorNacionalidad.entrySet()) {
+			String nacionalidad = nacCantidad.getKey();
+			Integer cantidad = nacCantidad.getValue();
+			cantidadPorNacionalidad += "\t* " + nacionalidad + ": " + cantidad.toString() + "\n";
 		}
+//		ArrayList<Nacionalidad> nacionalidades = new NacionalidadNegocioImpl().buscarTodos();
+//
+//		DecimalFormat df = new DecimalFormat();
+//		String porcentajesNacionalidad = "";
+//		df.setMaximumFractionDigits(2);
+//		for (Nacionalidad nacionalidad : nacionalidades) {
+//			int contador = 0;
+//			for (Cliente cli : clientesActivos) {
+//				if (cli.getNacionalidad().getId() == nacionalidad.getId()) {
+//					contador++;
+//				}
+//			}
+//			if (contador > 0) {
+//				porcentajesNacionalidad += "\t* " + nacionalidad.getNombre() + " - "
+//						+ df.format(((float) contador * 100.00 / cantidadActivos)) + "%\n";
+//			}
+//		}
 
 		reporte += "- Cantidad de Clientes (total): " + cantidadTotal + "\n";
 		reporte += "- Cantidad de Clientes Activos: " + cantidadActivos + "\n";
 		reporte += "- Cantidad de Clientes Inactivos: " + cantidadInactivos + "\n\n";
 
-		reporte += "- Porcentaje de Clientes Activos: " + (cantidadActivos * 100 / cantidadTotal) + "%\n";
-		reporte += "- Porcentaje de Clientes Inactivos: " + (cantidadInactivos * 100 / cantidadTotal) + "%\n\n";
+		reporte += "- Porcentaje de Clientes Activos: " + (cantidadActivos * 100.00 / cantidadTotal) + "%\n";
+		reporte += "- Porcentaje de Clientes Inactivos: " + (cantidadInactivos * 100.00 / cantidadTotal) + "%\n\n";
 
-		reporte += "- Edad promedio de Clientes: " + edadPromedio + "\n\n";
+		reporte += "- Edad promedio de Clientes Activos: " + (int) edadPromedio + "\n\n";
 
-		reporte += "- Provincia con mayor cantidad de Clientes Activos: " + provinciaMax.getNombre() + " - "
-				+ cantidadProvinciaMax + " cliente(s)." + "\n\n";
+		reporte += "- Clientes Activos por provincia: \n\n" + cantidadPorProvincia + "\n";
 
-		reporte += "- Nacionalidades de Clientes Activos:\n\n" + porcentajesNacionalidad;
+		reporte += "- Nacionalidades de Clientes Activos:\n\n" + cantidadPorNacionalidad;
 
 		return reporte;
 	}
-
-	private int calcularEdad(java.sql.Date fechaNacimiento) {
-		Date hoy = new Date();
-		long diferenciaMilisegundos = Math.abs(hoy.getTime() - fechaNacimiento.getTime());
-		long diff = TimeUnit.DAYS.convert(diferenciaMilisegundos, TimeUnit.MILLISECONDS);
-
-		return (int) diff / 365;
-	}
-
 }

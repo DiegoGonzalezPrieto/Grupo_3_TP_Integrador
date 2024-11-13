@@ -1,6 +1,7 @@
 package negocio;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import dominio.Cliente;
 import dominio.Usuario;
@@ -15,6 +16,14 @@ public interface ClienteNegocio {
     Cliente buscarPorId(int id);
     ArrayList<Cliente> listarTodos();
     ArrayList<Cliente> listarActivos();
+    
+    int contarTodos();
+    int contarActivos();
+    int contarInactivos();
+    float obtenerEdadPromedioActivos();
+    HashMap<String, Integer> obtenerClientesPorProvincia();
+    HashMap<String, Integer> obtenerClientesPorNacionalidad();
+    
     
 }
 
