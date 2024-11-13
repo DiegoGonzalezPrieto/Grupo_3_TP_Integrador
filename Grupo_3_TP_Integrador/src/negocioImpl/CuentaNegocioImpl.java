@@ -100,6 +100,18 @@ public class CuentaNegocioImpl implements CuentaNegocio {
         return !cuentaDao.existeNumeroCuenta(numeroCuenta);
     }
 
+	@Override
+	public Long obtenerUltimoNumeroCuenta() {
+		Long ultimoNumeroCuenta = cuentaDao.obtenerUltimoNumeroCuenta();
+		return ultimoNumeroCuenta;
+	}
+
+	@Override
+	public String obtenerUltimoCBU() {
+		String ultimoCBU = cuentaDao.obtenerUltimoCBU();
+		return ultimoCBU;
+	}
+
     public int totalCuentasAbiertas() {
     	return cuentaDao.obtenerTodos().size();
     }
