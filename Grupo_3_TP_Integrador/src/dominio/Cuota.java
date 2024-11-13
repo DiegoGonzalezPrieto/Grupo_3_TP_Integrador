@@ -2,6 +2,8 @@ package dominio;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Calendar;
 
 public class Cuota {
 	
@@ -15,7 +17,9 @@ public class Cuota {
 	
 	
 	//CONSTRUCTORES
-	public Cuota() {}
+	public Cuota() {
+		
+	}	
 	
 	public Cuota(Prestamo prestamo,int numerocuota, BigDecimal montopagado, Date fechapago, boolean estadopago) {
 		
