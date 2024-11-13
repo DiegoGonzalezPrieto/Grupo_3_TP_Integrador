@@ -65,15 +65,18 @@ label {
 						<option value="clientes">Reporte de Clientes</option>
 						<option value="cuentas">Reporte de Cuentas</option>
 						<option value="prestamos">Reporte de Préstamos</option>
-					</select> <label for="fechaInicio">Fecha de Inicio:</label> <input
-						type="date" id="fechaInicio" name="fechaInicio"
-						class="form-control" required onclick="this.showPicker()"
-						onchange="fechaFin.min = fechaInicio.value"> <label
-						for="fechaFin">Fecha de Fin:</label> <input type="date"
-						id="fechaFin" name="fechaFin" class="form-control" required
-						onclick="this.showPicker()"> <input type="submit"
-						value="Generar Reporte" class="btn btn-primary"
-						onclick="recargarPagina()">
+					</select>
+					<div id="fechasReporte">
+						<label for="fechaInicio">Fecha de Inicio:</label> <input
+							type="date" id="fechaInicio" name="fechaInicio"
+							class="form-control" required onclick="this.showPicker()"
+							onchange="fechaFin.min = fechaInicio.value"> <label
+							for="fechaFin">Fecha de Fin:</label> <input type="date"
+							id="fechaFin" name="fechaFin" class="form-control" required
+							onclick="this.showPicker()">
+					</div>
+					<input type="submit" value="Generar Reporte"
+						class="btn btn-primary" onclick="recargarPagina()">
 				</div>
 			</form>
 		</div>
@@ -110,10 +113,8 @@ label {
 					<td><%=reporte.getNombre()%></td>
 					<td><%=reporte.getFechas()%></td>
 					<td><%=reporte.getTipo()%></td>
-					<td><a
-						href="DescargarReporteServlet?id=<%=reporte.getId()%>"
-						class="btn btn-warning mb-2"> <i
-							class="fas fa-download"></i>
+					<td><a href="DescargarReporteServlet?id=<%=reporte.getId()%>"
+						class="btn btn-warning mb-2"> <i class="fas fa-download"></i>
 					</a></td>
 				</tr>
 				<%
@@ -182,19 +183,21 @@ label {
 		if (tipoReporte.value === 'clientes') {
 			fechaInicio.disabled = true;
 			fechaFin.disabled = true;
+			fechasReporte.hidden = true;
 		}
 		fechaInicio.max = new Date().toISOString().split("T")[0];
 		fechaFin.max = new Date().toISOString().split("T")[0];
 
 		// Cambios en formulario según tipo de reporte:
 		function reporteSeleccionado(reporte) {
-			console.log("reporte: ", reporte)
 			if (reporte === 'clientes') {
 				fechaInicio.disabled = true;
 				fechaFin.disabled = true;
+				fechasReporte.hidden = true;
 			} else {
 				fechaInicio.disabled = false;
 				fechaFin.disabled = false;
+				fechasReporte.hidden = false;
 			}
 		}
 
