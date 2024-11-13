@@ -3,6 +3,7 @@ package negocioImpl;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import dao.PrestamoDao;
 import daoImpl.PrestamoDaoImpl;
@@ -232,6 +233,48 @@ public class PrestamoNegocioImpl implements PrestamoNegocio {
 		catch (Exception ex) {
 			throw ex;
 		}
+	}
+
+
+	@Override
+	public int contarPrestamosAprobados(Date fechaInicio, Date fechaFin) throws SQLException {
+		return pDao.contarPrestamosAprobados(fechaInicio, fechaFin);
+	}
+
+
+	@Override
+	public int contarPrestamosRechazados(Date fechaInicio, Date fechaFin) throws SQLException {
+		return pDao.contarPrestamosRechazados(fechaInicio, fechaFin);
+	}
+
+
+	@Override
+	public int contarPrestamosEnEvaluacion(Date fechaInicio, Date fechaFin) throws SQLException {
+		return pDao.contarPrestamosEnEvaluacion(fechaInicio, fechaFin);
+	}
+
+
+	@Override
+	public BigDecimal sumarPrestamosAprobados(Date fechaInicio, Date fechaFin) throws SQLException {
+		return pDao.sumarPrestamosAprobados(fechaInicio, fechaFin);
+	}
+
+
+	@Override
+	public BigDecimal sumarPrestamosRechazados(Date fechaInicio, Date fechaFin) throws SQLException {
+		return pDao.sumarPrestamosRechazados(fechaInicio, fechaFin);
+	}
+
+
+	@Override
+	public BigDecimal sumarPrestamosEnEvaluacion(Date fechaInicio, Date fechaFin) throws SQLException {
+		return pDao.sumarPrestamosEnEvaluacion(fechaInicio, fechaFin);
+	}
+
+
+	@Override
+	public BigDecimal getPromedioPrestamos(Date fechaInicio, Date fechaFin) throws SQLException {
+		return pDao.getPromedioPrestamos(fechaInicio, fechaFin);
 	}
 
 }

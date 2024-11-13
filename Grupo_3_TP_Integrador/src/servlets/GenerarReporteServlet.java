@@ -28,9 +28,11 @@ import dominio.Nacionalidad;
 import dominio.Provincia;
 import negocio.ClienteNegocio;
 import negocio.CuentaNegocio;
+import negocio.PrestamoNegocio;
 import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.CuentaNegocioImpl;
 import negocioImpl.NacionalidadNegocioImpl;
+import negocioImpl.PrestamoNegocioImpl;
 import negocioImpl.ProvinciaNegocioImpl;
 
 /**
@@ -61,6 +63,7 @@ public class GenerarReporteServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+	@SuppressWarnings("deprecation")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -88,6 +91,21 @@ public class GenerarReporteServlet extends HttpServlet {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			String periodo = sdf.format(fechaInicio) + " a " + sdf.format(fechaFin);
 			nombreReporte = "reporte_cuentas_" + periodo + ".txt";
+
+		} else if (tipoReporte.equals("prestamos")) {
+
+			String[] fragmentosFechaInicio = request.getParameter("fechaInicio").split("-");
+			String[] fragmentosFechaFin = request.getParameter("fechaFin").split("-");
+			if (fragmentosFechaInicio.length != 3 || fragmentosFechaFin.length != 3)
+				return;
+			Date fechaInicio = new Date(Integer.parseInt(fragmentosFechaInicio[0]) - 1900,
+					Integer.parseInt(fragmentosFechaInicio[1]) - 1, Integer.parseInt(fragmentosFechaInicio[2]));
+			Date fechaFin = new Date(Integer.parseInt(fragmentosFechaFin[0]) - 1900,
+					Integer.parseInt(fragmentosFechaFin[1]) - 1, Integer.parseInt(fragmentosFechaFin[2]));
+			reporte = generarReportePrestamos(fechaInicio, fechaFin);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String periodo = sdf.format(fechaInicio) + " a " + sdf.format(fechaFin);
+			nombreReporte = "reporte_prestamos_" + periodo + ".txt";
 
 		}
 
@@ -117,10 +135,10 @@ public class GenerarReporteServlet extends HttpServlet {
 		// }
 		DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(Locale.ITALIAN);
 		df.setMaximumFractionDigits(2);
-//		DecimalFormatSymbols dfs = df.getDecimalFormatSymbols();
-//		dfs.setDecimalSeparator(',');
-//		dfs.set
-//		df.setDecimalFormatSymbols(dfs);
+		// DecimalFormatSymbols dfs = df.getDecimalFormatSymbols();
+		// dfs.setDecimalSeparator(',');
+		// dfs.set
+		// df.setDecimalFormatSymbols(dfs);
 
 		reporte += "- Cantidad de Cuentas creadas durante el período: "
 				+ n.obtenerReporteCantidadDeCuentas(fechaInicio, fechaFin) + "\n\n";
@@ -128,6 +146,43 @@ public class GenerarReporteServlet extends HttpServlet {
 				+ df.format(n.obtenerReporteSumaDeSaldos(fechaInicio, fechaFin)) + "\n";
 		reporte += "- Promedio de saldos de Cuentas creadas durante el período: $"
 				+ df.format(n.obtenerReporteSaldoPromedio(fechaInicio, fechaFin)) + "\n";
+
+		return reporte;
+	}
+
+	private String generarReportePrestamos(Date fechaInicio, Date fechaFin) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String periodo = sdf.format(fechaInicio) + "_" + sdf.format(fechaFin);
+		String reporte = "Reporte de Préstamos " + periodo + "\n";
+		reporte += "==========================================\n\n";
+
+		PrestamoNegocio n = new PrestamoNegocioImpl();
+		DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(Locale.ITALIAN);
+		df.setMaximumFractionDigits(2);
+
+		try {
+			int cantAprobados = n.contarPrestamosAprobados(fechaInicio, fechaFin);
+			int cantRechazados = n.contarPrestamosRechazados(fechaInicio, fechaFin);
+			int cantPendientes = n.contarPrestamosEnEvaluacion(fechaInicio, fechaFin);
+			BigDecimal sumaAprobados = n.sumarPrestamosAprobados(fechaInicio, fechaFin);
+			BigDecimal sumaRechazados = n.sumarPrestamosRechazados(fechaInicio, fechaFin);
+			BigDecimal sumaPendientes = n.sumarPrestamosEnEvaluacion(fechaInicio, fechaFin);
+			BigDecimal promedio = n.getPromedioPrestamos(fechaInicio, fechaFin);
+
+			reporte += "- Cantidad de Prestamos aprobados que fueron creados durante el período: " + cantAprobados + "\n";
+			reporte += "- Cantidad de Prestamos rechazados que fueron creados durante el período: " + cantRechazados + "\n";
+			reporte += "- Cantidad de Prestamos en evaluacion que fueron creados durante el período: " + cantPendientes + "\n\n";
+			
+			reporte += "- Monto total de Prestamos aprobados que fueron creados durante el período: $" + df.format(sumaAprobados) + "\n";
+			reporte += "- Monto total de Prestamos rechazados que fueron creados durante el período: $" + df.format(sumaRechazados) + "\n";
+			reporte += "- Monto total de Prestamos en evaluación que fueron creados durante el período: $" + df.format(sumaPendientes) + "\n\n";
+			
+			reporte += "- Monto promedio de Prestamos que fueron creados durante el período: $" + df.format(promedio) + "\n\n";
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			reporte = "Error al generar el reporte.";
+		}
 
 		return reporte;
 	}
