@@ -5,12 +5,15 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
@@ -102,20 +105,29 @@ public class GenerarReporteServlet extends HttpServlet {
 		reporte += "========================================\n\n";
 
 		CuentaNegocio n = new CuentaNegocioImpl();
-		List<Cuenta> cuentasTodas = n.listarTodas();
-		List<Cuenta> cuentasPeriodo = n.listarTodas();
-		cuentasPeriodo.removeIf(c -> new Date(c.getFechaCreacion().getTime()).before(fechaInicio)
-				|| c.getFechaCreacion().after(fechaFin));
+		// List<Cuenta> cuentasTodas = n.listarTodas();
+		// List<Cuenta> cuentasPeriodo = n.listarTodas();
+		// cuentasPeriodo.removeIf(c -> new
+		// Date(c.getFechaCreacion().getTime()).before(fechaInicio)
+		// || c.getFechaCreacion().after(fechaFin));
+		//
+		// BigDecimal totalSaldo = new BigDecimal(0);
+		// for (Cuenta cuenta : cuentasPeriodo) {
+		// totalSaldo = totalSaldo.add(cuenta.getSaldo());
+		// }
+		DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(Locale.ITALIAN);
+		df.setMaximumFractionDigits(2);
+//		DecimalFormatSymbols dfs = df.getDecimalFormatSymbols();
+//		dfs.setDecimalSeparator(',');
+//		dfs.set
+//		df.setDecimalFormatSymbols(dfs);
 
-		BigDecimal totalSaldo = new BigDecimal(0);
-		for (Cuenta cuenta : cuentasPeriodo) {
-			totalSaldo = totalSaldo.add(cuenta.getSaldo());
-		}
-
-		reporte += "- Cantidad de Cuentas creadas durante el período: " + cuentasPeriodo.size() + "\n\n";
-		reporte += "- Suma de saldos de Cuentas creadas durante el período: $" + totalSaldo + "\n";
+		reporte += "- Cantidad de Cuentas creadas durante el período: "
+				+ n.obtenerReporteCantidadDeCuentas(fechaInicio, fechaFin) + "\n\n";
+		reporte += "- Suma de saldos de Cuentas creadas durante el período: $"
+				+ df.format(n.obtenerReporteSumaDeSaldos(fechaInicio, fechaFin)) + "\n";
 		reporte += "- Promedio de saldos de Cuentas creadas durante el período: $"
-				+ totalSaldo.divide(new BigDecimal(cuentasPeriodo.size())) + "\n";
+				+ df.format(n.obtenerReporteSaldoPromedio(fechaInicio, fechaFin)) + "\n";
 
 		return reporte;
 	}
