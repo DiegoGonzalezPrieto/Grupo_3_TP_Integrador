@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dominio.Usuario;
+import exceptions.PasswordIncorrectaException;
+import exceptions.UsuarioNoEncontradoException;
 import negocioImpl.UsuarioNegocioImpl;
 
 /**
@@ -50,34 +52,40 @@ public class LoginServlet extends HttpServlet {
 		String password = request.getParameter("password");
 
 		
-		if (user == null || password == null) {
-			// faltan datos - vuelve a Login.jsp
-			// TODO : redireccionar a error?
-			RequestDispatcher rd = request.getRequestDispatcher("Login.jsp");
-			rd.forward(request, response);
-			return;
+		if (user == null || password == null) { 
+			request.setAttribute("error", "Faltan datos."); 
+			RequestDispatcher rd = request.getRequestDispatcher("Login.jsp"); 
+			rd.forward(request, response); return; 
 		}
 		
 		UsuarioNegocioImpl n = new UsuarioNegocioImpl();
 		
+		try { 
+			Usuario usuario = validarUsuario(user, password, n);
+			confirmarLogin(usuario, request); String ruta = obtenerRuta(usuario);
+			RequestDispatcher rd = request.getRequestDispatcher(ruta);
+			rd.forward(request, response);
+			} catch (UsuarioNoEncontradoException | PasswordIncorrectaException e) {
+				request.setAttribute("error", e.getMessage());
+				RequestDispatcher rd = request.getRequestDispatcher("Login.jsp");
+				rd.forward(request, response);
+			}
+	}
+	
+	private Usuario validarUsuario(String user, String password, UsuarioNegocioImpl n) throws UsuarioNoEncontradoException, PasswordIncorrectaException {
 		ArrayList<Usuario> usuarios = n.buscarTodos();
 		
-		for (Usuario usuario : usuarios) {
-			if (usuario.getNombreUsuario().equals(user)  && usuario.getPass().equals(password)) {
-				// login OK!
-				
-				confirmarLogin(usuario, request);
-				String ruta = obtenerRuta(usuario);
-				RequestDispatcher rd = request.getRequestDispatcher(ruta);
-				
-				rd.forward(request, response);
-				return;
+		for (Usuario usuario : usuarios) { 
+			if (usuario.getNombreUsuario().equals(user)) { 
+				if (usuario.getPass().equals(password)) { 
+					return usuario;
+					} else {
+						throw new PasswordIncorrectaException();
+					}
+				}
 			}
+			throw new UsuarioNoEncontradoException();
 		}
-		
-		RequestDispatcher rd = request.getRequestDispatcher("Login.jsp");
-		rd.forward(request, response);
-	}
 	
 	void confirmarLogin(Usuario usuario, HttpServletRequest request) {
 		HttpSession session = request.getSession();
