@@ -54,6 +54,10 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 	public Cliente buscarPorNombre(String nombre) {
 		return clienteDao.encontrarPorNombre(nombre);
 	}
+	
+	public int contarClientesActivos() {
+		return clienteDao.buscarTodosActivos().size();
+	}
 
 	@Override
 	public int contarTodos() {

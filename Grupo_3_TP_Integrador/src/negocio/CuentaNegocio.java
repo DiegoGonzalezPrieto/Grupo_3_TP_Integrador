@@ -18,7 +18,7 @@ public interface CuentaNegocio {
     boolean puedeCrearCuenta(int idCliente);
     boolean validarCBU(String cbu);
     boolean validarNumeroCuenta(Long numeroCuenta);
-    
+
     /*
      * Obtiene la cantidad de cuentas creadas en el periodo especificado
      * */
@@ -33,4 +33,7 @@ public interface CuentaNegocio {
      * Obtiene el saldo promedio de las cuentas creadas en el periodo especificado
      * */
     BigDecimal obtenerReporteSaldoPromedio(Date fechaInicio, Date fechaFin);
+
+    Long obtenerUltimoNumeroCuenta();
+    String obtenerUltimoCBU();
 }

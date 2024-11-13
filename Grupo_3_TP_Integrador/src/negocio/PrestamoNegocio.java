@@ -36,5 +36,6 @@ public interface PrestamoNegocio {
 	public BigDecimal sumarPrestamosRechazados(Date fechaInicio, Date fechaFin)throws SQLException;
 	public BigDecimal sumarPrestamosEnEvaluacion(Date fechaInicio, Date fechaFin)throws SQLException;
 	public BigDecimal getPromedioPrestamos(Date fechaInicio, Date fechaFin)throws SQLException;
+  public Boolean aprobarPrestamo(Prestamo prestamo) throws SQLException;
 
 }

@@ -14,23 +14,34 @@
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-	crossorigin="anonymous"></script>
+	crossorigin="anonymous">
+</script>
+<style>
+	body, html {
+		height: 100%;
+		margin: 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: #f8f9fa;
+	}
+</style>
 </head>
 <body>
+		<!-- Agregando "flex-wrap: wrap" o "flex-direction: column" al style de body, 
+		hmtl se ve titulo y abajo form, en vez de un elemento al lado del otro-->
+<div>
+
+	<h1 class="display-3 my-3" style="text-align: center;">- BANCO G3L4 -</h1>
+</div>
 	<div class="container">
+		<h2 class="my-3">Iniciar sesión</h2>
 
-
-
-		<h1 class="display-3 my-3">Login</h1>
-
-		<form action="LoginServlet" method="POST"
-			class="w-50 border border-2 rounded p-4">
-			<label for="usuario" class="form-label">Usuario</label> <input
-				type="text" placeholder="Usuario" id="usuario" name="usuario"
-				required class="form-control"> <br> <label
-				for="password" class="form-label">Contraseña</label> <input
-				type="password" placeholder="Contraseña" id="password"
-				name="password" required class="form-control"> <br>
+		<form action="LoginServlet" method="POST" class="border border-2 rounded p-4">
+			<label for="usuario" class="form-label">Usuario</label> 
+			<input type="text" placeholder="Usuario" id="usuario" name="usuario" required class="form-control"><br>
+			<label for="password" class="form-label">Contraseña</label>
+			<input type="password" placeholder="Contraseña" id="password" name="password" required class="form-control"><br>
 			<div class="text-center">
 				<button type="submit" class="btn btn-dark">Ingresar</button>
 			</div>

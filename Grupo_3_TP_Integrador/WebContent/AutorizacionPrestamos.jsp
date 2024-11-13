@@ -1,6 +1,14 @@
+<%@page import="java.util.List"%>
+<%@page import="dominio.Prestamo"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
+<!DOCTYPE html >
+<%
+   if(request.getAttribute("listaPrestamos") == null) {
+       response.sendRedirect("AutorizacionPrestamoServlet");
+       return;
+   }
+%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -26,10 +34,38 @@
 <body>
 	<%@ include file="BarraMenu.jsp"%>
 	<div class="container">
-		<h1 class="display-3">Autorización de Préstamos</h1>
-
-		<!-- TODO: obtener préstamos y mostrarlos -->
-		<!-- TODO: Si está pendiente, mostrar los botones de Acción, con enlace al Servlet correspondiente-->
+		<h1 class="display-3">Autorización de Préstamos</h1>		
+       	
+       	<!-- MOSTRAR MENSAJE DE EXITO DESPUES DE LA OPERACION -->
+       	<% 
+       		String mensajeExito = (String) request.getAttribute("mensajeExito"); 
+        	if (mensajeExito != null) {
+   		 %>
+        	<div class="alert alert-success alert-dismissible fade show" role="alert">
+            	<%= mensajeExito %>
+           		 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+       		</div>
+    	<% 
+       		 }
+  	     %>
+		
+		<!--  TRAER LISTA DE PRESTAMOS -->
+		<%
+            List<Prestamo> prestamos = (List<Prestamo>) request.getAttribute("listaPrestamos");
+            if (prestamos == null || prestamos.isEmpty()) {
+        %>
+            <p>No hay préstamos disponibles.</p>
+            
+        <% }else{ %>     
+        
+            <p>Se encontraron <%= prestamos.size() %> préstamos.</p>
+            
+        <% } %>    
+       
+       
+       
+       
+       
 		<table id="tabla-prestamos" class="table table-striped">
 			<thead>
 				<tr>
@@ -42,39 +78,53 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>Alba Martínez</td>
-					<td>Caja de Ahorro ARS - CBU: 23234755095</td>
-					<td>$ 20.000.000</td>
-					<td>24</td>
-					<td class="text-center text-bg-secondary">Pendiente</td>
-					<td>
-						<div class="btn-group btn-group-sm" role="group">
-							<a class="btn btn-outline-success"
-								href="AprobarPrestamoServlet?id=23"
-								onclick="return confirm('¿Está seguro de que desea Autorizar el préstamo?')">Aprobar</a>
-							<a class="btn btn-outline-danger"
-								href="RechazarPrestamoServlet?id=23"
-								onclick="return confirm('¿Está seguro de que desea Rechazar el préstamo?')">Rechazar</a>
-						</div>
+					<!-- OBTENGO LA LISTA DEL SERVLET  -->	
+					<%
+						
+						if(prestamos != null){
+							for(Prestamo p : prestamos) {	
+								
+					%>
+					
+				<tr>	
+					<td class="text-center"><%=p.getCliente().getNombre() %></td>
+					<td class="text-center"><%=p.getCuenta().getNumeroCuenta() %></td>
+					<td class="text-center">$ <%=p.getImportePrestamo() %></td>
+					<td class="text-center"><%=p.getCuotas() %></td>
+					<td class="text-center <%if (p.getEstadoValidacion().getNombre().equals("Pendiente")) { %> text-bg-secondary 
+					<% } else if (p.getEstadoValidacion().getNombre().equals("Autorizado")){ %>text-bg-success
+					<% } else if (p.getEstadoValidacion().getNombre().equals("Rechazado")){ %>text-bg-danger<% } %>">
+					
+					<%= p.getEstadoValidacion().getNombre() %>
+					
 					</td>
-				</tr>
-				<tr>
-					<td>Jorge Pérez</td>
-					<td>Cuenta Corriente - CBU: 55589376482</td>
-					<td>$ 5.000.000</td>
-					<td>6</td>
-					<td class="text-center text-bg-success">Aprobado</td>
-					<td class="text-center">-</td>
-				</tr>
-				<tr>
-					<td>Mauro Gómez</td>
-					<td>Cuenta Corriente - CBU: 233684955</td>
-					<td>$ 150.000.000</td>
-					<td>36</td>
-					<td class="text-center text-bg-danger">Rechazado</td>
-					<td class="text-center">-</td>
-				</tr>
+					<td class ="d-flex justify-content-center">
+						
+						<% if (p.getEstadoValidacion().getNombre().equals("Pendiente")){ %>
+						
+						<form action="AutorizacionPrestamoServlet" method="post" onsubmit="return confirm('¿Está seguro de que desea Autorizar el préstamo?')">
+							<input type="hidden" name="id" value="<%= p.getId() %>" />
+							<input type="hidden" name="accion" value="Aprobar" />
+							<button type="submit" class="btn btn-outline-success btn-sm me-2">Aprobar</button>
+						</form>
+						
+						<!-- Formulario para rechazar el préstamo -->
+						<form action="AutorizacionPrestamoServlet" method="post" onsubmit="return confirm('¿Está seguro de que desea Rechazar el préstamo?')">
+							<input type="hidden" name="id" value="<%= p.getId() %>" />
+							<input type="hidden" name="accion" value="Rechazar" />
+							<button type="submit" class="btn btn-outline-danger btn-sm me-2">Rechazar</button>
+						</form>						
+						
+						<%} else { %>
+							<span>-</span>	
+						<%} %>								
+					</td>
+				</tr>	
+				<%
+							}
+						}
+				%>
+								
 			</tbody>
 		</table>
 	</div>

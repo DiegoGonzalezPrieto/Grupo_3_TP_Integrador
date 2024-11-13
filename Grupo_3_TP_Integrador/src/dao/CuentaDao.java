@@ -15,6 +15,7 @@ public interface CuentaDao {
     List<Cuenta> obtenerTodos();
     List<Cuenta> obtenerTodoPorCliente(int idCliente);
     int encontrarCuentaActivaPorCliente(int idCliente);
+    List<Cuenta> obtenerCuentasRecientes();
     
     boolean existeCBU(String cbu);
     boolean existeNumeroCuenta(Long numeroCuenta);
@@ -33,5 +34,8 @@ public interface CuentaDao {
      * Obtiene el saldo promedio de las cuentas creadas en el periodo especificado
      * */
     BigDecimal obtenerReporteSaldoPromedio(Date fechaInicio, Date fechaFin);
+
+    Long obtenerUltimoNumeroCuenta();
+    String obtenerUltimoCBU();
 
 }

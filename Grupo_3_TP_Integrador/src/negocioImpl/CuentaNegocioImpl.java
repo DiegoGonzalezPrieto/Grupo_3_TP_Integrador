@@ -12,6 +12,7 @@ import negocio.CuentaNegocio;
 public class CuentaNegocioImpl implements CuentaNegocio {
     
     private CuentaDao cuentaDao;
+    
     private static final int MAX_CUENTAS_ACTIVAS = 3;
     
     public CuentaNegocioImpl() {
@@ -115,4 +116,24 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 	public BigDecimal obtenerReporteSaldoPromedio(Date fechaInicio, Date fechaFin) {
 		return cuentaDao.obtenerReporteSaldoPromedio(fechaInicio, fechaFin);
 	}
+
+	public Long obtenerUltimoNumeroCuenta() {
+		Long ultimoNumeroCuenta = cuentaDao.obtenerUltimoNumeroCuenta();
+		return ultimoNumeroCuenta;
+	}
+
+	@Override
+	public String obtenerUltimoCBU() {
+		String ultimoCBU = cuentaDao.obtenerUltimoCBU();
+		return ultimoCBU;
+	}
+
+    public int totalCuentasAbiertas() {
+    	return cuentaDao.obtenerTodos().size();
+    }
+
+    public List<Cuenta> listarCuentasRecientes(){
+    	return cuentaDao.obtenerCuentasRecientes();
+    }
+
 }

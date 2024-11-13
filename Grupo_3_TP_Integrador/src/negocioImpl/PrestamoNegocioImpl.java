@@ -7,8 +7,10 @@ import java.util.Date;
 
 import dao.PrestamoDao;
 import daoImpl.PrestamoDaoImpl;
+import dominio.Cuenta;
 import dominio.Prestamo;
-
+import negocio.CuentaNegocio;
+import negocio.CuotaNegocio;
 import negocio.PrestamoNegocio;
 
 public class PrestamoNegocioImpl implements PrestamoNegocio {
@@ -16,20 +18,63 @@ public class PrestamoNegocioImpl implements PrestamoNegocio {
 	///ATRIBUTOS
 	
 	private PrestamoDao pDao = new PrestamoDaoImpl();	
-	//private CuotaNegocio cuotaNeg = new CuotaNegImpl(); esto para el metodo de aprobar prestamo
-	//private CuentaNegocio cuentaNeg = new CuentaNegocioImpl(); esto para el metodo aprobar prestamo
-	
+	private CuotaNegocio cNeg = new CuotaNegocioImpl(); 
+	private CuentaNegocio cuNeg = new CuentaNegocioImpl(); 
+	private Cuenta cuenta = new Cuenta();
+	private BigDecimal saldoPrestamo = null;
 	
 	
 	//-------------------------------METODOS LOCALES------------------------------------//
 	
-	public boolean aprobarPrestamo(Prestamo prestamo) throws SQLException{
+	public Boolean aprobarPrestamo(Prestamo prestamo) throws SQLException{
+		//DECLARACION DE VARIABLES
+		boolean aprobacionOK = false;
+				
+		try {
+			//VERIFICAMOS QUE EL PRESTAMO ESTE PENDIENTE 
+			if(prestamo.getEstadoValidacion().getId() == 1) {
+			
+			//1 PASO: CAMBIAR EL ESTADO DEL PRESTAMO A ACEPTADO 	
+			boolean actualizarEstado = actualizarEstadoSolicitud(prestamo.getId(),2);
+			// 2 PASO: CREAMOS LAS CUOTAS PARA EL PRESTAMO.
+			boolean generarCuotas = cNeg.agregarCuotas(prestamo); 
+			
+				if(actualizarEstado && generarCuotas) {
+			
+					//3 TRAEMOS EL SALDO Y DEL PRESTAMO Y LA CUENTA A ACREDITAR
+					saldoPrestamo = prestamo.getImportePrestamo();
+					cuenta = cuNeg.obtenerCuentaPorId(prestamo.getCuenta().getId());
+				
+					//4 PASO ACREDITAMOS SALDO A LA CUENTA
+					cuenta.setSaldo(cuenta.getSaldo().add(saldoPrestamo));
+				
+					//5 PASO ACTUALIZAMOS CUENTA
+					boolean cuentaActualizada=cuNeg.actualizarCuenta(cuenta);				
+			
+					//5 PASO CREAR MOVIMIENTO
+						/*if(cuentaActualizada) {
+					 
+								//SETEAR MOVIMIENTO 
+								//INSERT MOVIMIENTO
+					 				 
+						}
+						else {throw new SQLException("no se pudo crear el movimiento en la BD");}*/
+				} 
+				else {throw new SQLException("no se pudo actualizar la cuenta en la BD");}	
+			}
+			else {throw new SQLException("el prestamo no esta pendiente de aprobacion");}
+			
+		}
+		catch (SQLException ex) {
+			throw ex;
+		}	
+		catch (Exception ex) {
+			throw ex;
+		}
 		
-		boolean aprobacion = false;
-		
-		return aprobacion;
-		
+		return aprobacionOK;
 	}
+			
 	
 	
 	//-------------------------------METODOS DML ------------------------------------//
@@ -235,8 +280,7 @@ public class PrestamoNegocioImpl implements PrestamoNegocio {
 		}
 	}
 
-
-	@Override
+  @Override
 	public int contarPrestamosAprobados(Date fechaInicio, Date fechaFin) throws SQLException {
 		return pDao.contarPrestamosAprobados(fechaInicio, fechaFin);
 	}
@@ -277,4 +321,5 @@ public class PrestamoNegocioImpl implements PrestamoNegocio {
 		return pDao.getPromedioPrestamos(fechaInicio, fechaFin);
 	}
 
+  
 }
