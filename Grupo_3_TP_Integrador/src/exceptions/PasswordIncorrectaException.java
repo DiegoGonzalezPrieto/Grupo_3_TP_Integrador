@@ -6,6 +6,6 @@ public class PasswordIncorrectaException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public PasswordIncorrectaException() {
-		super("La contraseÃ±a es incorrecta.");
+		super("La contraseña es incorrecta.");
 	}
 }

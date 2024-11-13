@@ -57,16 +57,16 @@
 
 		<ul class="nav nav-pills nav-fill m-4">
 			<li class="nav-item mx-2">
-				<a class="nav-link active" href="AutorizacionPrestamosServlet">Autorización de préstamos</a>
+				<a class="nav-link active" href="AutorizacionPrestamos.jsp">Autorización de préstamos</a>
 			</li>
 			<li class="nav-item mx-2">
-				<a class="nav-link active"href="AdministracionCuentasServlet">Administración de cuentas</a>
+				<a class="nav-link active"href="AdministracionCuentas.jsp">Administración de cuentas</a>
 			</li>
 			<li class="nav-item mx-2">
-				<a class="nav-link active" href="AdministracionClientesServlet">Administración de clientes</a>
+				<a class="nav-link active" href="AdministracionClientes.jsp">Administración de clientes</a>
 			</li>
 			<li class="nav-item mx-2">
-				<a class="nav-link active" href="ReportesServlet">Reportes</a>
+				<a class="nav-link active" href="Reportes.jsp">Reportes</a>
 			</li>
 		</ul>
 	</div>
@@ -120,7 +120,7 @@
 				</div>
 				
 			</div>
-		<div class="nav-link"><a href="ReportesServlet"> Ver reportes </a></div>
+		<div class="nav-link"><a href="Reportes.jsp"> Ver reportes </a></div>
 		</div>
 	</div>
 	
