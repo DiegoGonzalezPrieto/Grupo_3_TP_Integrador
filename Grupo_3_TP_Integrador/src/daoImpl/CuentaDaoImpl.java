@@ -128,10 +128,10 @@ public class CuentaDaoImpl implements CuentaDao {
     public List<Cuenta> obtenerTodos() {
         List<Cuenta> listaCuentas = new ArrayList<>();
 
-        String obtenerTodos = "SELECT c.*, cl.nombre as nombre_cliente, cl.apellido as apellido_cliente, "
-        		+ "tc.tipo_cuenta as tipo_cuenta FROM cuentas c "
-        		+ "INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente "
-        		+ "INNER JOIN tipos_cuenta tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta";
+        String obtenerTodos = "SELECT c.*, cl.nombre as nombre_cliente, cl.apellido as apellido_cliente, tc.tipo_cuenta as tipo_cuenta " +
+                "FROM cuentas c " +
+                "INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente " +
+                "INNER JOIN tipos_cuenta tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta WHERE c.estado_cuenta = 1";
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
