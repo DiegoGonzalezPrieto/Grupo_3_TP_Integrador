@@ -1,6 +1,7 @@
 package dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import dominio.Cliente;
 
@@ -16,4 +17,12 @@ public interface ClienteDao {
 	public ArrayList<Cliente> buscarTodos();
 	public ArrayList<Cliente> buscarTodosActivos();
 
+	// PARA REPORTES
+	
+	public int contarTodos();
+	public int contarActivos();
+	public int contarInactivos();
+	public float obtenerEdadPromedioActivos();
+	public HashMap<String, Integer> obtenerClientesPorProvincia();
+	public HashMap<String, Integer> obtenerClientesPorNacionalidad();
 }

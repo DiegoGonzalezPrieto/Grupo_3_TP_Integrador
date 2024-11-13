@@ -8,3 +8,4 @@ public class UsuarioNoEncontradoException extends Exception {
 		super("El usuario no existe.");
 	}
 }
+

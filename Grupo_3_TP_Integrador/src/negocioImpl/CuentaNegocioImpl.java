@@ -1,6 +1,8 @@
 package negocioImpl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import dao.CuentaDao;
 import daoImpl.CuentaDaoImpl;
@@ -100,6 +102,32 @@ public class CuentaNegocioImpl implements CuentaNegocio {
         return !cuentaDao.existeNumeroCuenta(numeroCuenta);
     }
 
+	@Override
+	public int obtenerReporteCantidadDeCuentas(Date fechaInicio, Date fechaFin) {
+		return cuentaDao.obtenerReporteCantidadDeCuentas(fechaInicio, fechaFin);
+	}
+
+	@Override
+	public BigDecimal obtenerReporteSumaDeSaldos(Date fechaInicio, Date fechaFin) {
+		return cuentaDao.obtenerReporteSumaDeSaldos(fechaInicio, fechaFin);
+	}
+
+	@Override
+	public BigDecimal obtenerReporteSaldoPromedio(Date fechaInicio, Date fechaFin) {
+		return cuentaDao.obtenerReporteSaldoPromedio(fechaInicio, fechaFin);
+	}
+
+	public Long obtenerUltimoNumeroCuenta() {
+		Long ultimoNumeroCuenta = cuentaDao.obtenerUltimoNumeroCuenta();
+		return ultimoNumeroCuenta;
+	}
+
+	@Override
+	public String obtenerUltimoCBU() {
+		String ultimoCBU = cuentaDao.obtenerUltimoCBU();
+		return ultimoCBU;
+	}
+
     public int totalCuentasAbiertas() {
     	return cuentaDao.obtenerTodos().size();
     }
@@ -107,5 +135,5 @@ public class CuentaNegocioImpl implements CuentaNegocio {
     public List<Cuenta> listarCuentasRecientes(){
     	return cuentaDao.obtenerCuentasRecientes();
     }
-    
+
 }
