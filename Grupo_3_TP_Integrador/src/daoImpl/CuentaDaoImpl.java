@@ -219,8 +219,8 @@ public class CuentaDaoImpl implements CuentaDao {
     
 	@Override
 	public boolean existeCBU(String cbu) {
-		String exiteCBU = "SELECT COUNT(*) FROM cuentas WHERE cbu = ? AND id_cuenta != ?";
-	    
+		String existeCBU = "SELECT COUNT(*) FROM cuentas WHERE cbu = ? AND id_cuenta != ?";
+		
 	    try {
 	        Class.forName("com.mysql.jdbc.Driver");
 	    } catch (ClassNotFoundException e) {
@@ -228,7 +228,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	    }
 	    
 	    try (Connection conexion = Conexion.getConnection();
-	         PreparedStatement statement = conexion.prepareStatement(exiteCBU)) {
+	         PreparedStatement statement = conexion.prepareStatement(existeCBU)) {
 	        
 	        statement.setString(1, cbu);
 			statement.setInt(2, idCuentaExcluir);
@@ -271,6 +271,59 @@ public class CuentaDaoImpl implements CuentaDao {
         
         return true;
     }
+	
+	@Override
+	public Long obtenerUltimoNumeroCuenta() {
+	    String select = "SELECT MAX(numero_cuenta) FROM cuentas";
+	    
+	    try {
+	        Class.forName("com.mysql.jdbc.Driver");
+	    } catch (ClassNotFoundException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    try (Connection conexion = Conexion.getConnection();
+	         PreparedStatement statement = conexion.prepareStatement(select)) {
+	        
+	        ResultSet rs = statement.executeQuery();
+	        if(rs.next()) {
+	            Long ultimoNumero = rs.getLong(1);
+	            return ultimoNumero == 0 ? 100000L : ultimoNumero;
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return 100000L; 
+	}
+
+	@Override
+	public String obtenerUltimoCBU() {
+	    String select = "SELECT MAX(cbu) FROM cuentas";
+	    
+	    try {
+	        Class.forName("com.mysql.jdbc.Driver");
+	    } catch (ClassNotFoundException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    try (Connection conexion = Conexion.getConnection();
+	         PreparedStatement statement = conexion.prepareStatement(select)) {
+	        
+	        ResultSet rs = statement.executeQuery();
+	        if(rs.next()) {
+	            String ultimoCBU = rs.getString(1);
+	            return ultimoCBU == null ? "1000000000000000000000" : ultimoCBU;
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return "1000000000000000000000"; 
+	}
+
     
 	private Cuenta mapResultSetDeCuenta(ResultSet rs) throws SQLException {
 

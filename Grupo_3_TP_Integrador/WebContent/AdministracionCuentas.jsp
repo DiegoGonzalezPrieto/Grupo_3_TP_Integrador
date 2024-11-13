@@ -69,6 +69,7 @@
 
 	<div class="mt-4">
 		<h2>Listado de Cuentas</h2>
+		<a href="AgregarCuentaServlet" class="btn btn-outline-success mb-3" >Nueva Cuenta</a>
 		<table id="cuentasTable" class="table table-striped table-bordered">
 			<thead>
 				<tr>
@@ -117,70 +118,7 @@
 		</table>
 	</div>
 
-	<div class="mt-4">
-    	<h2>Agregar Nueva Cuenta</h2>
-		    <form action="AgregarCuentaServlet" method="post">
-		        <div class="form-group">
-		            <label for="cliente">Cliente:</label>
-		            <select id="cliente" name="cliente" class="form-control" required>
-		                <option value="">Seleccione un cliente</option>
-		                <%
-		                    List<Cliente> listaClientes = (List<Cliente>)request.getAttribute("listaClientes");
-		                    if(listaClientes != null) {
-		                        for(Cliente cliente : listaClientes) {
-		                %>
-		                    <option value="<%=cliente.getIdCliente()%>">
-		                        <%=cliente.getApellido() + ", " + cliente.getNombre()%>
-		                    </option>
-		                <%
-		                        }
-		                    }
-		                %>
-		            </select>
-		        </div>
-		
-		        <div class="form-group">
-				    <label for="tipoCuenta">Tipo de Cuenta:</label>
-				    <select id="tipoCuenta" name="tipoCuenta" class="form-control" required>
-				        <option value="">Seleccione un tipo de cuenta</option>
-				        <%
-				            List<TipoCuenta> listaTiposCuenta = (List<TipoCuenta>)request.getAttribute("listaTiposCuenta");
-				            
-				            if(listaTiposCuenta != null) {
-				                for(TipoCuenta tipo : listaTiposCuenta){
-				        %>
-				            <option value="<%=tipo.getId()%>"><%=tipo.getNombre()%></option>
-				        <%
-				                }
-				            }
-				        %>
-				    </select>
-				</div>
-				
-		        <div class="form-group">
-		            <label for="numeroCuenta">Número de Cuenta:</label>
-		            <input type="text" id="numeroCuenta" name="numeroCuenta" class="form-control" 
-		            pattern="[0-9]{6,20}" title="El número de cuenta debe tener entre 6 y 20 dígitos numéricos" required>
-		        </div>
-		
-		        <div class="form-group">
-		            <label for="cbu">CBU:</label>
-		            <input type="text" id="cbu" name="cbu" class="form-control" 
-		            pattern="[0-9]{22}" minlength="22" maxlength="22" title="El CBU debe tener exactamente 22 dígitos numéricos" required>
-		        </div>
-		
-		        <div class="form-group">
-		            <label for="saldo">Saldo Inicial:</label>
-		            <input type="number" id="saldo" name="saldo" class="form-control" 
-		                   value="10000" readonly>
-		            <small class="form-text text-muted">El saldo inicial es fijo de $10,000</small>
-		        </div>
-				<div class="d-flex justify-content-center mb-3">
-				    <button type="submit" class="btn btn-outline-success">Agregar Cuenta</button>
-				</div>
-
-		    </form>
-	</div>
+	
 </div>
 
 	<%@ include file="Footer.jsp"%>

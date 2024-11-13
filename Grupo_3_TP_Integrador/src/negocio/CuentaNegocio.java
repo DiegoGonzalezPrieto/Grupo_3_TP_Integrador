@@ -16,4 +16,7 @@ public interface CuentaNegocio {
     boolean puedeCrearCuenta(int idCliente);
     boolean validarCBU(String cbu);
     boolean validarNumeroCuenta(Long numeroCuenta);
+    
+    Long obtenerUltimoNumeroCuenta();
+    String obtenerUltimoCBU();
 }

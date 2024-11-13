@@ -1,6 +1,8 @@
 package servlets;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,7 +15,9 @@ import dominio.Cliente;
 import dominio.Cuenta;
 import dominio.TipoCuenta;
 import negocio.CuentaNegocio;
+import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.CuentaNegocioImpl;
+import negocioImpl.TipoCuentaNegocioImpl;
 
 /**
  * Servlet implementation class AgregarCuentaServlet
@@ -32,8 +36,28 @@ public class AgregarCuentaServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		ClienteNegocioImpl clientes = new ClienteNegocioImpl();
+        TipoCuentaNegocioImpl tiposCuenta = new TipoCuentaNegocioImpl();
+        
+        List<Cliente> listaClientes = clientes.listarTodos();
+        List<TipoCuenta> listaTiposCuenta = tiposCuenta.buscarTodos();
+        
+        Long ultimoNumeroCuenta = negocioCuentas.obtenerUltimoNumeroCuenta();
+        Long nuevoNumeroCuenta = ultimoNumeroCuenta + 1;
+        
+        String ultimoCBU = negocioCuentas.obtenerUltimoCBU();
+        BigInteger cbuActual = new BigInteger(ultimoCBU);
+        BigInteger nuevoCBUNumero = cbuActual.add(BigInteger.ONE);
+        String nuevoCBU = String.format("%022d", nuevoCBUNumero);
+        
+
+        request.setAttribute("listaClientes", listaClientes);
+        request.setAttribute("listaTiposCuenta", listaTiposCuenta);
+        request.setAttribute("nuevaCuenta", nuevoNumeroCuenta);
+        request.setAttribute("nuevoCBU", nuevoCBU);
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/AgregarCuenta.jsp");
+        dispatcher.forward(request, response);
 	}
 
 	/**
@@ -63,7 +87,7 @@ public class AgregarCuentaServlet extends HttpServlet {
 	            request.setAttribute("mensaje", "Cuenta creada exitosamente");
 	            request.setAttribute("tipoMensaje", "success");
 	        } else {
-	            request.setAttribute("mensaje", "Error al crear la cuenta. Verifique que el cliente no tenga más de 3 cuentas y que el CBU y número de cuenta sean únicos.");
+	            request.setAttribute("mensaje", "Error al crear la cuenta, el cliente no puede tener más de 3 cuentas.");
 	            request.setAttribute("tipoMensaje", "danger");
 	        }
 	    } catch (Exception e) {

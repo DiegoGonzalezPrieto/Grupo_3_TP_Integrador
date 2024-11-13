@@ -23,7 +23,7 @@ public class CuentaNegocioImpl implements CuentaNegocio {
         }
         
         if (cuentaDao.existeCBU(cuenta.getCbu()) || 
-            !validarNumeroCuenta(cuenta.getNumeroCuenta()) || !validarCBU(cuenta.getCbu())) {
+            !validarNumeroCuenta(cuenta.getNumeroCuenta())) {
             return false;
         }
         
@@ -98,4 +98,16 @@ public class CuentaNegocioImpl implements CuentaNegocio {
         
         return !cuentaDao.existeNumeroCuenta(numeroCuenta);
     }
+
+	@Override
+	public Long obtenerUltimoNumeroCuenta() {
+		Long ultimoNumeroCuenta = cuentaDao.obtenerUltimoNumeroCuenta();
+		return ultimoNumeroCuenta;
+	}
+
+	@Override
+	public String obtenerUltimoCBU() {
+		String ultimoCBU = cuentaDao.obtenerUltimoCBU();
+		return ultimoCBU;
+	}
 }

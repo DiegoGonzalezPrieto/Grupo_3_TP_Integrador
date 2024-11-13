@@ -38,19 +38,11 @@ public class AdministracionCuentasServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		CuentaNegocioImpl cuentas = new CuentaNegocioImpl();
-		
-		ClienteNegocioImpl clientes = new ClienteNegocioImpl();
-        TipoCuentaNegocioImpl tiposCuenta = new TipoCuentaNegocioImpl();
-		        
+			        
         List<Cuenta> listaCuentas = cuentas.listarTodas();
         
-        List<Cliente> listaClientes = clientes.listarTodos();
-        List<TipoCuenta> listaTiposCuenta = tiposCuenta.buscarTodos();
-        
         request.setAttribute("listaCuentas", listaCuentas);
-        request.setAttribute("listaClientes", listaClientes);
-        request.setAttribute("listaTiposCuenta", listaTiposCuenta);
-        
+               
         RequestDispatcher dispatcher = request.getRequestDispatcher("/AdministracionCuentas.jsp");
         dispatcher.forward(request, response);
     }
