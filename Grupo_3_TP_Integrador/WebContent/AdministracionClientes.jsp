@@ -37,7 +37,20 @@
 
 	<div class="container mt-5">
 		<h1 class="text-center mb-4">Administración de Clientes/Usuarios</h1>
-
+		<%
+			String mensaje = (String) session.getAttribute("mensaje");
+			String tipoMensaje = (String) session.getAttribute("tipoMensaje");
+			if(mensaje != null && tipoMensaje != null) {
+			    session.removeAttribute("mensaje");
+			    session.removeAttribute("tipoMensaje");
+			%>
+			    <div class="alert alert-<%=tipoMensaje%> alert-dismissible fade show" role="alert">
+			        <%=mensaje%>
+			        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			    </div>
+			<%
+			}
+			%>
 		<!-- Tabs -->
 		<ul class="nav nav-tabs" id="myTab" role="tablist">
 			<li class="nav-item" role="presentation">

@@ -15,5 +15,7 @@ public interface ClienteDao {
 	
 	public ArrayList<Cliente> buscarTodos();
 	public ArrayList<Cliente> buscarTodosActivos();
+	
+	public boolean existeDNI(String dni);
 
 }

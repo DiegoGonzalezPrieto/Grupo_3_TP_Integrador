@@ -53,11 +53,12 @@ public class GestionDatosServlet extends HttpServlet {
 
 	ClienteNegocio negoCliente;
 	UsuarioNegocio negoUsuario;
-
+	ClienteDao clienteDao;
 	public GestionDatosServlet() {
 		super();
 		negoCliente = new ClienteNegocioImpl();
 		negoUsuario = new UsuarioNegocioImpl();
+		clienteDao = new ClienteDaoImpl();
 	}
 
 	/**
@@ -125,40 +126,22 @@ public class GestionDatosServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// doGet(request, response);
-		Cliente cliente;
-
-		crearCliente(request, response, false);
-		
-		RequestDispatcher rd = request.getRequestDispatcher("/AdministracionClientes.jsp");
-		rd.forward(request, response);
-		// COMENTO AC� PORQUE NO SE QUE HACE - USO EL POST PARA CREAR/EDITAR USUARIO
-		// (Diego)
-
-		// if(request.getAttribute("cliente") != null) {
-		// cliente = (Cliente)request.getAttribute("cliente");
-		// }
-		//
-		//
-		// String action = request.getParameter("action");
-		// int clienteId = Integer.parseInt(request.getParameter("clienteId"));
-		// ClienteNegocio negoCliente = new ClienteNegocioImpl();
-		//
-		// cliente = negoCliente.buscarPorId(clienteId);
-		// request.setAttribute("cliente", cliente);
-		// request.setAttribute("action", action);
-		//
-		// RequestDispatcher rd = request.getRequestDispatcher("/GestionDatos.jsp");
-		// rd.forward(request, response);
-		// if(request.getAttribute("btnEditar") != null) {
-		// gestionCliente(request, response, true);
-		// }else if(request.getAttribute("btnInsertar") != null) {
-		// gestionCliente(request, response, false);
-		// }
-
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    try {
+	        String dni = request.getParameter("dni");
+	        if(clienteDao.existeDNI(dni)) {
+	        	request.getSession().setAttribute("mensaje", "El DNI ya existe en la base de datos");
+	            request.getSession().setAttribute("tipoMensaje", "danger");
+	            response.sendRedirect("AdministracionClientesServlet");
+	            return;
+	        }
+	        crearCliente(request, response, false);
+	    } catch (Exception e) {
+	        request.setAttribute("mensaje", "Error: " + e.getMessage());
+	        request.setAttribute("tipoMensaje", "danger");
+	        e.printStackTrace();
+	    }
+	        
 	}
 
 	private void gestionCliente(HttpServletRequest request, HttpServletResponse response, boolean accion) {
@@ -197,47 +180,63 @@ public class GestionDatosServlet extends HttpServlet {
 	 * Crea un cliente levantando los datos de la request.
 	 * Luego podr�a editar
 	 */
-	private void crearCliente(HttpServletRequest request, HttpServletResponse response, boolean editar) {
-		ClienteNegocio negoCliente = new ClienteNegocioImpl();
-
-		Cliente cliente = new Cliente();
-		cliente.setEstadoUsuario(true);
-		cliente.setNombreUsuario(request.getParameter("usuario"));
-		cliente.setPass(request.getParameter("pass"));
-		cliente.setTipoUsuario(new TipoUsuario(1, "cliente"));
-		Usuario u = new Usuario(0,request.getParameter("usuario"),request.getParameter("pass"),new TipoUsuario(1, "cliente"), true);
-		negoUsuario.agregarUsuario(u);
-		cliente.setId(negoUsuario.buscarPorNombre(request.getParameter("usuario")).getId());
-
-		Provincia provi = daoProvincia.buscarPorId(Integer.parseInt(request.getParameter("provincia")));
-		Nacionalidad nacio = NegocioNacion.buscarPorId(Integer.parseInt(request.getParameter("nacionalidad")));
-		Localidad loca = NegocioLocalidad.buscarPorId(Integer.parseInt(request.getParameter("localidad")));
-		int id = cliente.getIdCliente();
-
-		String[] fragmentosFecha = request.getParameter("fechaNacimiento").split("-");
-		Date fechaNacimiento = new Date(Integer.parseInt(fragmentosFecha[0]) - 1900,
-				Integer.parseInt(fragmentosFecha[1]) - 1, Integer.parseInt(fragmentosFecha[2]));
-
-		cliente.setApellido((String) request.getParameter("apellido"));
-		cliente.setNombre((String) request.getParameter("nombre"));
-		cliente.setCorreoElectronico((String) request.getParameter("email"));
-		cliente.setDni((String) request.getParameter("dni"));
-		cliente.setCuil((String) request.getParameter("cuil"));
-		cliente.setDireccion((String) request.getParameter("direccion"));
-		cliente.setFechaNacimiento(fechaNacimiento);
-		cliente.setGenero((String) request.getParameter("genero"));
-		cliente.setTelefono((String) request.getParameter("telefono"));
-		cliente.setProvincia(provi);
-		cliente.setLocalidad(loca);
-		cliente.setNacionalidad(nacio);
-		
-		if (editar) {
-			negoCliente.update(cliente);
-		} else {
-			negoCliente.insert(cliente);
-		}
-
-		
+	private void crearCliente(HttpServletRequest request, HttpServletResponse response, boolean editar) throws ServletException, IOException  {
+		try {
+			Cliente cliente = new Cliente();
+	        cliente.setApellido(request.getParameter("apellido"));
+	        cliente.setNombre(request.getParameter("nombre"));
+	        cliente.setCorreoElectronico(request.getParameter("email"));
+	        cliente.setDni(request.getParameter("dni"));
+	        cliente.setCuil(request.getParameter("cuil"));
+	        cliente.setDireccion(request.getParameter("direccion"));
+	        
+	        String[] fragmentosFecha = request.getParameter("fechaNacimiento").split("-");
+	        Date fechaNacimiento = new Date(Integer.parseInt(fragmentosFecha[0]) - 1900,
+	                Integer.parseInt(fragmentosFecha[1]) - 1, Integer.parseInt(fragmentosFecha[2]));
+	        cliente.setFechaNacimiento(fechaNacimiento);
+	        
+	        cliente.setGenero(request.getParameter("genero"));
+	        cliente.setTelefono(request.getParameter("telefono"));
+	        
+	
+	        cliente.setProvincia(daoProvincia.buscarPorId(Integer.parseInt(request.getParameter("provincia"))));
+	        cliente.setNacionalidad(NegocioNacion.buscarPorId(Integer.parseInt(request.getParameter("nacionalidad"))));
+	        cliente.setLocalidad(NegocioLocalidad.buscarPorId(Integer.parseInt(request.getParameter("localidad"))));
+	        System.out.println("LLEGANDO A USUARIO");
+	        Usuario usuario = new Usuario();
+	        usuario.setNombreUsuario(request.getParameter("usuario"));
+	        usuario.setPass(request.getParameter("pass"));
+	        usuario.setTipoUsuario(new TipoUsuario(1, "cliente"));
+	        usuario.setEstadoUsuario(true);
+	        
+	        try {
+	            negoUsuario.agregarUsuario(usuario);
+	
+	            Usuario usuarioCreado = negoUsuario.buscarPorNombre(request.getParameter("usuario"));
+	            if(usuarioCreado != null) {
+	                cliente.setId(usuarioCreado.getId());
+	                cliente.setEstadoUsuario(true);
+	                
+	                negoCliente.insert(cliente);
+	            	request.getSession().setAttribute("mensaje", "Cliente creado exitosamente");
+	                request.getSession().setAttribute("tipoMensaje", "success");
+	            } else {
+	                request.setAttribute("mensaje", "Error al crear el usuario");
+	                request.setAttribute("tipoMensaje", "danger");
+	            }
+	        } catch(Exception e) {
+	        	request.getSession().setAttribute("mensaje", "Error: " + e.getMessage());
+	            request.getSession().setAttribute("tipoMensaje", "danger");
+	            e.printStackTrace();
+	        }
+        
+	    } catch (Exception e) {
+	        request.setAttribute("mensaje", "Error: " + e.getMessage());
+	        request.setAttribute("tipoMensaje", "danger");
+	        e.printStackTrace();
+	    }
+	    
+	    response.sendRedirect("AdministracionClientesServlet");
 
 	}
 

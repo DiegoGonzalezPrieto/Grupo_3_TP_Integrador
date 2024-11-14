@@ -65,6 +65,7 @@
 			}
 		%>
 		<h2><%=encabezado%></h2>
+		<!-- En el JSP: -->
 		<form action="GestionDatosServlet" method="POST">
 
 			<div class="form-group">

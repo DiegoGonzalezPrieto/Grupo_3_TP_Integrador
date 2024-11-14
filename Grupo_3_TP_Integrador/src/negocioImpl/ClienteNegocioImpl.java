@@ -12,8 +12,7 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 	
 	@Override
 	public void insert(Cliente c) {
-		clienteDao.insert(c);
-		
+			clienteDao.insert(c);
 	}
 
 	@Override
