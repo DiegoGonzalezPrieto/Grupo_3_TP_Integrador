@@ -15,10 +15,12 @@ import dao.ClienteDao;
 import dao.LocalidadDao;
 import dao.NacionalidadDao;
 import dao.ProvinciaDao;
+import dao.UsuarioDao;
 import daoImpl.ClienteDaoImpl;
 import daoImpl.LocalidadDaoImpl;
 import daoImpl.NacionalidadDaoImpl;
 import daoImpl.ProvinciaDaoImpl;
+import daoImpl.UsuarioDaoImpl;
 import dominio.Cliente;
 import dominio.Localidad;
 import dominio.Nacionalidad;
@@ -53,12 +55,11 @@ public class GestionDatosServlet extends HttpServlet {
 
 	ClienteNegocio negoCliente;
 	UsuarioNegocio negoUsuario;
-	ClienteDao clienteDao;
+
 	public GestionDatosServlet() {
 		super();
 		negoCliente = new ClienteNegocioImpl();
 		negoUsuario = new UsuarioNegocioImpl();
-		clienteDao = new ClienteDaoImpl();
 	}
 
 	/**
@@ -80,6 +81,7 @@ public class GestionDatosServlet extends HttpServlet {
 				dispatcher.forward(request, response);
 				return;
 			}
+			
 			if(request.getParameter("id") != null) {
 				int idCliente = Integer.parseInt(request.getParameter("id"));
 				
@@ -129,12 +131,31 @@ public class GestionDatosServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    try {
 	        String dni = request.getParameter("dni");
-	        if(clienteDao.existeDNI(dni)) {
-	        	request.getSession().setAttribute("mensaje", "El DNI ya existe en la base de datos");
+	        String cuil = request.getParameter("cuil");
+	        String user = request.getParameter("usuario");
+	        
+	        if(negoCliente.existeDNI(dni)) {
+	            request.getSession().setAttribute("mensaje", "El DNI ya existe en la base de datos");
 	            request.getSession().setAttribute("tipoMensaje", "danger");
-	            response.sendRedirect("AdministracionClientesServlet");
+	            response.sendRedirect("GestionDatosServlet?nuevo=true");
 	            return;
 	        }
+	        
+	        if(negoCliente.existeCUIL(cuil)) {
+	            request.getSession().setAttribute("mensaje", "El CUIL ya existe en la base de datos, verifique que sea correcto.");
+	            request.getSession().setAttribute("tipoMensaje", "danger");
+	            response.sendRedirect("GestionDatosServlet?nuevo=true");
+	            return;
+	        }
+	        
+	        if(negoUsuario.existeUsuario(user)) {
+	            request.getSession().setAttribute("mensaje", "El Usuario ya existe en la base de datos, intente con otro usuario.");
+	            request.getSession().setAttribute("tipoMensaje", "danger");
+	            response.sendRedirect("GestionDatosServlet?nuevo=true");
+	            return;
+	        }
+	        
+	        
 	        crearCliente(request, response, false);
 	    } catch (Exception e) {
 	        request.setAttribute("mensaje", "Error: " + e.getMessage());
@@ -183,6 +204,7 @@ public class GestionDatosServlet extends HttpServlet {
 	private void crearCliente(HttpServletRequest request, HttpServletResponse response, boolean editar) throws ServletException, IOException  {
 		try {
 			Cliente cliente = new Cliente();
+			
 	        cliente.setApellido(request.getParameter("apellido"));
 	        cliente.setNombre(request.getParameter("nombre"));
 	        cliente.setCorreoElectronico(request.getParameter("email"));
@@ -202,7 +224,7 @@ public class GestionDatosServlet extends HttpServlet {
 	        cliente.setProvincia(daoProvincia.buscarPorId(Integer.parseInt(request.getParameter("provincia"))));
 	        cliente.setNacionalidad(NegocioNacion.buscarPorId(Integer.parseInt(request.getParameter("nacionalidad"))));
 	        cliente.setLocalidad(NegocioLocalidad.buscarPorId(Integer.parseInt(request.getParameter("localidad"))));
-	        System.out.println("LLEGANDO A USUARIO");
+
 	        Usuario usuario = new Usuario();
 	        usuario.setNombreUsuario(request.getParameter("usuario"));
 	        usuario.setPass(request.getParameter("pass"));

@@ -16,6 +16,8 @@ public interface ClienteNegocio {
     ArrayList<Cliente> listarTodos();
     ArrayList<Cliente> listarActivos();
     
+    public boolean existeDNI(String DNI);
+    public boolean existeCUIL(String CUIL);
 }
 
 

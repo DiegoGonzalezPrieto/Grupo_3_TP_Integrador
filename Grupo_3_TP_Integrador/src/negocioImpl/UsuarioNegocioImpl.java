@@ -39,4 +39,9 @@ public class UsuarioNegocioImpl implements UsuarioNegocio {
 	public Usuario buscarPorNombre(String nombre) {
 		return usuarioDao.buscarPorNombre(nombre);
 	}
+
+	@Override
+	public boolean existeUsuario(String user) {
+		return usuarioDao.exiteUsuario(user);
+	}
 }

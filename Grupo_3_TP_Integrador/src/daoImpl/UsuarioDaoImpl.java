@@ -184,6 +184,24 @@ public class UsuarioDaoImpl implements UsuarioDao {
         }
         return null;
 	}
+
+	@Override
+	public boolean exiteUsuario(String user) {
+		String buscarDNI = "SELECT COUNT(*) FROM usuarios WHERE nombre_usuario = ?";
+	    
+		try (Connection conexion = Conexion.getConnection();
+	         PreparedStatement statement = conexion.prepareStatement(buscarDNI)) {
+	        statement.setString(1, user);
+	        
+	        ResultSet rs = statement.executeQuery();
+	        
+	        return rs.next() && rs.getInt(1) > 0;
+	    
+		} catch (SQLException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
     
     
 

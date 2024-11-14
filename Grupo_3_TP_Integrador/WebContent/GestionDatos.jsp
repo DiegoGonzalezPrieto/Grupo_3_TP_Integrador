@@ -7,6 +7,7 @@
 <%@page import="dominio.Localidad"%>
 <%@page import="dominio.Provincia"%>
 <%@page import="java.util.ArrayList"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,6 +36,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
 <body>
+	<%@ include file="BarraMenu.jsp"%>
 	<div class="container mt-5">
 
 		<%
@@ -64,6 +66,21 @@
 				accion = "crear";
 			}
 		%>
+		
+		<%
+		    String mensaje = (String) session.getAttribute("mensaje");
+		    String tipoMensaje = (String) session.getAttribute("tipoMensaje");
+		    if(mensaje != null && tipoMensaje != null) {
+		        session.removeAttribute("mensaje");
+		        session.removeAttribute("tipoMensaje");
+		    %>
+		        <div class="alert alert-<%=tipoMensaje%> alert-dismissible fade show" role="alert">
+		            <%=mensaje%>
+		            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		        </div>
+		    <%
+		    }
+	    %>
 		<h2><%=encabezado%></h2>
 		<!-- En el JSP: -->
 		<form action="GestionDatosServlet" method="POST">
@@ -238,7 +255,8 @@
 				href="AdministracionClientes.jsp" class="btn btn-primary">Volver</a>
 		</form>
 	</div>
-
+	
+<%@ include file="Footer.jsp"%>
 	<script type="text/javascript">
 		// Filtro de Localidades reactivo
 		const localidades = localidad.options;

@@ -324,5 +324,23 @@ public class ClienteDaoImpl implements ClienteDao {
 	        return false;
 	    }
 	}
+	
+	@Override
+	public boolean existeCUIL(String cuil) {
+		String buscarDNI = "SELECT COUNT(*) FROM clientes WHERE cuil = ?";
+	    
+		try (Connection conexion = Conexion.getConnection();
+	         PreparedStatement statement = conexion.prepareStatement(buscarDNI)) {
+	        statement.setString(1, cuil);
+	        
+	        ResultSet rs = statement.executeQuery();
+	        
+	        return rs.next() && rs.getInt(1) > 0;
+	    
+		} catch (SQLException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
 
 }

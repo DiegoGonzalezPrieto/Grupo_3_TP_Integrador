@@ -11,6 +11,8 @@ public interface UsuarioDao {
     void eliminarUsuario(int id);
 
     Usuario buscarPorNombre(String nombre);
+    
+    public boolean exiteUsuario(String user);
 }
 
 

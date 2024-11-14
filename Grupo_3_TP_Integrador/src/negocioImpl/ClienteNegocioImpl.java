@@ -54,6 +54,17 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 		return clienteDao.encontrarPorNombre(nombre);
 	}
 
+	@Override
+	public boolean existeDNI(String DNI) {
+		return clienteDao.existeDNI(DNI);
+		
+	}
+
+	@Override
+	public boolean existeCUIL(String CUIL) {
+		return clienteDao.existeCUIL(CUIL);
+	}
+
 
 
 }

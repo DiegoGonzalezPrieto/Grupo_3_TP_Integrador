@@ -17,5 +17,6 @@ public interface ClienteDao {
 	public ArrayList<Cliente> buscarTodosActivos();
 	
 	public boolean existeDNI(String dni);
+	public boolean existeCUIL(String cuil);
 
 }

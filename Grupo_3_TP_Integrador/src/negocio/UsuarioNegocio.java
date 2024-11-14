@@ -14,5 +14,7 @@ public interface UsuarioNegocio {
     void eliminarUsuario(int id);
     
     Usuario buscarPorNombre(String nombre);
+    
+    public boolean existeUsuario(String user);
 
 }
