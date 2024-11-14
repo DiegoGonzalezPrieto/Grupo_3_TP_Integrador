@@ -9,7 +9,7 @@ public class CuilInvalidoException extends Exception {
 	
 	@Override
 	public String getMessage() {
-		return "El Cuil ingresado es inválido.";
+		return "El Cuil ingresado es invalido.";
 	}
 
 }

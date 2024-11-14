@@ -123,7 +123,7 @@
 				<label for="dni">DNI:</label> <input type="text"
 					class="form-control" id="dni" name="dni"
 					value="<%=cliente == null ? "" : cliente.getDni()%>"
-					pattern="[0-9]{8}" title="El DNI debe tener exactamente 8 dígitos"
+					
 					required>
 			</div>
 
@@ -131,7 +131,7 @@
 				<label for="cuil">CUIL:</label> <input type="text"
 					class="form-control" id="cuil" name="cuil"
 					value="<%=cliente == null ? "" : cliente.getCuil()%>"
-					pattern="[0-9]{11}"
+					
 					title="El CUIL debe tener exactamente 11 dígitos" required>
 			</div>
 			<div class="form-group">
