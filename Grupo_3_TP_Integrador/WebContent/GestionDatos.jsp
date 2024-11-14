@@ -135,11 +135,15 @@
 					title="El CUIL debe tener exactamente 11 dígitos" required>
 			</div>
 			<div class="form-group">
-				<label for="nombre">Genero:</label> <input type="text"
-					class="form-control" id="genero" name="genero"
-					value="<%=cliente == null ? "" : cliente.getGenero()%>">
+    			<label for="genero">Género:</label>
+    				<select class="form-select form-select-sm" id="genero" name="genero">
+       					 <option value="" <%= cliente == null || cliente.getGenero() == null ? "selected" : "" %>>Seleccione un género</option>
+       					 <option value="V" <%= cliente != null && "V".equals(cliente.getGenero()) ? "selected" : "" %>>Masculino</option>
+       					 <option value="M" <%= cliente != null && "M".equals(cliente.getGenero()) ? "selected" : "" %>>Femenino</option>
+        				 <option value="O" <%= cliente != null && "O".equals(cliente.getGenero()) ? "selected" : "" %>>Otro</option>
+    				</select>
 			</div>
-
+						
 			<div class="form-group">
 				<label for="email">E-mail:</label> <input type="email"
 					class="form-control" id="email" name="email"
