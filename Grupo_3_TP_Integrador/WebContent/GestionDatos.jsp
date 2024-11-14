@@ -201,9 +201,8 @@
 				}
 			%>
 			<input type="submit" value="<%=accionBoton%>" name="btnEditar"
-				class="btn btn-primary"> <input type="submit" value="Volver"
-				name="btnVolver" class="btn btn-primary">
-
+				class="btn btn-primary"> <a
+				href="AdministracionClientes.jsp" class="btn btn-primary">Volver</a>
 		</form>
 	</div>
 
@@ -211,9 +210,8 @@
 	
 	const localidades = localidad.options;
 		function filtrarLocalidades(idProvincia) {
+			localidad.disabled = false;
 			let opcionesPosibles = Array.from(localidades).filter(l => l.value === idProvincia);
-			console.log("opciones posibles", opcionesPosibles)
-			console.log("value opcion", opcionesPosibles[0].value)
 			localidad.value = opcionesPosibles[0].value;
 
 		}
