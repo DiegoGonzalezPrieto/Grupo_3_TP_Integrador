@@ -313,37 +313,37 @@ public class GestionDatosServlet extends HttpServlet {
 	        request.setAttribute("naciones", NegocioNacion.buscarTodos());
 	        request.setAttribute("nuevo", true);
 	        
-	        Cliente clienteTemp = new Cliente();
-	        clienteTemp.setNombreUsuario(request.getParameter("usuario"));
-	        clienteTemp.setNombre(request.getParameter("nombre"));
-	        clienteTemp.setApellido(request.getParameter("apellido"));
-	        clienteTemp.setDni(request.getParameter("dni"));
-	        clienteTemp.setCuil(request.getParameter("cuil"));
-	        clienteTemp.setCorreoElectronico(request.getParameter("email"));
-	        clienteTemp.setTelefono(request.getParameter("telefono"));
-	        clienteTemp.setDireccion(request.getParameter("direccion"));
-	        clienteTemp.setGenero(request.getParameter("genero"));
+	        Cliente cliente = new Cliente();
+	        cliente.setNombreUsuario(request.getParameter("usuario"));
+	        cliente.setNombre(request.getParameter("nombre"));
+	        cliente.setApellido(request.getParameter("apellido"));
+	        cliente.setDni(request.getParameter("dni"));
+	        cliente.setCuil(request.getParameter("cuil"));
+	        cliente.setCorreoElectronico(request.getParameter("email"));
+	        cliente.setTelefono(request.getParameter("telefono"));
+	        cliente.setDireccion(request.getParameter("direccion"));
+	        cliente.setGenero(request.getParameter("genero"));
 	        
 
 	        String provinciaId = request.getParameter("provincia");
 	        if(provinciaId != null && !provinciaId.isEmpty()) {
 	            Provincia provincia = daoProvincia.buscarPorId(Integer.parseInt(provinciaId));
-	            clienteTemp.setProvincia(provincia);
+	            cliente.setProvincia(provincia);
 	        }
 	        
 	        String localidadId = request.getParameter("localidad");
 	        if(localidadId != null && !localidadId.isEmpty()) {
 	            Localidad localidad = NegocioLocalidad.buscarPorId(Integer.parseInt(localidadId));
-	            clienteTemp.setLocalidad(localidad);
+	            cliente.setLocalidad(localidad);
 	        }
 	        
 	        String nacionalidadId = request.getParameter("nacionalidad");
 	        if(nacionalidadId != null && !nacionalidadId.isEmpty()) {
 	            Nacionalidad nacionalidad = NegocioNacion.buscarPorId(Integer.parseInt(nacionalidadId));
-	            clienteTemp.setNacionalidad(nacionalidad);
+	            cliente.setNacionalidad(nacionalidad);
 	        }
 	        
-	        request.setAttribute("cliente", clienteTemp);
+	        request.setAttribute("cliente", cliente);
 	        
 	    } catch(Exception e) {
 	        e.printStackTrace();
