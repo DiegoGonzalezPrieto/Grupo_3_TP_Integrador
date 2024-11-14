@@ -36,7 +36,7 @@ public class AdministracionClientesServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
 		ClienteNegocioImpl cliente = new ClienteNegocioImpl();
-		List<Cliente> listaClientes = cliente.listarTodos();
+		List<Cliente> listaClientes = cliente.listarActivos();
 
 		
 		request.setAttribute("listaClientes", listaClientes);

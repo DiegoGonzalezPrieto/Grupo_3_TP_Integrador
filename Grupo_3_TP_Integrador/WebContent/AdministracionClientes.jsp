@@ -57,26 +57,23 @@
 
 			<div class="tab-pane fade show active" id="clientes" role="tabpanel"
 				aria-labelledby="clientes-tab">
-					<a href="GestionDatosServlet"><input type="submit" name="btnNuevo" class="btn btn-success btn-sm" value="Nuevo cliente"></a>
+					<a href="GestionDatosServlet?nuevo"><input type="submit" name="btnNuevo" class="btn btn-success btn-sm" value="Nuevo cliente"></a>
 				
-				
-				
-				
-					
 					<div class="mb-3">
 						
 						
 					</div>				
 					
-				<table id="clientesTable" class="table table-striped table-bordered"
+				<table id="clientesTable" class="table table-striped table-bordered table-responsive"
 					style="width: 80%">
 					<thead class="table-dark">
 						<tr>
 							<th>ID</th>
+							<th>Usuario</th>
 							<th>DNI</th>	
 							<th>Nombre</th>
 							<th>Apellido</th>
-							<th>Sexo</th>
+							<th>Género</th>
 							<th>Dirección</th>
 							<th>Localidad</th>
 							<th>Provincia</th>
@@ -97,10 +94,11 @@
 				%>
 						<tr>
 							<td><%=cliente.getId() %></td>
+							<td><%=cliente.getNombreUsuario() %></td>
 							<td><%=cliente.getDni() %></td>							
 							<td><%=cliente.getNombre() %></td>
 							<td><%=cliente.getApellido() %></td>
-							<td><%=cliente.getGenero() %></td>
+							<td><%=cliente.getGeneroCompleto() %></td>
 							<td><%=cliente.getDireccion() %></td>
 							<td><%=cliente.getLocalidad().getNombre() %></td>
 							<td><%=cliente.getProvincia().getNombre() %></td>

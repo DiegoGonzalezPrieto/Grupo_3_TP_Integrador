@@ -147,6 +147,43 @@ public class UsuarioDaoImpl implements UsuarioDao {
             e.printStackTrace();
         }
     }
+
+	@Override
+	public Usuario buscarPorNombre(String nombre) {
+		try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        String select = "SELECT id_usuario, nombre_usuario, pass, tipo_usuario, estado_usuario "
+        		+ "FROM usuarios WHERE nombre_usuario = ?;";
+
+        try (Connection conexion = Conexion.getConnection();
+             PreparedStatement statement = conexion.prepareStatement(select)) {
+
+            statement.setString(1, nombre);
+
+            ResultSet result = statement.executeQuery();
+
+            if (result.next()) {
+            	TipoUsuarioDaoImpl dao = new TipoUsuarioDaoImpl();
+            	TipoUsuario tipo = dao.buscarPorId(result.getInt("tipo_usuario"));
+                return new Usuario(
+                    result.getInt("id_usuario"),
+                    result.getString("nombre_usuario"),
+                    result.getString("pass"),
+                    tipo,
+                    result.getBoolean("estado_usuario")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+	}
     
     
 

@@ -46,7 +46,7 @@
 							<div class="form-group">
 								<label class="form-label">Nro. Documento o CUIL:</label>
 								<div class="input-group w-50">
-									<select class="form-select w-25">
+									<select class="form-select w-25" disabled>
 										<option value="<%=cliente.getDni() %>" selected>DNI</option>
 										<option value="<%=cliente.getCuil() %>">CUIL</option>
 									</select> <input type="text" class="form-control" value="35035199"
@@ -104,6 +104,21 @@
 							<div class="form-group">
 								<label class="form-label">Email:</label> <input type="email"
 									class="form-control w-50" value="<%=cliente.getCorreoElectronico() %>" readonly>
+							</div>
+						</div>
+					</div>
+					<!--  Datos Usuario -->
+					<div class="row mb-3">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="form-label">Usuario:</label> <input type="text"
+									class="form-control w-50" value="<%= cliente.getNombreUsuario() %>" readonly>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="form-label">Contraseña:</label> <input type="text"
+									class="form-control w-50" value="<%=cliente.getPass() %>" readonly>
 							</div>
 						</div>
 					</div>
