@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -34,37 +35,14 @@ public class AdministracionClientesServlet extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-		String action = request.getParameter("action");
-	    String clienteIdParam = request.getParameter("clienteId");
-	    Cliente cliente = null;
+		ClienteNegocioImpl cliente = new ClienteNegocioImpl();
+		List<Cliente> listaClientes = cliente.listarTodos();
 
-	    if (clienteIdParam != null) {
-	        int clienteId = Integer.parseInt(clienteIdParam);
-
-	        if ("ver".equals(action)) {
-	            verCliente(request, response);
-	            request.setAttribute("accion", "ver");
-
-	        } else if ("editar".equals(action)) {
-	        	editarCliente(request, response);
-	            request.setAttribute("accion", "editar");
-
-	        } else if ("eliminar".equals(action)) {
-	        	eliminarCliente(request, response);
-	            request.setAttribute("accion", "eliminar");
-	       
-	        }
-	        
-	  
-	        request.setAttribute("cliente", cliente);
-	        
-	        RequestDispatcher rd = request.getRequestDispatcher("/GestionDatos.jsp");
-	        rd.forward(request, response);
-
-	    } else {
-	    	listarClientes(request, response);
-	        response.sendRedirect("error.jsp");
-	    }
+		
+		request.setAttribute("listaClientes", listaClientes);
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/AdministracionClientes.jsp");
+        dispatcher.forward(request, response);
     }
 
     private void verCliente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -100,9 +78,7 @@ public class AdministracionClientesServlet extends HttpServlet {
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		RequestDispatcher rd = request.getRequestDispatcher("/administracionClientes.jsp"); 
+			throws ServletException, IOException { 
 		
 	}
 	

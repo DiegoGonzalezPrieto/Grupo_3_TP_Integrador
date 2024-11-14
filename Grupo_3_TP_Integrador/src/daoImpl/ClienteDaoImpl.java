@@ -116,7 +116,6 @@ public class ClienteDaoImpl implements ClienteDao {
 
 	@Override
 	public Cliente encontrarPorId(int id) {
-
 		String selectCliente = "Select "
 				+ "	C.id_cliente, C.id_usuario, C.id_nacionalidad, C.id_localidad, C.id_provincia,  " + "    C.dni, "
 				+ "    C.cuil, " + "    C.nombre, " + "    C.apellido, " + "    C.email, " + "    C.telefono, "
@@ -235,10 +234,10 @@ public class ClienteDaoImpl implements ClienteDao {
 			e.printStackTrace();
 		}
 
-		String select = "Select	 C.id_cliente, id_usuario,    C.dni,   C.cuil,    C.nombre,"
-				+ "    C.apellido ,    C.email,    C.telefono ,     C.sexo ,"
-				+ "    C.fecha_nacimiento  ,     C.direccion , 	 C.id_localidad,     C.id_nacionalidad,"
-				+ "    C.id_provincia      from clientes C";
+		String select = "Select	 C.id_cliente as id_cliente, C.id_usuario as id_usuario,   C.dni as dni,   C.cuil as cuil,    C.nombre as nombre,"
+				+ "    C.apellido as apellido ,    C.email as email,    C.telefono as telefono ,     C.sexo as sexo ,"
+				+ "    C.fecha_nacimiento as fecha_nacimiento ,     C.direccion as direccion , 	 C.id_localidad as id_localidad,     C.id_nacionalidad as id_nacionalidad,"
+				+ "    C.id_provincia as id_provincia     from clientes C";
 
 		ArrayList<Cliente> listado = new ArrayList<>();
 		ArrayList<Nacionalidad> naciones = new NacionalidadDaoImpl().buscarTodos();
@@ -253,7 +252,7 @@ public class ClienteDaoImpl implements ClienteDao {
 			while (result.next()) {
 
 				Usuario usuario = new UsuarioNegocioImpl().buscarPorId(result.getInt("id_usuario"));
-				Cliente cliente = new Cliente(usuario.getId(), usuario.getNombreUsuario(), usuario.getPass(),
+				Cliente cliente = new Cliente(result.getInt("id_cliente"), usuario.getNombreUsuario(), usuario.getPass(),
 						usuario.getTipoUsuario(), usuario.activo());
 				
 				Nacionalidad n = null;
@@ -277,8 +276,9 @@ public class ClienteDaoImpl implements ClienteDao {
 						break;
 					}
 				}
+				
 				cliente.setIdCliente(result.getInt("id_cliente"));
-				cliente.setDni(result.getString("DNI"));
+				cliente.setDni(result.getString("dni"));
 				cliente.setCuil(result.getString("cuil"));
 				cliente.setNombre(result.getString("nombre"));
 				cliente.setApellido(result.getString("apellido"));
@@ -286,10 +286,10 @@ public class ClienteDaoImpl implements ClienteDao {
 				cliente.setTelefono(result.getString("telefono"));
 				cliente.setGenero(result.getString("sexo"));
 				cliente.setFechaNacimiento(result.getDate("fecha_nacimiento"));
+				cliente.setDireccion(result.getString("direccion"));
 				cliente.setNacionalidad(n);
 				cliente.setLocalidad(l);
 				cliente.setProvincia(p);
-
 				listado.add(cliente);
 			}
 

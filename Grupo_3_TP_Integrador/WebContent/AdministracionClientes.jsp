@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 	
-	<% if (request.getAttribute("listaC") == null) { %>
-    <script>
-        window.location.href = "AdministracionClientesServlet";
-    </script>
-<% } %>
+<%
+   if(request.getAttribute("listaClientes") == null) {
+       response.sendRedirect("AdministracionClientesServlet");
+       return;
+   }
+%>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="dominio.Cliente" %>
 <!DOCTYPE html>
@@ -60,18 +61,13 @@
 				
 				
 				
-				<form action="AdministracionClientesServlet" method="POST" class="mb-4">
+				
 					
 					<div class="mb-3">
 						
 						
 					</div>				
-				<%
-					ArrayList<Cliente> listaClientes = null;
-					if(request.getAttribute("listaC") != null){
-						listaClientes = (ArrayList<Cliente>) request.getAttribute("listaC");
-					}
-				%>			
+					
 				<table id="clientesTable" class="table table-striped table-bordered"
 					style="width: 80%">
 					<thead class="table-dark">
@@ -93,33 +89,35 @@
 						</tr>
 					</thead>
 					<tbody>
-				<% 
-					if(listaClientes != null)
-					for(Cliente cli : listaClientes)
-					{
-						if(cli.activo()){				
-					%>
+				<%
+					ArrayList<Cliente> listaClientes = (ArrayList<Cliente>) request.getAttribute("listaClientes");
+					if(listaClientes != null){
+						for(Cliente cliente : listaClientes){ 
+						
+				%>
 						<tr>
-							<td><%=cli.getId() %></td>
-							<td><%=cli.getDni() %></td>							
-							<td><%=cli.getNombre() %></td>
-							<td><%=cli.getApellido() %></td>
-							<td><%=cli.getGenero() %></td>
-							<td><%=cli.getDireccion() %></td>
-							<td><%=cli.getLocalidad().getNombre() %></td>
-							<td><%=cli.getProvincia().getNombre() %></td>
-							<td><%=cli.getCorreoElectronico() %></td>
-							<td><%=cli.getTelefono() %></td>
-							<td><%=cli.getNacionalidad().getNombre() %></td>
+							<td><%=cliente.getId() %></td>
+							<td><%=cliente.getDni() %></td>							
+							<td><%=cliente.getNombre() %></td>
+							<td><%=cliente.getApellido() %></td>
+							<td><%=cliente.getGenero() %></td>
+							<td><%=cliente.getDireccion() %></td>
+							<td><%=cliente.getLocalidad().getNombre() %></td>
+							<td><%=cliente.getProvincia().getNombre() %></td>
+							<td><%=cliente.getCorreoElectronico() %></td>
+							<td><%=cliente.getTelefono() %></td>
+							<td><%=cliente.getNacionalidad().getNombre() %></td>
 							
-							<td><button type="submit" name="action" value="ver" class="btn btn-info btn-sm" formaction="GestionDatosServlet?clienteId=<%=cli.getId() %>">Ver</button></td>
-                        	<td><button type="submit" name="action" value="editar" class="btn btn-warning btn-sm" formaction="GestionDatosServlet?clienteId=<%=cli.getId() %>">Editar</button></td>
-                        	<td><button type="submit" name="action" value="eliminar" class="btn btn-danger btn-sm" formaction="GestionDatosServlet?clienteId=<%=cli.getId() %>">Eliminar</button></td>
+							<td><a class="btn btn-info btn-sm" href="GestionDatosServlet?id=<%=cliente.getId() %>">Ver</a></td>
+                        	<td><a class="btn btn-warning btn-sm" href="GestionDatosServlet?id=<%=cliente.getId() %>">Editar</a></td>
+                        	<td><a class="btn btn-danger btn-sm" href="GestionDatosServlet?i=<%=cliente.getId() %>">Eliminar</a></td>
 						</tr>
-				<%} } %>
+				<%
+					} 
+				} %>
 					</tbody>
 				</table>
-				</form>
+				
 					
 			</div>
 

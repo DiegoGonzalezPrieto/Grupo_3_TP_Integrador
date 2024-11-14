@@ -29,6 +29,7 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 
 	@Override
 	public Cliente buscarPorId(int id) {
+		Cliente c = clienteDao.encontrarPorId(id);
 		return clienteDao.encontrarPorId(id);
 		
 	}

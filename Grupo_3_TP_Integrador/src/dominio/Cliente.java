@@ -35,12 +35,13 @@ public class Cliente extends Usuario {
 
 
 	/*Un cliente tiene un DNI, CUIL, nombre, apellido, sexo, nacionalidad,
-	fecha de nacimiento, dirección, localidad, provincia, correo
-	electrónico, teléfono, un usuario y contraseña para acceder a la
-	página
+	fecha de nacimiento, direcciï¿½n, localidad, provincia, correo
+	electrï¿½nico, telï¿½fono, un usuario y contraseï¿½a para acceder a la
+	pï¿½gina
 	*/
-	public Cliente(int id, String nombreUsuario, String pass, TipoUsuario tipoUsuario, boolean estadoUsuario) {
-		super(id, nombreUsuario, pass, tipoUsuario, estadoUsuario);
+	public Cliente(int idCliente, String nombreUsuario, String pass, TipoUsuario tipoUsuario, boolean estadoUsuario) {
+		super(idCliente, nombreUsuario, pass, tipoUsuario, estadoUsuario);
+		this.idCliente = idCliente;
 	}
 	public int getIdCliente() {
 		return idCliente;

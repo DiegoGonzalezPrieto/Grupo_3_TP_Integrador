@@ -35,7 +35,7 @@ import negocioImpl.ProvinciaNegocioImpl;
 /**
  * Servlet implementation class GestionDatos
  */
-@WebServlet("/GestionDatos")
+@WebServlet("/GestionDatosServlet")
 public class GestionDatosServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private NacionalidadNegocio NegocioNacion = new NacionalidadNegocioImpl();
@@ -47,19 +47,40 @@ public class GestionDatosServlet extends HttpServlet {
 	private ProvinciaNegocio daoProvincia = new ProvinciaNegocioImpl();
 	private ArrayList<Provincia> listaProvincias;
 	
+	ClienteNegocio negoCliente;
     public GestionDatosServlet() {
         super();
-        // TODO Auto-generated constructor stub
+        negoCliente = new ClienteNegocioImpl();
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		
-	}
+		try {
+            int idCliente = Integer.parseInt(request.getParameter("id"));
+            
+            Cliente cliente = negoCliente.buscarPorId(idCliente);
+            
+            if(cliente != null) {       
+            	
+                request.setAttribute("cliente", cliente);
+                
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/DatosCliente.jsp");
+                dispatcher.forward(request, response);
+              
+            } else {
+            	
+                request.setAttribute("mensaje", "No se encontró el cliente");
+                response.sendRedirect("AdministracionClientesServlet");
+            }
+            
+        } catch (Exception e) {
+            request.setAttribute("mensaje", "Error al cargar el cliente: " + e.getMessage());
+            response.sendRedirect("AdministracionClientesServlet");
+        }
+    }
+	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
