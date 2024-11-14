@@ -60,8 +60,8 @@ label {
 			<form action="GenerarReporteServlet" method="POST">
 				<div class="mb-3">
 					<label for="tipoReporte">Tipo de Reporte:</label> <select
-						id="tipoReporte" name="tipoReporte" class="form-select" required
-						onchange="reporteSeleccionado(this.value)">
+						id="tipoReporte" name="tipoReporte" class="form-select w-50"
+						required onchange="reporteSeleccionado(this.value)">
 						<option value="clientes">Reporte de Clientes</option>
 						<option value="cuentas">Reporte de Cuentas</option>
 						<option value="prestamos">Reporte de Préstamos</option>
@@ -69,15 +69,13 @@ label {
 					<div id="fechasReporte">
 						<label for="fechaInicio">Fecha de Inicio:</label> <input
 							type="date" id="fechaInicio" name="fechaInicio"
-							class="form-control" required onclick="this.showPicker()"
+							class="form-control  w-50" required
 							onchange="fechaFin.min = fechaInicio.value"> <label
 							for="fechaFin">Fecha de Fin:</label> <input type="date"
-							id="fechaFin" name="fechaFin" class="form-control" required
-							onclick="this.showPicker()">
+							id="fechaFin" name="fechaFin" class="form-control  w-50" required>
 					</div>
 					<input type="submit" value="Generar Reporte"
 						class="btn btn-primary" onclick="recargarPagina()">
-				</div>
 			</form>
 		</div>
 
