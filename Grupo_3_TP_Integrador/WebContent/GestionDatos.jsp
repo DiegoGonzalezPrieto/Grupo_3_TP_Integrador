@@ -255,8 +255,8 @@
 				}
 			%>
 			<input type="submit" value="<%=accionBoton%>" name="btnEditar"
-				class="btn btn-primary"> <a
-				href="AdministracionClientes.jsp" class="btn btn-primary">Volver</a>
+				class="btn btn-primary" onclick="return confirm ('¿Seguro que desea<%=accionBoton%> el usuario?');">
+				<a href="AdministracionClientes.jsp" class="btn btn-primary">Volver</a>
 		</form>
 	</div>
 	
