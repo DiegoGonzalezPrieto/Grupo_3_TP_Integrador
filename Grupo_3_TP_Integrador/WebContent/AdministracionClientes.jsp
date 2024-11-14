@@ -108,7 +108,8 @@
 							
 							<td><a class="btn btn-info btn-sm" href="GestionDatosServlet?id=<%=cliente.getId() %>">Ver</a></td>
                         	<td><a class="btn btn-warning btn-sm" href="GestionDatosServlet?id=<%=cliente.getId() %>">Editar</a></td>
-                        	<td><a class="btn btn-danger btn-sm" href="GestionDatosServlet?i=<%=cliente.getId() %>">Eliminar</a></td>
+                        	<td><a class="btn btn-danger btn-sm" href="GestionDatosServlet?delete=<%=cliente.getId() %>"
+                        	onclick="return confirm('¿Seguro que desea eliminar esta cuenta?')">Eliminar</a></td>
 						</tr>
 				<%
 					} 

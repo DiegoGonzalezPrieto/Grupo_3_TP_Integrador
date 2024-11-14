@@ -79,22 +79,41 @@ public class GestionDatosServlet extends HttpServlet {
 				dispatcher.forward(request, response);
 				return;
 			}
-			int idCliente = Integer.parseInt(request.getParameter("id"));
+			if(request.getParameter("id") != null) {
+				int idCliente = Integer.parseInt(request.getParameter("id"));
+				
+				Cliente cliente = negoCliente.buscarPorId(idCliente);
 
-			Cliente cliente = negoCliente.buscarPorId(idCliente);
-
-			if (cliente != null) {
-
-				request.setAttribute("cliente", cliente);
-
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/DatosCliente.jsp");
-				dispatcher.forward(request, response);
-
-			} else {
-
-				request.setAttribute("mensaje", "No se encontrÃ³ el cliente");
-				response.sendRedirect("AdministracionClientesServlet");
-			}
+				if (cliente != null) {
+	
+					request.setAttribute("cliente", cliente);
+	
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/DatosCliente.jsp");
+					dispatcher.forward(request, response);
+	
+				} else {
+	
+					request.setAttribute("mensaje", "No se encontrÃ³ el cliente");
+					response.sendRedirect("AdministracionClientesServlet");
+				}
+				
+			}else if(request.getParameter("delete") != null) {
+				
+				int idCliente = Integer.parseInt(request.getParameter("delete"));
+					if (idCliente != 0) {
+						
+						negoCliente.delete(idCliente);
+		
+						RequestDispatcher dispatcher = request.getRequestDispatcher("/AdministracionClientes.jsp");
+						dispatcher.forward(request, response);
+		
+					} else {
+		
+						request.setAttribute("mensaje", "No se pudo eliminar el cliente");
+						response.sendRedirect("AdministracionClientesServlet");
+					}
+					
+				}
 
 		} catch (Exception e) {
 			request.setAttribute("mensaje", "Error al cargar el cliente: " + e.getMessage());
@@ -113,8 +132,10 @@ public class GestionDatosServlet extends HttpServlet {
 		Cliente cliente;
 
 		crearCliente(request, response, false);
-
-		// COMENTO ACÄ PORQUE NO SE QUE HACE - USO EL POST PARA CREAR/EDITAR USUARIO
+		
+		RequestDispatcher rd = request.getRequestDispatcher("/AdministracionClientes.jsp");
+		rd.forward(request, response);
+		// COMENTO ACï¿½ PORQUE NO SE QUE HACE - USO EL POST PARA CREAR/EDITAR USUARIO
 		// (Diego)
 
 		// if(request.getAttribute("cliente") != null) {
@@ -170,13 +191,11 @@ public class GestionDatosServlet extends HttpServlet {
 			negoCliente.insert(cliente);
 		}
 
-		RequestDispatcher rd = request.getRequestDispatcher("/GestionDatos.jsp");
-
 	}
 
 	/*
 	 * Crea un cliente levantando los datos de la request.
-	 * Luego podría editar
+	 * Luego podrï¿½a editar
 	 */
 	private void crearCliente(HttpServletRequest request, HttpServletResponse response, boolean editar) {
 		ClienteNegocio negoCliente = new ClienteNegocioImpl();
@@ -218,7 +237,7 @@ public class GestionDatosServlet extends HttpServlet {
 			negoCliente.insert(cliente);
 		}
 
-		RequestDispatcher rd = request.getRequestDispatcher("/GestionDatos.jsp");
+		
 
 	}
 

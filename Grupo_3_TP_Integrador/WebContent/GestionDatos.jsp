@@ -1,3 +1,4 @@
+<%@page import="java.time.LocalDate"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
@@ -67,60 +68,101 @@
 		<form action="GestionDatosServlet" method="POST">
 
 			<div class="form-group">
-				<label for="usuario">Usuario:</label> <input type="text"
-					class="form-control" id="usuario" name="usuario"
-					value="<%=cliente == null ? "" : cliente.getNombreUsuario()%>">
+			    <label for="usuario">Usuario:</label>
+			    <input type="text" class="form-control" id="usuario" name="usuario"
+			        value="<%=cliente == null ? "" : cliente.getNombreUsuario()%>"
+			        pattern="[A-Za-z0-9]{4,20}"
+			        title="El usuario debe tener entre 4 y 20 caracteres alfanuméricos"
+			        required>
 			</div>
+			
 			<div class="form-group">
-				<label for="pass">Contraseña:</label> <input type="text"
-					class="form-control" id="pass" name="pass"
-					value="<%=cliente == null ? "" : cliente.getPass()%>">
+			    <label for="pass">Contraseña:</label>
+			    <input type="password" class="form-control" id="pass" name="pass"
+			        value="<%=cliente == null ? "" : cliente.getPass()%>"
+			        pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+			        title="La contraseña debe tener al menos 8 caracteres, incluyendo letras y números"
+			        required>
 			</div>
+			
 			<div class="form-group">
-				<label for="nombre">Nombre:</label> <input type="text"
-					class="form-control" id="nombre" name="nombre"
-					value="<%=cliente == null ? "" : cliente.getNombre()%>">
+			    <label for="nombre">Nombre:</label>
+			    <input type="text" class="form-control" id="nombre" name="nombre"
+			        value="<%=cliente == null ? "" : cliente.getNombre()%>"
+			        pattern="[A-Za-zÀ-ÿ\s]{2,50}"
+			        title="Ingrese un nombre válido (solo letras)"
+			        required>
 			</div>
+			
 			<div class="form-group">
-				<label for="nombre">Apellido:</label> <input type="text"
-					class="form-control" id="apellido" name="apellido"
-					value="<%=cliente == null ? "" : cliente.getApellido()%>">
+			    <label for="apellido">Apellido:</label>
+			    <input type="text" class="form-control" id="apellido" name="apellido"
+			        value="<%=cliente == null ? "" : cliente.getApellido()%>"
+			        pattern="[A-Za-zÀ-ÿ\s]{2,50}"
+			        title="Ingrese un apellido válido (solo letras)"
+			        required>
 			</div>
+			
 			<div class="form-group">
-				<label for="nombre">DNI:</label> <input type="text"
-					class="form-control" id="dni" name="dni"
-					value="<%=cliente == null ? "" : cliente.getDni()%>">
+			    <label for="dni">DNI:</label>
+			    <input type="text" class="form-control" id="dni" name="dni"
+			        value="<%=cliente == null ? "" : cliente.getDni()%>"
+			        pattern="[0-9]{8}"
+			        title="El DNI debe tener exactamente 8 dígitos"
+			        required>
 			</div>
+			
 			<div class="form-group">
-				<label for="nombre">CUIL:</label> <input type="text"
-					class="form-control" id="cuil" name="cuil"
-					value="<%=cliente == null ? "" : cliente.getCuil()%>">
+			    <label for="cuil">CUIL:</label>
+			    <input type="text" class="form-control" id="cuil" name="cuil"
+			        value="<%=cliente == null ? "" : cliente.getCuil()%>"
+			        pattern="[0-9]{11}"
+			        title="El CUIL debe tener exactamente 11 dígitos"
+			        required>
 			</div>
 			<div class="form-group">
 				<label for="nombre">Genero:</label> <input type="text"
 					class="form-control" id="genero" name="genero"
 					value="<%=cliente == null ? "" : cliente.getGenero()%>">
 			</div>
+			
 			<div class="form-group">
-				<label for="nombre">E-mail:</label> <input type="text"
-					class="form-control" id="email" name="email"
-					value="<%=cliente == null ? "" : cliente.getCorreoElectronico()%>">
+			    <label for="email">E-mail:</label>
+			    <input type="email" class="form-control" id="email" name="email"
+			        value="<%=cliente == null ? "" : cliente.getCorreoElectronico()%>"
+			        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+			        title="Ingrese un email válido"
+			        required>
 			</div>
+			
 			<div class="form-group">
-				<label for="nombre">Telefono:</label> <input type="text"
-					class="form-control" id="telefono" name="telefono"
-					value="<%=cliente == null ? "" : cliente.getTelefono()%>">
+			    <label for="telefono">Teléfono:</label>
+			    <input type="text" class="form-control" id="telefono" name="telefono"
+			        value="<%=cliente == null ? "" : cliente.getTelefono()%>"
+			        pattern="[0-9]{10}"
+			        title="El teléfono debe tener 10 dígitos"
+			        required>
 			</div>
+			
 			<div class="form-group">
 				<label for="nombre">Fecha de nacimiento:</label> <input type="date"
 					class="form-control" id="fechaNacimiento" name="fechaNacimiento"
-					value="<%=cliente == null ? "" : cliente.getFechaNacimiento()%>" d>
+					value="<%=cliente == null ? "" : cliente.getFechaNacimiento()%>" 
+					max="<%=LocalDate.now().minusYears(18)%>"
+			        title="Debe ser mayor de 18 años"
+			        required>
 			</div>
+			
 			<div class="form-group">
-				<label for="nombre">Dirección:</label> <input type="text"
-					class="form-control" id="direccion" name="direccion"
-					value="<%=cliente == null ? "" : cliente.getDireccion()%>">
+			    <label for="direccion">Dirección:</label>
+			    <input type="text" class="form-control" id="direccion" name="direccion"
+			        value="<%=cliente == null ? "" : cliente.getDireccion()%>"
+			        minlength="5"
+			        maxlength="100"
+			        title="La dirección debe tener entre 5 y 100 caracteres"
+			        required>
 			</div>
+			
 			<div class="form-group">
 				<label for="provincia">Provincia:</label> <select
 					class="form-select form-select-sm" name="provincia" id="provincia"
