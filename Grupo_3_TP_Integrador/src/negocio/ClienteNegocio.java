@@ -14,6 +14,7 @@ public interface ClienteNegocio {
     
     Cliente buscarPorNombre(String nombre);
     Cliente buscarPorId(int id);
+    int buscarPorIdUsuario(int id);
     ArrayList<Cliente> listarTodos();
     ArrayList<Cliente> listarActivos();
     

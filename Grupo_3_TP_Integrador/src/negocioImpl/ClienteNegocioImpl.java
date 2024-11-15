@@ -102,4 +102,10 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 		return clienteDao.obtenerClientesPorNacionalidad();
 	}
 
+	@Override
+	public int buscarPorIdUsuario(int id) {
+		int idCliente = clienteDao.encontrarPorIdUsuario(id);
+		return idCliente;
+	}
+
 }
