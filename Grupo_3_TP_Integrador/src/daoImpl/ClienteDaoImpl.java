@@ -168,6 +168,27 @@ public class ClienteDaoImpl implements ClienteDao {
 			return null;
 		}
 	}
+	
+	@Override
+	public int encontrarPorIdUsuario(int idUsuario) {  
+		 String query = "SELECT id_cliente FROM clientes WHERE id_usuario = ?";
+		    
+		    try (Connection conexion = Conexion.getConnection();
+		         PreparedStatement statement = conexion.prepareStatement(query)) {
+		        
+		        statement.setInt(1, idUsuario);
+		        ResultSet rs = statement.executeQuery();
+		        
+		        if(rs.next()) {
+		            return rs.getInt("id_cliente");
+		        }
+		        
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+		    
+		    return 0; // o lanzar excepción
+	}
 
 	@Override
 	public Cliente encontrarPorNombre(String nombre) {
@@ -524,5 +545,7 @@ public class ClienteDaoImpl implements ClienteDao {
 			return resultado;
 		}
 	}
+
+
 
 }
