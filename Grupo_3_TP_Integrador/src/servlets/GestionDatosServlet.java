@@ -149,10 +149,8 @@ public class GestionDatosServlet extends HttpServlet {
 	    
 		if (request.getParameter("crear") != null ){
 			
-			System.out.println("Estamos creando");
 			validarYCrearCliente(request, response);
 		}else if (request.getParameter("editar") != null) {
-			System.out.println("Estamos editando");
 			validarYEditarCliente(request,response);
 		}
 	        
@@ -391,8 +389,6 @@ public class GestionDatosServlet extends HttpServlet {
         try {
 
 	        if(negoCliente.existeDNI(dni) && !dni.equals(clienteEditar.getDni())) {
-	            System.out.println(clienteEditar.getDni());
-	            System.out.println(dni);
 	        	request.getSession().setAttribute("mensaje", "El DNI ya existe en la base de datos");
 	            request.getSession().setAttribute("tipoMensaje", "danger");
 	            
