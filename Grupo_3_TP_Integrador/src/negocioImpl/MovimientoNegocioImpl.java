@@ -21,28 +21,27 @@ public class MovimientoNegocioImpl implements MovimientoNegocio {
 		
 	}
 
-	@Override
-	public void delete(int id) {
-		dao.delete(id);
-		
-	}
+//	@Override
+//	public void delete(int id) {
+//		dao.delete(id);
+//		
+//	}
 
 	@Override
 	public Movimiento encontrarPorId(int id) {
-		//return dao.encontrarPorId(id)
-		return null;
+		return dao.encontrarPorId(id);
 	}
 
 	@Override
-	public ArrayList<Movimiento> ListarMovimientosPorCuenta(int idCuenta) {
+	public ArrayList<Movimiento> listarMovimientosPorCuenta(int idCuenta) {
 		
-		return dao.ListarMovimientosPorCuenta(idCuenta);
+		return dao.listarMovimientosPorCuenta(idCuenta);
 	}
 
 	@Override
-	public ArrayList<Movimiento> ListarTodo() {
+	public ArrayList<Movimiento> listarTodo() {
 		
-		return dao.ListarTodo();
+		return dao.listarTodos();
 	}
 
 }
