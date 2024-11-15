@@ -153,7 +153,6 @@ public class TransferenciaServlet extends HttpServlet {
 			request.setAttribute("mensaje", "Transferencia exitosa!");
 			request.setAttribute("claseMensaje", "success");
 			doGet(request, response);
-			System.out.println("Fin trasnsferencia.");
 
 		} catch (Exception e) {
 			request.setAttribute("mensaje", "Ups! Hubo un error inesperado...");
