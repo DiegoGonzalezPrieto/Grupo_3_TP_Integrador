@@ -108,6 +108,9 @@ public class GestionDatosServlet extends HttpServlet {
 					if (idCliente != 0) {
 						
 						negoCliente.delete(idCliente);
+						
+						request.getSession().setAttribute("mensaje", "Cliente eliminado exitosamente");
+			            request.getSession().setAttribute("tipoMensaje", "success");
 		
 						RequestDispatcher dispatcher = request.getRequestDispatcher("/AdministracionClientes.jsp");
 						dispatcher.forward(request, response);
