@@ -54,11 +54,11 @@
             List<Prestamo> prestamos = (List<Prestamo>) request.getAttribute("listaPrestamos");
             if (prestamos == null || prestamos.isEmpty()) {
         %>
-            <p>No hay préstamos disponibles.</p>
+            <p></p>
             
         <% }else{ %>     
         
-            <p>Se encontraron <%= prestamos.size() %> préstamos.</p>
+            <p></p>
             
         <% } %>    
        
