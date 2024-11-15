@@ -468,5 +468,34 @@ public class CuentaDaoImpl implements CuentaDao {
 		}
 		return new BigDecimal(0);
 	}
+
+	@Override
+	public Cuenta obtenerCuentaPorCbu(String cbu) {
+		String encontrarPorId = "SELECT c.*, cl.nombre as nombre_cliente, cl.apellido as apellido_cliente, tc.tipo_cuenta as tipo_cuenta " + 
+        		"FROM cuentas c INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente " + 
+        		"INNER JOIN tipos_cuenta tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta WHERE c.cbu = ?";
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        
+        try (Connection conexion = Conexion.getConnection();
+             PreparedStatement statement = conexion.prepareStatement(encontrarPorId)) {
+            
+            statement.setString(1, cbu);
+            ResultSet rs = statement.executeQuery();
+            
+            if(rs.next()) {
+                return mapResultSetDeCuenta(rs);
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+	}
   
 }

@@ -14,6 +14,7 @@ public interface CuentaNegocio {
     Cuenta obtenerCuentaPorId(int id);
     List<Cuenta> listarTodas();
     List<Cuenta> listarPorCliente(int idCliente);
+    List<Cuenta> listarActivasPorCliente(int idCliente);
     
     boolean puedeCrearCuenta(int idCliente);
     boolean validarCBU(String cbu);
@@ -36,4 +37,6 @@ public interface CuentaNegocio {
 
     Long obtenerUltimoNumeroCuenta();
     String obtenerUltimoCBU();
+    
+    Cuenta obtenerCuentaPorCbu(String cbu);
 }
