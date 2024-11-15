@@ -12,5 +12,9 @@ public interface UsuarioNegocio {
     void agregarUsuario(Usuario usuario);
     void actualizarUsuario(Usuario usuario);
     void eliminarUsuario(int id);
+    
+    Usuario buscarPorNombre(String nombre);
+    
+    public boolean existeUsuario(String user);
 
 }

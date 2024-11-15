@@ -1,6 +1,8 @@
 package negocioImpl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import dao.CuentaDao;
 import daoImpl.CuentaDaoImpl;
@@ -10,6 +12,7 @@ import negocio.CuentaNegocio;
 public class CuentaNegocioImpl implements CuentaNegocio {
     
     private CuentaDao cuentaDao;
+    
     private static final int MAX_CUENTAS_ACTIVAS = 3;
     
     public CuentaNegocioImpl() {
@@ -18,7 +21,7 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 
     @Override
     public boolean crearCuenta(Cuenta cuenta) {
-        if (!puedeCrearCuenta(cuenta.getCliente().getId_cliente())) {
+        if (!puedeCrearCuenta(cuenta.getCliente().getIdCliente())) {
             return false;
         }
         
@@ -98,4 +101,39 @@ public class CuentaNegocioImpl implements CuentaNegocio {
         
         return !cuentaDao.existeNumeroCuenta(numeroCuenta);
     }
+
+	@Override
+	public int obtenerReporteCantidadDeCuentas(Date fechaInicio, Date fechaFin) {
+		return cuentaDao.obtenerReporteCantidadDeCuentas(fechaInicio, fechaFin);
+	}
+
+	@Override
+	public BigDecimal obtenerReporteSumaDeSaldos(Date fechaInicio, Date fechaFin) {
+		return cuentaDao.obtenerReporteSumaDeSaldos(fechaInicio, fechaFin);
+	}
+
+	@Override
+	public BigDecimal obtenerReporteSaldoPromedio(Date fechaInicio, Date fechaFin) {
+		return cuentaDao.obtenerReporteSaldoPromedio(fechaInicio, fechaFin);
+	}
+
+	public Long obtenerUltimoNumeroCuenta() {
+		Long ultimoNumeroCuenta = cuentaDao.obtenerUltimoNumeroCuenta();
+		return ultimoNumeroCuenta;
+	}
+
+	@Override
+	public String obtenerUltimoCBU() {
+		String ultimoCBU = cuentaDao.obtenerUltimoCBU();
+		return ultimoCBU;
+	}
+
+    public int totalCuentasAbiertas() {
+    	return cuentaDao.obtenerTodos().size();
+    }
+
+    public List<Cuenta> listarCuentasRecientes(){
+    	return cuentaDao.obtenerCuentasRecientes();
+    }
+
 }

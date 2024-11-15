@@ -1,14 +1,21 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.ClienteDao;
 import daoImpl.ClienteDaoImpl;
 import dominio.Cliente;
+import negocio.ClienteNegocio;
+import negocioImpl.ClienteNegocioImpl;
 
 /**
  * Servlet implementation class AdministracionClientesServlet
@@ -16,44 +23,64 @@ import dominio.Cliente;
 @WebServlet("/AdministracionClientesServlet")
 public class AdministracionClientesServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
+	ClienteNegocio negoCli = new ClienteNegocioImpl();
+	ClienteDao daoCliente = new ClienteDaoImpl();
 	public AdministracionClientesServlet() {
 		super();
-		// TODO Auto-generated constructor stub
+	
 	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+		ClienteNegocioImpl cliente = new ClienteNegocioImpl();
+		List<Cliente> listaClientes = cliente.listarActivos();
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+		
+		request.setAttribute("listaClientes", listaClientes);
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/AdministracionClientes.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    private void verCliente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int clienteId = Integer.parseInt(request.getParameter("id"));
+        Cliente cliente = daoCliente.encontrarPorId(clienteId);
+        request.setAttribute("cliente", cliente);
+        RequestDispatcher rd = request.getRequestDispatcher("/GestionDatos.jsp");
+        rd.forward(request, response);
+    }
+
+    private void editarCliente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int clienteId = Integer.parseInt(request.getParameter("id"));
+        Cliente cliente = daoCliente.encontrarPorId(clienteId);
+        request.setAttribute("cliente", cliente);
+        request.setAttribute("accion", "editar");
+        RequestDispatcher rd = request.getRequestDispatcher("/GestionDatos.jsp");
+        rd.forward(request, response);
+    }
+
+    private void eliminarCliente(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int clienteId = Integer.parseInt(request.getParameter("id"));
+       
+        response.sendRedirect("AdministracionClientesServlet?action=listar");
+    }
+
+    private void listarClientes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ArrayList<Cliente> listadoClientes = daoCliente.buscarTodos();
+        request.setAttribute("listaC", listadoClientes);
+        RequestDispatcher rd = request.getRequestDispatcher("/AdministracionClientes.jsp");
+        rd.forward(request, response);
+    }
+
+
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		String nombre = request.getParameter("nombre");
-		boolean resultado = false;
-
-		if (nombre != null) {
-			ClienteDaoImpl dao = new ClienteDaoImpl();
-			Cliente c = new Cliente();
-			c.setNombre(nombre);
-			resultado = dao.insert(c);
-		}
-
-		request.setAttribute("creado", resultado);
-		request.getRequestDispatcher("AdministracionClientes.jsp").forward(request, response);
-
+			throws ServletException, IOException { 
+		
 	}
+	
 
 }

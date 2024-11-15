@@ -10,6 +10,9 @@ public interface UsuarioDao {
     void actualizarUsuario(Usuario usuario);
     void eliminarUsuario(int id);
 
+    Usuario buscarPorNombre(String nombre);
+    
+    public boolean exiteUsuario(String user);
 }
 
 

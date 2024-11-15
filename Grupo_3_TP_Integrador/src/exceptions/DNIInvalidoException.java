@@ -9,7 +9,7 @@ public class DNIInvalidoException extends Exception {
 	
 	@Override
 	public String getMessage() {
-		return "El DNI ingresado es inválido.";
+		return "El DNI ingresado es invalido.";
 	}
 
 }

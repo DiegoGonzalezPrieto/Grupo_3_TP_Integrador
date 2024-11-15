@@ -1,3 +1,5 @@
+<%@page import="dominio.ReporteGuardado"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -51,37 +53,72 @@ label {
 	<%@ include file="BarraMenu.jsp"%>
 	<h1>Gestión de Reportes</h1>
 	<div class="container">
-		<!-- Listaod de reportes -->
-		<h2>Reportes</h2>
+
+		<!-- Form para generar nuevos reportes -->
+		<div class="container">
+			<h2>Generar Nuevo Reporte</h2>
+			<form action="GenerarReporteServlet" method="POST">
+				<div class="mb-3">
+					<label for="tipoReporte">Tipo de Reporte:</label> <select
+						id="tipoReporte" name="tipoReporte" class="form-select w-50"
+						required onchange="reporteSeleccionado(this.value)">
+						<option value="clientes">Reporte de Clientes</option>
+						<option value="cuentas">Reporte de Cuentas</option>
+						<option value="prestamos">Reporte de Préstamos</option>
+					</select>
+					<div id="fechasReporte">
+						<label for="fechaInicio">Fecha de Inicio:</label> <input
+							type="date" id="fechaInicio" name="fechaInicio"
+							class="form-control  w-50" required
+							onchange="fechaFin.min = fechaInicio.value"> <label
+							for="fechaFin">Fecha de Fin:</label> <input type="date"
+							id="fechaFin" name="fechaFin" class="form-control  w-50" required>
+					</div>
+					<input type="submit" value="Generar Reporte"
+						class="btn btn-primary" onclick="recargarPagina()">
+			</form>
+		</div>
+
+		<!-- Lista de reportes -->
+		<%
+			ArrayList<ReporteGuardado> reportes = new ArrayList<ReporteGuardado>();
+			if (session.getAttribute("reportes") != null) {
+				reportes = (ArrayList<ReporteGuardado>) session.getAttribute("reportes");
+			} else {
+				session.setAttribute("reportes", reportes);
+			}
+		%>
+
+		<h2>Reportes de esta sesión</h2>
 		<table id="tablaReportes" class="table table-striped">
 			<thead>
 				<tr>
 					<th scope="col">ID</th>
 					<th scope="col">Nombre</th>
 					<th scope="col">Fecha</th>
-					<th scope="col">Detalle</th>
+					<th scope="col">Tipo</th>
 					<th scope="col" class="text-center">Acciones</th>
 				</tr>
 			</thead>
 			<tbody>
+				<%
+					for (ReporteGuardado reporte : reportes) {
+				%>
+
+
 				<tr>
-					<td>1</td>
-					<td>Reporte de Clientes</td>
-					<td>2024-11-01</td>
-					<td>Detalles del reporte de clientes...</td>
-					<td>
-						<div class="btn-group btn-group-sm" role="group">
-							<a href="VerReporteServlet?id=1"
-								class="btn btn-primary me-2 mb-2"> <i class="fas fa-eye"></i>
-							</a> <a href="DescargarReporteServlet?id=1"
-								class="btn btn-warning mb-2"
-								onclick="return confirm('¿Está seguro que desea descargar?')">
-								<i class="fas fa-download"></i>
-							</a>
-						</div>
-					</td>
+					<td><%=reporte.getId()%></td>
+					<td><%=reporte.getNombre()%></td>
+					<td><%=reporte.getFechas()%></td>
+					<td><%=reporte.getTipo()%></td>
+					<td><a href="DescargarReporteServlet?id=<%=reporte.getId()%>"
+						class="btn btn-warning mb-2"> <i class="fas fa-download"></i>
+					</a></td>
 				</tr>
-				<tr>
+				<%
+					}
+				%>
+				<!--  <tr>
 					<td>2</td>
 					<td>Reporte de Cuentas</td>
 					<td>2024-11-01</td>
@@ -98,33 +135,15 @@ label {
 						</div>
 					</td>
 				</tr>
+				-->
 			</tbody>
 		</table>
 	</div>
 
-	<!-- Form para generar nuevos reportes -->
-	<div class="container">
-		<h2>Generar Nuevo Reporte</h2>
-		<form action="GenerarReporteServlet" method="POST">
-			<div class="mb-3">
-				<label for="tipoReporte">Tipo de Reporte:</label> <select
-					id="tipoReporte" name="tipoReporte" class="form-select">
-					<option value="clientes">Reporte de Clientes</option>
-					<option value="cuentas">Reporte de Cuentas</option>
-					<option value="prestamos">Reporte de Préstamos</option>
-				</select> <label for="fechaInicio">Fecha de Inicio:</label> <input
-					type="date" id="fechaInicio" name="fechaInicio"
-					class="form-control" required> <label for="fechaFin">Fecha
-					de Fin:</label> <input type="date" id="fechaFin" name="fechaFin"
-					class="form-control" required> <input type="submit"
-					value="Generar Reporte" class="btn btn-primary"
-					onclick="return confirm('¿Generar reporte?')">
-			</div>
-		</form>
-	</div>
+
 
 	<!-- Form para programar unn reporte -->
-	<div class="container">
+	<!--<div class="container">
 		<h2>Programar Reporte</h2>
 		<form action="ProgramarReporteServlet" method="POST">
 			<div class="mb-3">
@@ -153,8 +172,40 @@ label {
 					onclick="return confirm('¿Programar reporte?')">
 			</div>
 		</form>
-	</div>
+	</div>-->
+
+
 	<%@ include file="Footer.jsp"%>
+	<script type="text/javascript">
+		// init seleccion de fechas
+		if (tipoReporte.value === 'clientes') {
+			fechaInicio.disabled = true;
+			fechaFin.disabled = true;
+			fechasReporte.hidden = true;
+		}
+		fechaInicio.max = new Date().toISOString().split("T")[0];
+		fechaFin.max = new Date().toISOString().split("T")[0];
+
+		// Cambios en formulario según tipo de reporte:
+		function reporteSeleccionado(reporte) {
+			if (reporte === 'clientes') {
+				fechaInicio.disabled = true;
+				fechaFin.disabled = true;
+				fechasReporte.hidden = true;
+			} else {
+				fechaInicio.disabled = false;
+				fechaFin.disabled = false;
+				fechasReporte.hidden = false;
+			}
+		}
+
+		// recargar pagina para agtualizar tabla de reportes
+		function recargarPagina() {
+			setTimeout(function() {
+				location.reload();
+			}, 2000);
+		}
+	</script>
 	<script type="text/javascript">
 		let table = new DataTable(
 				'#tablaReportes',

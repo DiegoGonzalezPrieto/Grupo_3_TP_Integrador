@@ -1,3 +1,4 @@
+<%@page import="dominio.Cliente"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -19,55 +20,24 @@
 			<div class="card-header bg-primary text-white">
 				<h4 class="mb-0">Datos Personales</h4>
 			</div>
+			<%
+				Cliente cliente = (Cliente) request.getAttribute("cliente");
+				if (cliente != null) {
+			%>
 			<div class="card-body">
 				<form action="HomeCliente.jsp" method="GET">
 					<div class="row mb-3">
 						<div class="col-md-6">
 							<div class="form-group">
 								<label class="form-label">Nombre:</label> <input type="text"
-									class="form-control w-50" value="Juan Pablo" readonly>
+									class="form-control w-50" value="<%=cliente.getNombre()%>"
+									readonly>
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
 								<label class="form-label">Apellido:</label> <input type="text"
-									class="form-control w-50" value="Rajoy" readonly>
-							</div>
-						</div>
-					</div>
-
-					<div class="row mb-3">
-						<div class="col-md-6">
-							<div class="form-group">
-								<label class="form-label">Nro. Documento o CUIL:</label>
-								<div class="input-group w-50">
-									<select class="form-select w-25">
-										<option value="DNI" selected>DNI</option>
-										<option value="CUIL">CUIL</option>
-									</select> <input type="text" class="form-control" value="35035199"
-										readonly>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-								<label class="form-label">Fecha Nac.:</label> <input type="text"
-									class="form-control w-50" value="01/03/2001" readonly>
-							</div>
-						</div>
-					</div>
-
-					<div class="row mb-3">
-						<div class="col-md-6">
-							<div class="form-group">
-								<label class="form-label">Sexo:</label> <input type="text"
-									class="form-control w-50" value="Masculino" readonly>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-								<label class="form-label">Nacionalidad:</label> <input
-									type="text" class="form-control w-50" value="Argentina"
+									class="form-control w-50" value="<%=cliente.getApellido()%>"
 									readonly>
 							</div>
 						</div>
@@ -76,14 +46,18 @@
 					<div class="row mb-3">
 						<div class="col-md-6">
 							<div class="form-group">
-								<label class="form-label">Dirección:</label> <input type="text"
-									class="form-control w-50" value="Calle 6" readonly>
+								<label class="form-label">Nro. Documento</label>
+								<div class="input-group w-50">
+									<input type="text" class="form-control w-50"
+										value="<%=cliente.getDni()%>" readonly>
+								</div>
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
-								<label class="form-label">Localidad:</label> <input type="text"
-									class="form-control w-50" value="San Antonio" readonly>
+								<label class="form-label">CUIL</label> <input type="text"
+									class="form-control w-50" value="<%=cliente.getCuil()%>"
+									readonly>
 							</div>
 						</div>
 					</div>
@@ -91,22 +65,90 @@
 					<div class="row mb-3">
 						<div class="col-md-6">
 							<div class="form-group">
+								<label class="form-label">Sexo:</label> <input type="text"
+									class="form-control w-50"
+									value="<%=cliente.getGeneroCompleto()%>" readonly>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="form-label">Fecha Nac.:</label> <input type="text"
+									class="form-control w-50"
+									value="<%=cliente.getFechaNacimiento()%>" readonly>
+							</div>
+						</div>
+					</div>
+
+
+
+					<div class="row mb-3">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="form-label">Dirección:</label> <input type="text"
+									class="form-control w-50" value="<%=cliente.getDireccion()%>"
+									readonly>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="form-label">Localidad:</label> <input type="text"
+									class="form-control w-50"
+									value="<%=cliente.getLocalidad().getNombre()%>" readonly>
+							</div>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-md-6">
+							<div class="form-group">
 								<label class="form-label">Provincia:</label> <input type="text"
-									class="form-control w-50" value="Buenos Aires" readonly>
+									class="form-control w-50"
+									value="<%=cliente.getProvincia().getNombre()%>" readonly>
 							</div>
 						</div>
 						<div class="col-md-6">
 							<div class="form-group">
 								<label class="form-label">Email:</label> <input type="email"
-									class="form-control w-50" value="user@test.com" readonly>
+									class="form-control w-50"
+									value="<%=cliente.getCorreoElectronico()%>" readonly>
+							</div>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-md-6">
+							<label class="form-label">Nacionalidad:</label> <input
+								type="text" class="form-control w-50"
+								value="<%=cliente.getNacionalidad().getNombre()%>" readonly>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group"></div>
+						</div>
+					</div>
+
+					<!--  Datos Usuario -->
+					<div class="row mb-3">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="form-label">Usuario:</label> <input type="text"
+									class="form-control w-50"
+									value="<%=cliente.getNombreUsuario()%>" readonly>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="form-label">Contraseña:</label> <input type="text"
+									class="form-control w-50" value="<%=cliente.getPass()%>"
+									readonly>
 							</div>
 						</div>
 					</div>
 
 					<div class="text-center mt-4">
-						<button type="submit" class="btn btn-primary">Volver</button>
+						<a href="AdministracionClientes.jsp" class="btn btn-primary">Volver</a>
 					</div>
 				</form>
+				<%
+					}
+				%>
 			</div>
 		</div>
 	</div>

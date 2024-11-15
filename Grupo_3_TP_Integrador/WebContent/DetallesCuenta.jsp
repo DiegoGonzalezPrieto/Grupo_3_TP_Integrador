@@ -53,7 +53,12 @@
 <body>
 
 	<%@ include file="BarraMenu.jsp"%>
+	
+	<div class="container">
+	<h1>Funcionalidad en desarrollo...</h1>
+	</div>
 
+<!--  
 	<div class="container mt-4">
 		<div class="card">
 			<div class="card-header bg-white">
@@ -170,6 +175,6 @@
 							});
 						});
 	</script>
-
+-->
 </body>
 </html>
