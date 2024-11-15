@@ -21,7 +21,7 @@
 		<h1 class="text-center mb-4">Transferencia</h1>
 		<div class="row justify-content-center">
 			<div class="col-md-4">
-				<form class="p-4 border rounded bg-light">
+				<form action="" method="POST" class="p-4 border rounded bg-light">
 					<div class="mb-3">
 						<label for="cuentaOrigen" class="form-label">Cuenta
 							Origen:</label> <select id="cuentaOrigen" name="cuentaOrigen"
@@ -33,11 +33,30 @@
 						</select>
 					</div>
 
-					<div class="mb-3">
+					<h3 class="text-center mb-3">Destino</h3>
+
+					<div class="form-check form-switch ml-4 mb-3">
+						<input class="form-check-input" type="checkbox"
+							id="esCuentaPropia" onchange="alternarCuentaPropia(this.checked)">
+						<label class="form-check-label" for="esCuentaPropia">A
+							cuenta propia</label>
+					</div>
+					<div class="mb-3" id="bloqueCbuDestino">
 						<label for="cbuDestino" class="form-label">Cuenta Destino
 							(CBU):</label> <input type="number" id="cbuDestino" name="cbuDestino"
 							class="form-control" placeholder="Ingrese CBU de destino"
 							required>
+					</div>
+
+					<div class="mb-3" id="bloqueCuentaPropia">
+						<label for="cuentaPropia" class="form-label">Cuenta
+							Propia:</label> <select id="cuentaPropia" name="cuentaPropia"
+							class="form-select" required>
+							<option value="" disabled selected>Seleccione</option>
+							<option value="cuenta1">Cuenta 1 - 12345678</option>
+							<option value="cuenta2">Cuenta 2 - 87654321</option>
+							<option value="cuenta3">Cuenta 3 - 11223344</option>
+						</select>
 					</div>
 
 					<div class="mb-3">
@@ -51,14 +70,30 @@
 							onclick="return confirm('¿Confirma la transferencia?')">Transferir</button>
 						<button type="reset" class="btn btn-warning">Borrar
 							campos</button>
-						<a href="HomeCliente.jsp"
-							class="btn btn-danger">Volver</a>
+						<a href="HomeCliente.jsp" class="btn btn-danger">Volver</a>
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
 	<%@ include file="Footer.jsp"%>
+
+	<script type="text/javascript">
+		/**
+		 * Recibe el valor de checked del toggle de cuenta propia.
+		 * Muestra u oculta los controles de selección de destino (CBU o cuenta propia).
+		 */
+		function alternarCuentaPropia(esACuentaPropia) {
+
+			bloqueCbuDestino.hidden = esACuentaPropia;
+			cbuDestino.disabled = esACuentaPropia;
+
+			bloqueCuentaPropia.hidden = !esACuentaPropia;
+			cuentaPropia.disabled = !esACuentaPropia;
+		}
+
+		alternarCuentaPropia(false);
+	</script>
 </body>
 </html>
 
