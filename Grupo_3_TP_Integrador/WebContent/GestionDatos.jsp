@@ -83,7 +83,7 @@
 	    %>
 		<h2><%=encabezado%></h2>
 		<!-- En el JSP: -->
-		<form action="GestionDatosServlet" method="POST">
+		<form action="GestionDatosServlet" method="POST" id="form">
 
 			<div class="form-group">
 				<label for="usuario">Usuario:</label> <input type="text"
@@ -102,6 +102,19 @@
 					title="La contraseña debe tener al menos 8 caracteres, incluyendo letras y números"
 					required>
 			</div>
+			
+			<div class="form-group">
+				<label for="pass">Confirmar contraseña:</label> <input type="password"
+					class="form-control" id="ConfPass" name="ConfPass"
+					value="<%=cliente == null ? "" : cliente.getPass()%>"
+					pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+					title="La contraseña debe tener al menos 8 caracteres, incluyendo letras y números"
+					required>
+			</div>
+			
+			<div id="error-message" style="display:none; color: red;">
+        		Las contraseñas no coinciden.
+    		</div>
 
 			<div class="form-group">
 				<label for="nombre">Nombre:</label> <input type="text"
@@ -148,7 +161,7 @@
 				<label for="email">E-mail:</label> <input type="email"
 					class="form-control" id="email" name="email"
 					value="<%=cliente == null ? "" : cliente.getCorreoElectronico()%>"
-					pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+					
 					title="Ingrese un email válido" required>
 			</div>
 
@@ -282,5 +295,26 @@
 
 		filtrarLocalidades(provincia.value);
 	</script>
+	<script>
+		//Valido contraseña chiquis
+		
+		document.getElementById("form").addEventListener("submit", function(event) {
+		    
+		    var errorMessage = document.getElementById("error-message");
+	
+		    console.log(pass);
+		    console.log(confPass);
+		    console.log(pass !== ConfPass);
+		    if (ConfPass.value !== pass.value ) {
+		    	errorMessage.style.display = "block";
+		        event.preventDefault(); 
+		        console.log("fallo");
+		    } else {
+		        errorMessage.style.display = "none";
+		    }
+		});
+	
+	</script>
+	
 </body>
 </html>
