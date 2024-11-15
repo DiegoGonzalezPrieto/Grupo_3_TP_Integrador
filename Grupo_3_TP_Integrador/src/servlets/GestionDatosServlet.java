@@ -117,8 +117,23 @@ public class GestionDatosServlet extends HttpServlet {
 						request.setAttribute("mensaje", "No se pudo eliminar el cliente");
 						response.sendRedirect("AdministracionClientesServlet");
 					}
-					
-				}
+					 
+				
+			}else if (request.getParameter("editar")!= null){
+				
+				int idCliente = Integer.parseInt(request.getParameter("editar"));
+				Cliente cliente = negoCliente.buscarPorId(idCliente);
+				
+				request.setAttribute("clienteEditar",cliente);
+				request.setAttribute("editar",true);
+				request.setAttribute("provincias", daoProvincia.buscarTodos());
+				request.setAttribute("localidades", NegocioLocalidad.buscarTodos());
+				request.setAttribute("naciones", NegocioNacion.buscarTodos());
+				
+				RequestDispatcher dispatcher = request.getRequestDispatcher("GestionDatos.jsp");
+				dispatcher.forward(request, response);
+				
+			}
 
 		} catch (Exception e) {
 			request.setAttribute("mensaje", "Error al cargar el cliente: " + e.getMessage());
@@ -131,7 +146,20 @@ public class GestionDatosServlet extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    try {
+	    
+		if (request.getParameter("crear") != null ){
+			
+			System.out.println("Estamos creando");
+			validarYCrearCliente(request, response);
+		}else if (request.getParameter("editar") != null) {
+			System.out.println("Estamos editando");
+			validarYEditarCliente(request,response);
+		}
+	        
+	}
+	
+	private void validarYCrearCliente(HttpServletRequest request, HttpServletResponse response) {
+		try {
 	        String dni = request.getParameter("dni");
 	        String cuil = request.getParameter("cuil");
 	        String user = request.getParameter("usuario");
@@ -174,12 +202,13 @@ public class GestionDatosServlet extends HttpServlet {
 	        
 	        
 	        crearCliente(request, response, false);
-	    } catch (Exception e) {
+	    
+		} catch (Exception e) {
 	        request.setAttribute("mensaje", "Error: " + e.getMessage());
 	        request.setAttribute("tipoMensaje", "danger");
 	        e.printStackTrace();
 	    }
-	        
+		
 	}
 
 	private void gestionCliente(HttpServletRequest request, HttpServletResponse response, boolean accion) {
@@ -349,5 +378,119 @@ public class GestionDatosServlet extends HttpServlet {
 	        e.printStackTrace();
 	    }
 	}
+	
+	private void validarYEditarCliente(HttpServletRequest request, HttpServletResponse response) {
+		
+		String dni = request.getParameter("dni");
+        String cuil = request.getParameter("cuil");
+        String user = request.getParameter("usuario");
+        
+        int idCliente = Integer.parseInt(request.getParameter("idCliente"));
+        Cliente clienteEditar = negoCliente.buscarPorId(idCliente);
+        
+        try {
+
+	        if(negoCliente.existeDNI(dni) && !dni.equals(clienteEditar.getDni())) {
+	            System.out.println(clienteEditar.getDni());
+	            System.out.println(dni);
+	        	request.getSession().setAttribute("mensaje", "El DNI ya existe en la base de datos");
+	            request.getSession().setAttribute("tipoMensaje", "danger");
+	            
+	            datosFormulario(request);
+	            RequestDispatcher dispatcher = request.getRequestDispatcher("/GestionDatos.jsp");
+	            dispatcher.forward(request, response);
+	            return;
+	        }
+        
+	        if(negoCliente.existeCUIL(cuil) && !cuil.equals(clienteEditar.getCuil())) {
+	            request.getSession().setAttribute("mensaje", "El CUIL ya existe en la base de datos, verifique que sea correcto.");
+	            request.getSession().setAttribute("tipoMensaje", "danger");
+	            
+	            datosFormulario(request);
+	     
+	            RequestDispatcher dispatcher = request.getRequestDispatcher("/GestionDatos.jsp");
+	            dispatcher.forward(request, response);
+	            return;
+	        }
+	        
+	        if(negoUsuario.existeUsuario(user) && !user.equals(clienteEditar.getNombreUsuario())) {
+	            request.getSession().setAttribute("mensaje", "El Usuario ya existe en la base de datos, intente con otro usuario.");
+	            request.getSession().setAttribute("tipoMensaje", "danger");
+	            
+	            datosFormulario(request);
+	            
+	            RequestDispatcher dispatcher = request.getRequestDispatcher("/GestionDatos.jsp");
+	            dispatcher.forward(request, response);
+	            return;
+	        }
+        
+	        editarCliente(request, response, clienteEditar);
+	        
+        } catch (Exception e) {
+	        request.setAttribute("mensaje", "Error: " + e.getMessage());
+	        request.setAttribute("tipoMensaje", "danger");
+	        e.printStackTrace();
+	    }
+ 
+	}
+	
+	private void editarCliente(HttpServletRequest request, HttpServletResponse response, Cliente clienteAEditar) throws ServletException, IOException {
+		
+		try {
+			String dni = request.getParameter("dni");
+	        String cuil = request.getParameter("cuil");
+	        String email = request.getParameter("email");
+	        String telefono = request.getParameter("telefono");
+	        
+	        if(!dni.matches("[0-9]{8}")) {
+	            throw new DNIInvalidoException();
+	        }
+	        
+	        if(!cuil.matches("[0-9]{11}")) {
+	            throw new CuilInvalidoException();
+	        }
+	        
+	        clienteAEditar.setNombre(request.getParameter("nombre"));
+	        clienteAEditar.setApellido(request.getParameter("apellido"));
+	        clienteAEditar.setDni(dni);
+	        clienteAEditar.setCuil(cuil);
+	        clienteAEditar.setCorreoElectronico(email);
+	        clienteAEditar.setTelefono(telefono);
+	        clienteAEditar.setDireccion(request.getParameter("direccion"));
+	        clienteAEditar.setGenero(request.getParameter("genero"));
+	        
+
+	        String[] fragmentosFecha = request.getParameter("fechaNacimiento").split("-");
+	        Date fechaNacimiento = new Date(Integer.parseInt(fragmentosFecha[0]) - 1900,
+	                Integer.parseInt(fragmentosFecha[1]) - 1, Integer.parseInt(fragmentosFecha[2]));
+	        clienteAEditar.setFechaNacimiento(fechaNacimiento);
+	        
+
+	        clienteAEditar.setProvincia(daoProvincia.buscarPorId(Integer.parseInt(request.getParameter("provincia"))));
+	        clienteAEditar.setNacionalidad(NegocioNacion.buscarPorId(Integer.parseInt(request.getParameter("nacionalidad"))));
+	        clienteAEditar.setLocalidad(NegocioLocalidad.buscarPorId(Integer.parseInt(request.getParameter("localidad"))));
+	        
+	        negoCliente.update(clienteAEditar);
+	        request.getSession().setAttribute("mensaje", "Cliente editado exitosamente");
+            request.getSession().setAttribute("tipoMensaje", "success");
+            response.sendRedirect("AdministracionClientesServlet");
+	        
+		 } catch (DNIInvalidoException | CuilInvalidoException e) {
+		        request.getSession().setAttribute("mensaje", e.getMessage());
+		        request.getSession().setAttribute("tipoMensaje", "danger");
+		        datosFormulario(request);
+		        request.getRequestDispatcher("/GestionDatos.jsp").forward(request, response);
+		        return;
+		    } catch (Exception e) {
+		        request.getSession().setAttribute("mensaje", "Error inesperado: " + e.getMessage());
+		        request.getSession().setAttribute("tipoMensaje", "danger");
+		        e.printStackTrace();
+		        datosFormulario(request);
+		        request.getRequestDispatcher("/GestionDatos.jsp").forward(request, response);
+		        return;
+		    }
+	    
+	}
+	
 
 }

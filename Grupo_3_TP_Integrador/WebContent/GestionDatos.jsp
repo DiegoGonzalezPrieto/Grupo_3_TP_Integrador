@@ -41,11 +41,12 @@
 
 		<%
 			Cliente cliente = new Cliente();
-			cliente = (Cliente) request.getAttribute("cliente");
+			cliente = (Cliente) request.getAttribute("clienteEditar");
 
 			ArrayList<Nacionalidad> listaNaciones = null;
 			ArrayList<Localidad> listaLocalidades = null;
 			ArrayList<Provincia> listaProvincias = null;
+			
 			if (request.getAttribute("localidades") != null) {
 				listaLocalidades = (ArrayList<Localidad>) request.getAttribute("localidades");
 			}
@@ -64,6 +65,9 @@
 			if (request.getAttribute("nuevo") != null) {
 				encabezado = "Nuevo Cliente";
 				accion = "crear";
+			}else{
+				accion="editar";
+				encabezado="Editar Cliente";
 			}
 		%>
 		
@@ -85,11 +89,18 @@
 		<!-- En el JSP: -->
 		<form action="GestionDatosServlet" method="POST" id="form">
 
+		<% if (cliente != null){%>
+			<input type="hidden" value="<%= cliente.getIdCliente()%>" name="idCliente" id="idCliente">
+		<% } %>
+
 			<div class="form-group">
 				<label for="usuario">Usuario:</label> <input type="text"
 					class="form-control" id="usuario" name="usuario"
 					value="<%=cliente == null ? "" : cliente.getNombreUsuario()%>"
 					pattern="[A-Za-z0-9]{4,20}"
+					<%if(accion.equals("editar")) {%>
+						readonly
+					<% }%>
 					title="El usuario debe tener entre 4 y 20 caracteres alfanuméricos"
 					required>
 			</div>
@@ -99,6 +110,9 @@
 					class="form-control" id="pass" name="pass"
 					value="<%=cliente == null ? "" : cliente.getPass()%>"
 					pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+					<%if(accion.equals("editar")) {%>
+						readonly
+					<% }%>
 					title="La contraseña debe tener al menos 8 caracteres, incluyendo letras y números"
 					required>
 			</div>
@@ -267,9 +281,11 @@
 					accionBoton = "Editar";
 				}
 			%>
-			<input type="submit" value="<%=accionBoton%>" name="btnEditar"
-				class="btn btn-primary" onclick="return confirm ('¿Seguro que desea<%=accionBoton%> el usuario?');">
+
+			<input type="submit" value="<%=accionBoton%>" name="<%= accion.equals("editar")? "editar" : "crear" %>"
+				class="btn btn-primary" onclick="return confirm ('¿Seguro que desea <%=accionBoton%> el usuario?');">
 				<a href="AdministracionClientes.jsp" class="btn btn-primary">Volver</a>
+
 		</form>
 	</div>
 	
