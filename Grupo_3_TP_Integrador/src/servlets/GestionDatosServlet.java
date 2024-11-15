@@ -1,8 +1,10 @@
 package servlets;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,6 +24,7 @@ import daoImpl.NacionalidadDaoImpl;
 import daoImpl.ProvinciaDaoImpl;
 import daoImpl.UsuarioDaoImpl;
 import dominio.Cliente;
+import dominio.Cuenta;
 import dominio.Localidad;
 import dominio.Nacionalidad;
 import dominio.Provincia;
@@ -30,11 +33,13 @@ import dominio.Usuario;
 import exceptions.CuilInvalidoException;
 import exceptions.DNIInvalidoException;
 import negocio.ClienteNegocio;
+import negocio.CuentaNegocio;
 import negocio.LocalidadNegocio;
 import negocio.NacionalidadNegocio;
 import negocio.ProvinciaNegocio;
 import negocio.UsuarioNegocio;
 import negocioImpl.ClienteNegocioImpl;
+import negocioImpl.CuentaNegocioImpl;
 import negocioImpl.LocalidadNegocioImpl;
 import negocioImpl.NacionalidadNegocioImpl;
 import negocioImpl.ProvinciaNegocioImpl;
@@ -57,11 +62,13 @@ public class GestionDatosServlet extends HttpServlet {
 
 	ClienteNegocio negoCliente;
 	UsuarioNegocio negoUsuario;
+	CuentaNegocio negocioCuentas;
 
 	public GestionDatosServlet() {
 		super();
 		negoCliente = new ClienteNegocioImpl();
 		negoUsuario = new UsuarioNegocioImpl();
+		negocioCuentas = new CuentaNegocioImpl();
 	}
 
 	/**
@@ -87,7 +94,7 @@ public class GestionDatosServlet extends HttpServlet {
 			if(request.getParameter("id") != null) {
 				int idCliente = Integer.parseInt(request.getParameter("id"));
 				
-				Cliente cliente = negoCliente.buscarPorId(idCliente);
+				Cliente cliente = negoCliente.buscarPorId(idCliente);				
 
 				if (cliente != null) {
 	
@@ -104,8 +111,26 @@ public class GestionDatosServlet extends HttpServlet {
 				
 			}else if(request.getParameter("delete") != null) {
 				
-				int idCliente = Integer.parseInt(request.getParameter("delete"));
+				int idCliente = Integer.parseInt(request.getParameter("delete"));	
+				
 					if (idCliente != 0) {
+						List<Cuenta> listCuentasCliente = negocioCuentas.listarPorCliente(idCliente);
+						
+						 for (Cuenta cuenta : listCuentasCliente) {
+							 if (cuenta.getSaldo().compareTo(BigDecimal.ZERO) != 0) {
+								    request.getSession().setAttribute("mensaje", 
+								        "No se puede eliminar el cliente porque la cuenta " + cuenta.getNumeroCuenta() +
+								        " debe tener saldo $0 (saldo actual: $" + String.format("%,.2f", cuenta.getSaldo()) + ")");
+								    request.getSession().setAttribute("tipoMensaje", "warning");
+								    
+								    response.sendRedirect("AdministracionClientesServlet");
+								    return;
+								}
+					        }
+
+					        for (Cuenta cuenta : listCuentasCliente) {
+					            negocioCuentas.eliminarCuenta(cuenta.getId());
+					        }
 						
 						negoCliente.delete(idCliente);
 						
