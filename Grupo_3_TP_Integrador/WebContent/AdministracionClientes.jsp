@@ -77,7 +77,7 @@
 						
 					</div>				
 					
-				<table id="clientesTable" class="table table-striped table-bordered table-responsive"
+				<table id="clientesTable" class="table table-striped table-bordered"
 					style="width: 80%">
 					<thead class="table-dark">
 						<tr>
@@ -86,13 +86,15 @@
 							<th>DNI</th>	
 							<th>Nombre</th>
 							<th>Apellido</th>
+							<th>Correo Electrónico</th>
+							<th>Teléfono</th>
+							<!-- 
 							<th>Género</th>
 							<th>Dirección</th>
 							<th>Localidad</th>
 							<th>Provincia</th>
-							<th>Correo Electrónico</th>
-							<th>Teléfono</th>
 							<th>Nacionalidad</th>
+							 -->
 							<th>Detalles</th>
 							<th>Editar</th>
 							<th>Eliminar</th>
@@ -111,13 +113,15 @@
 							<td><%=cliente.getDni() %></td>							
 							<td><%=cliente.getNombre() %></td>
 							<td><%=cliente.getApellido() %></td>
+							<td><%=cliente.getCorreoElectronico() %></td>
+							<td><%=cliente.getTelefono() %></td>
+							<!-- 
 							<td><%=cliente.getGeneroCompleto() %></td>
 							<td><%=cliente.getDireccion() %></td>
 							<td><%=cliente.getLocalidad().getNombre() %></td>
 							<td><%=cliente.getProvincia().getNombre() %></td>
-							<td><%=cliente.getCorreoElectronico() %></td>
-							<td><%=cliente.getTelefono() %></td>
 							<td><%=cliente.getNacionalidad().getNombre() %></td>
+							-->
 							
 							<td><a class="btn btn-info btn-sm" href="GestionDatosServlet?id=<%=cliente.getIdCliente() %>">Ver</a></td>
                         	<td><a class="btn btn-warning btn-sm" href="GestionDatosServlet?id=<%=cliente.getIdCliente()  %>">Editar</a></td>
