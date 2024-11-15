@@ -17,6 +17,9 @@ public interface ClienteNegocio {
     ArrayList<Cliente> listarTodos();
     ArrayList<Cliente> listarActivos();
     
+
+
+
     int contarTodos();
     int contarActivos();
     int contarInactivos();
@@ -24,7 +27,8 @@ public interface ClienteNegocio {
     HashMap<String, Integer> obtenerClientesPorProvincia();
     HashMap<String, Integer> obtenerClientesPorNacionalidad();
     
-    
+    public boolean existeDNI(String DNI);
+    public boolean existeCUIL(String CUIL);
 }
 
 

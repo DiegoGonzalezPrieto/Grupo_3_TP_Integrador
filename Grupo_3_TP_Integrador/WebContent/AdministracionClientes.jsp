@@ -1,5 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+	
+<%
+   if(request.getAttribute("listaClientes") == null) {
+       response.sendRedirect("AdministracionClientesServlet");
+       return;
+   }
+%>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="dominio.Cliente" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -28,7 +37,20 @@
 
 	<div class="container mt-5">
 		<h1 class="text-center mb-4">Administración de Clientes/Usuarios</h1>
-
+		<%
+			String mensaje = (String) session.getAttribute("mensaje");
+			String tipoMensaje = (String) session.getAttribute("tipoMensaje");
+			if(mensaje != null && tipoMensaje != null) {
+			    session.removeAttribute("mensaje");
+			    session.removeAttribute("tipoMensaje");
+			%>
+			    <div class="alert alert-<%=tipoMensaje%> alert-dismissible fade show" role="alert">
+			        <%=mensaje%>
+			        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			    </div>
+			<%
+			}
+			%>
 		<!-- Tabs -->
 		<ul class="nav nav-tabs" id="myTab" role="tablist">
 			<li class="nav-item" role="presentation">
@@ -48,78 +70,72 @@
 
 			<div class="tab-pane fade show active" id="clientes" role="tabpanel"
 				aria-labelledby="clientes-tab">
-				<form action="AdministracionClientesServlet" method="POST"
-					class="mb-4">
-					<div class="input-group mb-3">
-						<input type="text" id="filtro" name="filtro" class="form-control"
-							placeholder="Buscar cliente">
-						<button type="submit" class="btn btn-primary">Buscar</button>
-					</div>
+					<a href="GestionDatosServlet?nuevo"><input type="submit" name="btnNuevo" class="btn btn-success btn-sm" value="Nuevo cliente"></a>
+				
 					<div class="mb-3">
-						<button type="submit" class="btn btn-success">Nuevo
-							cliente</button>
-					</div>
-				</form>
-
+						
+						
+					</div>				
+					
 				<table id="clientesTable" class="table table-striped table-bordered"
 					style="width: 80%">
 					<thead class="table-dark">
 						<tr>
-							<th>DNI</th>
-							<th>CUIL</th>
+							<th>ID</th>
+							<th>Usuario</th>
+							<th>DNI</th>	
 							<th>Nombre</th>
 							<th>Apellido</th>
-							<th>Sexo</th>
-							<th>Nacionalidad</th>
-							<th>Fecha de Nacimiento</th>
+							<th>Correo Electrónico</th>
+							<th>Teléfono</th>
+							<!-- 
+							<th>Género</th>
 							<th>Dirección</th>
 							<th>Localidad</th>
 							<th>Provincia</th>
-							<th>Correo Electrónico</th>
-							<th>Teléfono</th>
+							<th>Nacionalidad</th>
+							 -->
+							<th>Detalles</th>
 							<th>Editar</th>
 							<th>Eliminar</th>
 						</tr>
 					</thead>
 					<tbody>
-
+				<%
+					ArrayList<Cliente> listaClientes = (ArrayList<Cliente>) request.getAttribute("listaClientes");
+					if(listaClientes != null){
+						for(Cliente cliente : listaClientes){ 
+						
+				%>
 						<tr>
-							<td>30567890</td>
-							<td>20-30567890-5</td>
-							<td>Lucía</td>
-							<td>Pérez</td>
-							<td>F</td>
-							<td>Argentina</td>
-							<td>1990-04-12</td>
-							<td>Calle Falsa 123</td>
-							<td>Buenos Aires</td>
-							<td>Buenos Aires</td>
-							<td>lucia.perez@example.com</td>
-							<td>+54 11 1234-5678</td>
-							<td><button class="btn btn-warning btn-sm">Editar</button></td>
-							<td><button class="btn btn-danger btn-sm">Eliminar</button></td>
+							<td><%=cliente.getIdCliente() %></td>
+							<td><%=cliente.getNombreUsuario() %></td>
+							<td><%=cliente.getDni() %></td>							
+							<td><%=cliente.getNombre() %></td>
+							<td><%=cliente.getApellido() %></td>
+							<td><%=cliente.getCorreoElectronico() %></td>
+							<td><%=cliente.getTelefono() %></td>
+							<!-- 
+							<td><%=cliente.getGeneroCompleto() %></td>
+							<td><%=cliente.getDireccion() %></td>
+							<td><%=cliente.getLocalidad().getNombre() %></td>
+							<td><%=cliente.getProvincia().getNombre() %></td>
+							<td><%=cliente.getNacionalidad().getNombre() %></td>
+							-->
+							
+							<td><a class="btn btn-info btn-sm" href="GestionDatosServlet?id=<%=cliente.getIdCliente() %>">Ver</a></td>
+                        	<td><a class="btn btn-warning btn-sm" href="GestionDatosServlet?editar=<%=cliente.getIdCliente()  %>">Editar</a></td>
+                        	<td><a class="btn btn-danger btn-sm" href="GestionDatosServlet?delete=<%=cliente.getIdCliente()  %>"
+                        	onclick="return confirm('¿Seguro que desea eliminar esta cuenta?')">Eliminar</a></td>
 						</tr>
-						<tr>
-							<td>30567890</td>
-							<td>20-30567890-5</td>
-							<td>Lucía</td>
-							<td>Pérez</td>
-							<td>F</td>
-							<td>Argentina</td>
-							<td>1990-04-12</td>
-							<td>Calle Falsa 123</td>
-							<td>Buenos Aires</td>
-							<td>Buenos Aires</td>
-							<td>lucia.perez@example.com</td>
-							<td>+54 11 1234-5678</td>
-							<td><button class="btn btn-warning btn-sm">Editar</button></td>
-							<td><button class="btn btn-danger btn-sm">Eliminar</button></td>
-						</tr>
-
+				<%
+					} 
+				} %>
 					</tbody>
 				</table>
+				
+					
 			</div>
-
 
 			<div class="tab-pane fade" id="usuarios" role="tabpanel"
 				aria-labelledby="usuarios-tab">
@@ -137,6 +153,8 @@
 			</div>
 		</div>
 	</div>
+	
+	
 	<%@ include file="Footer.jsp"%>
 
 

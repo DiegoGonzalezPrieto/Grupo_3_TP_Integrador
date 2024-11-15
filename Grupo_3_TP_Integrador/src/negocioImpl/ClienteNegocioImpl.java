@@ -13,8 +13,7 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 
 	@Override
 	public void insert(Cliente c) {
-		clienteDao.insert(c);
-
+			clienteDao.insert(c);
 	}
 
 	@Override
@@ -30,6 +29,7 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 
 	@Override
 	public Cliente buscarPorId(int id) {
+		Cliente c = clienteDao.encontrarPorId(id);
 		return clienteDao.encontrarPorId(id);
 
 	}
@@ -60,6 +60,18 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 	}
 
 	@Override
+
+	public boolean existeDNI(String DNI) {
+		return clienteDao.existeDNI(DNI);
+		
+	}
+
+	@Override
+	public boolean existeCUIL(String CUIL) {
+		return clienteDao.existeCUIL(CUIL);
+	}
+
+  @Override
 	public int contarTodos() {
 		return clienteDao.contarTodos();
 	}

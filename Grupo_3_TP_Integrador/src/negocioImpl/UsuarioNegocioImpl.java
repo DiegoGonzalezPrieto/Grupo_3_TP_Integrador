@@ -34,4 +34,14 @@ public class UsuarioNegocioImpl implements UsuarioNegocio {
     public void eliminarUsuario(int id) {
         usuarioDao.eliminarUsuario(id);
     }
+
+	@Override
+	public Usuario buscarPorNombre(String nombre) {
+		return usuarioDao.buscarPorNombre(nombre);
+	}
+
+	@Override
+	public boolean existeUsuario(String user) {
+		return usuarioDao.exiteUsuario(user);
+	}
 }
