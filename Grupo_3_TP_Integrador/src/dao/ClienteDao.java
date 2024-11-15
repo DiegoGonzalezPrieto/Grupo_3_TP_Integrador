@@ -12,6 +12,7 @@ public interface ClienteDao {
 	public boolean delete(int id);
 	
 	public Cliente encontrarPorId(int id);
+	public int encontrarPorIdUsuario(int id);
 	public Cliente encontrarPorNombre(String nombre);
 	
 	public ArrayList<Cliente> buscarTodos();

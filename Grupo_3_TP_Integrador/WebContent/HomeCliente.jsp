@@ -1,5 +1,14 @@
+<%@page import="dominio.Cliente"%>
+<%@page import="dominio.Cuenta"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+	<%
+	if (request.getAttribute("cuentasCliente") == null) {
+		response.sendRedirect("HomeClienteServlet");
+		return;
+	}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,9 +28,12 @@
 	<%@ include file="BarraMenu.jsp"%>
 	<div class="container">
 		<!-- TODO: mostrar nombre del Cliente. Enlaces con ids del cliente -->
-
-		<h1 class="display-3 my-3">Bienvenida, Alba Martínez!</h1>
-
+		<% 
+           Cliente cliente = (Cliente)request.getAttribute("cliente");
+           if(cliente != null) {
+		%>
+		<h1 class="display-3 my-3">Bienvenido, <%=cliente.getApellido() + " " + cliente.getNombre()%></h1>
+		<%} %>
 		<ul class="nav nav-pills nav-fill m-3">
 			<li class="nav-item mx-2"><a class="nav-link active"
 				href="Transferencia.jsp">Transferencias</a></li>
@@ -30,25 +42,36 @@
 			<li class="nav-item mx-2"><a class="nav-link active"
 				href="PagoPrestamo.jsp">Pago de Cuotas</a></li>
 			<li class="nav-item mx-2"><a class="nav-link active"
-				href="DatosCliente.jsp">Mis Datos</a></li>
+				href="GestionDatosServlet?id=<%=cliente.getIdCliente()%>">Mis Datos</a></li>
 		</ul>
 
 
 		<h2 class="my-3">Mis Cuentas</h2>
 		<ul class="nav flex-column">
-			<!-- TODO: For con cuentas del cliente y enlaces a los detalles -->
-			<li class="nav-item my-1"><a class="border nav-link"
-				href="DetallesCuenta.jsp"><span class="text-black">Cuenta
-						1</span><br> <span class="text-black">CBU: 31289756287259</span> <br>
-					<span class="text-black">Caja de Ahorro ARS</span></a></li>
-			<li class="nav-item my-1"><a class="border nav-link"
-				href="DetallesCuenta.jsp"><span class="text-black">Cuenta
-						1</span><br> <span class="text-black">CBU: 5588884393214</span> <br>
-					<span class="text-black">Caja de Ahorro USD</span></a></li>
-			<li class="nav-item my-1"><a class="border nav-link"
-				href="DetallesCuenta.jsp"><span class="text-black">Cuenta
-						1</span><br> <span class="text-black">CBU: 4577773892535</span> <br>
-					<span class="text-black">Cuenta Corriente</span></a></li>
+		    <%
+		        List<Cuenta> cuentasCliente = (List<Cuenta>)request.getAttribute("cuentasCliente");
+		        if(cuentasCliente != null && !cuentasCliente.isEmpty()) {
+		            for(Cuenta cuenta : cuentasCliente) {
+		    %>
+		            <li class="nav-item my-1">
+		                <a class="border nav-link" href="DetallesCuenta.jsp?id=<%=cuenta.getId()%>">
+		                    <span class="text-black">Cuenta <%=cuenta.getNumeroCuenta()%></span><br>
+		                    <span class="text-black">CBU: <%=cuenta.getCbu()%></span><br>
+		                    <span class="text-black"><%=cuenta.getTipoCuenta().getNombre()%></span>
+		                </a>
+		            </li>
+		    <%
+		            }
+		        } else {
+		    %>
+		            <li class="nav-item my-1">
+		                <div class="border nav-link">
+		                    <span class="text-black">No hay cuentas disponibles</span>
+		                </div>
+		            </li>
+		    <%
+		        }
+		    %>
 		</ul>
 
 	</div>
