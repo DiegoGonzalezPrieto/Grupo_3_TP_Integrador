@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -254,7 +255,7 @@ public class ClienteDaoImpl implements ClienteDao {
 				Usuario usuario = new UsuarioNegocioImpl().buscarPorId(result.getInt("id_usuario"));
 				Cliente cliente = new Cliente(result.getInt("id_cliente"), usuario.getNombreUsuario(), usuario.getPass(),
 						usuario.getTipoUsuario(), usuario.activo());
-				
+
 				Nacionalidad n = null;
 				Provincia p = null;
 				Localidad l = null;
@@ -308,7 +309,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	}
 
 	@Override
-	public boolean existeDNI(String dni) {
+  public boolean existeDNI(String dni) {
 		String buscarDNI = "SELECT COUNT(*) FROM clientes WHERE dni = ?";
 	    
 		try (Connection conexion = Conexion.getConnection();
@@ -324,8 +325,8 @@ public class ClienteDaoImpl implements ClienteDao {
 	        return false;
 	    }
 	}
-	
-	@Override
+  
+  @Override
 	public boolean existeCUIL(String cuil) {
 		String buscarDNI = "SELECT COUNT(*) FROM clientes WHERE cuil = ?";
 	    
@@ -341,6 +342,187 @@ public class ClienteDaoImpl implements ClienteDao {
 	        e.printStackTrace();
 	        return false;
 	    }
+  }
+
+	
+	@Override
+	public int contarTodos() {
+		String selectTodos = "SELECT COUNT(*) as cantidad FROM banco.clientes;";
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return 0;
+		}
+
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(selectTodos)) {
+
+			ResultSet resultSet = statement.executeQuery();
+			if (resultSet.next()) {
+				return resultSet.getInt("cantidad");
+			} else {
+				return 0;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+	@Override
+	public int contarActivos() {
+		String selectActivos = "SELECT COUNT(*) as cantidad FROM banco.clientes"
+				+ " JOIN banco.usuarios ON usuarios.id_usuario = clientes.id_usuario "
+				+ " WHERE usuarios.estado_usuario = true;";
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return 0;
+		}
+
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(selectActivos)) {
+
+			ResultSet resultSet = statement.executeQuery();
+			if (resultSet.next()) {
+				return resultSet.getInt("cantidad");
+			} else {
+				return 0;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+	@Override
+	public int contarInactivos() {
+		String selectInactivos = "SELECT COUNT(*) as cantidad FROM banco.clientes"
+				+ " JOIN banco.usuarios ON usuarios.id_usuario = clientes.id_usuario "
+				+ " WHERE usuarios.estado_usuario = false;";
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return 0;
+		}
+
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(selectInactivos)) {
+
+			ResultSet resultSet = statement.executeQuery();
+			if (resultSet.next()) {
+				return resultSet.getInt("cantidad");
+			} else {
+				return 0;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+	@Override
+	public float obtenerEdadPromedioActivos() {
+		String selectEdadPromedioActivos = "SELECT AVG((TO_DAYS(NOW())-TO_DAYS(fecha_nacimiento)))/365.242199 as edad_promedio "
+				+ " FROM clientes JOIN banco.usuarios ON usuarios.id_usuario = clientes.id_usuario "
+				+ " WHERE usuarios.estado_usuario = true;";
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return 0;
+		}
+
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(selectEdadPromedioActivos)) {
+
+			ResultSet resultSet = statement.executeQuery();
+			if (resultSet.next()) {
+				return resultSet.getFloat("edad_promedio");
+			} else {
+				return 0;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+
+	}
+
+	@Override
+	public HashMap<String, Integer> obtenerClientesPorProvincia() {
+		String selectClientesPorProvinciaActivos = "SELECT provincias.id_provincia, provincia, COUNT(clientes.id_usuario) as cantidad FROM banco.clientes "
+				+ " JOIN provincias on clientes.id_provincia = provincias.id_provincia JOIN usuarios on clientes.id_usuario = usuarios.id_usuario "
+				+ " WHERE usuarios.estado_usuario = true GROUP BY id_provincia, provincia ORDER BY COUNT(id_usuario) ASC;";
+
+		HashMap<String, Integer> resultado = new HashMap<String, Integer>();
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return resultado;
+		}
+
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(selectClientesPorProvinciaActivos)) {
+
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				String provincia = resultSet.getString("provincia");
+				int cantidad = resultSet.getInt("cantidad");
+				resultado.put(provincia, cantidad);
+			}
+			return resultado;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return resultado;
+		}
+	}
+
+	@Override
+	public HashMap<String, Integer> obtenerClientesPorNacionalidad() {
+		String selectClientesPorNacionalidadActivos = "SELECT nacionalidades.id_nacionalidad, nacionalidad, COUNT(clientes.id_usuario) as cantidad "
+				+ " FROM banco.clientes  JOIN nacionalidades on clientes.id_nacionalidad = nacionalidades.id_nacionalidad "
+				+ " JOIN usuarios on clientes.id_usuario = usuarios.id_usuario "
+				+ " WHERE usuarios.estado_usuario = true "
+				+ " GROUP BY id_nacionalidad, nacionalidad "
+				+ " ORDER BY COUNT(id_usuario) DESC;"; 
+
+		HashMap<String, Integer> resultado = new HashMap<String, Integer>();
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return resultado;
+		}
+
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(selectClientesPorNacionalidadActivos)) {
+
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				String nacionalidad = resultSet.getString("nacionalidad");
+				int cantidad = resultSet.getInt("cantidad");
+				resultado.put(nacionalidad, cantidad);
+			}
+			return resultado;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return resultado;
+		}
 	}
 
 }

@@ -1,10 +1,13 @@
 package daoImpl;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import dao.CuentaDao;
@@ -13,9 +16,9 @@ import dominio.Cuenta;
 import dominio.TipoCuenta;
 
 public class CuentaDaoImpl implements CuentaDao {
+	
 	private static final int idCuentaExcluir = 0;
-
-	@Override
+@Override
     public boolean insert(Cuenta cuenta) {
         String insert = "INSERT INTO cuentas (id_cliente, id_tipo_cuenta, fecha_creacion, " +
                        "numero_cuenta, cbu, saldo, estado_cuenta) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -47,7 +50,9 @@ public class CuentaDaoImpl implements CuentaDao {
 
     @Override
     public boolean update(Cuenta cuenta) {
-        String update = "UPDATE cuentas SET id_tipo_cuenta = ?, saldo = ?, estado_cuenta = ? WHERE id_cuenta = ?";
+
+        String update = "UPDATE cuentas SET id_tipo_cuenta = ?, saldo = ? WHERE id_cuenta = ?";
+
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -60,8 +65,7 @@ public class CuentaDaoImpl implements CuentaDao {
             
             statement.setInt(1, cuenta.getTipoCuenta().getId());
             statement.setBigDecimal(2, cuenta.getSaldo());
-            statement.setBoolean(3, cuenta.Activa());
-            statement.setInt(4, cuenta.getId());
+            statement.setInt(3, cuenta.getId());
             
             return statement.executeUpdate() > 0;
             
@@ -73,7 +77,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
     @Override
     public boolean delete(int id) {
-        String delete = "UPDATE cuentas SET estado_cuenta = false WHERE id_cuenta = 1";
+        String delete = "UPDATE cuentas SET estado_cuenta = false WHERE id_cuenta = ?";
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -95,7 +99,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
     @Override
     public Cuenta encontrarPorId(int id) {
-        String encontrarPorId = "SELECT c.*, cl.nombre as nombre_cliente, tc.tipo_cuenta as tipo_cuenta " + 
+        String encontrarPorId = "SELECT c.*, cl.nombre as nombre_cliente, cl.apellido as apellido_cliente, tc.tipo_cuenta as tipo_cuenta " + 
         		"FROM cuentas c INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente " + 
         		"INNER JOIN tipos_cuenta tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta WHERE c.id_cuenta = ?";
         
@@ -125,10 +129,11 @@ public class CuentaDaoImpl implements CuentaDao {
     @Override
     public List<Cuenta> obtenerTodos() {
         List<Cuenta> listaCuentas = new ArrayList<>();
+
         String obtenerTodos = "SELECT c.*, cl.nombre as nombre_cliente, cl.apellido as apellido_cliente, tc.tipo_cuenta as tipo_cuenta " +
-                       "FROM cuentas c " +
-                       "INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente " +
-                       "INNER JOIN tipos_cuenta tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta";
+                "FROM cuentas c " +
+                "INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente " +
+                "INNER JOIN tipos_cuenta tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta WHERE c.estado_cuenta = 1";
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -137,7 +142,7 @@ public class CuentaDaoImpl implements CuentaDao {
         }
         
         try (Connection conexion = Conexion.getConnection();
-             PreparedStatement statement = conexion.prepareStatement(obtenerTodos)) {
+        		PreparedStatement statement = conexion.prepareStatement(obtenerTodos)) {
             
             ResultSet rs = statement.executeQuery();
             
@@ -186,10 +191,11 @@ public class CuentaDaoImpl implements CuentaDao {
         return listaCuentas;
     }
 
-
     @Override
     public int encontrarCuentaActivaPorCliente(int idCliente) {
+
         String cuentaActiva = "SELECT COUNT(*) as cantidad FROM cuentas WHERE id_cliente = ? AND estado_cuenta = true";
+
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -216,8 +222,8 @@ public class CuentaDaoImpl implements CuentaDao {
     
 	@Override
 	public boolean existeCBU(String cbu) {
-		String exiteCBU = "SELECT COUNT(*) FROM cuentas WHERE cbu = ? AND id_cuenta != ?";
-	    
+		String existeCBU = "SELECT COUNT(*) FROM cuentas WHERE cbu = ? AND id_cuenta != ?";
+		
 	    try {
 	        Class.forName("com.mysql.jdbc.Driver");
 	    } catch (ClassNotFoundException e) {
@@ -225,7 +231,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	    }
 	    
 	    try (Connection conexion = Conexion.getConnection();
-	         PreparedStatement statement = conexion.prepareStatement(exiteCBU)) {
+	         PreparedStatement statement = conexion.prepareStatement(existeCBU)) {
 	        
 	        statement.setString(1, cbu);
 			statement.setInt(2, idCuentaExcluir);
@@ -268,21 +274,75 @@ public class CuentaDaoImpl implements CuentaDao {
         
         return true;
     }
+	
+	@Override
+	public Long obtenerUltimoNumeroCuenta() {
+	    String select = "SELECT MAX(numero_cuenta) FROM cuentas";
+	    
+	    try {
+	        Class.forName("com.mysql.jdbc.Driver");
+	    } catch (ClassNotFoundException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    try (Connection conexion = Conexion.getConnection();
+	         PreparedStatement statement = conexion.prepareStatement(select)) {
+	        
+	        ResultSet rs = statement.executeQuery();
+	        if(rs.next()) {
+	            Long ultimoNumero = rs.getLong(1);
+	            return ultimoNumero == 0 ? 100000L : ultimoNumero;
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return 100000L; 
+	}
+
+	@Override
+	public String obtenerUltimoCBU() {
+	    String select = "SELECT MAX(cbu) FROM cuentas";
+	    
+	    try {
+	        Class.forName("com.mysql.jdbc.Driver");
+	    } catch (ClassNotFoundException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    try (Connection conexion = Conexion.getConnection();
+	         PreparedStatement statement = conexion.prepareStatement(select)) {
+	        
+	        ResultSet rs = statement.executeQuery();
+	        if(rs.next()) {
+	            String ultimoCBU = rs.getString(1);
+	            return ultimoCBU == null ? "1000000000000000000000" : ultimoCBU;
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return "1000000000000000000000"; 
+	}
+
     
 	private Cuenta mapResultSetDeCuenta(ResultSet rs) throws SQLException {
 
-		Cuenta cuenta = new Cuenta();
+		  Cuenta cuenta = new Cuenta();
 	    cuenta.setId(rs.getInt("id_cuenta"));
+
 	    
 	    Cliente cliente = new Cliente();
 	    cliente.setIdCliente(rs.getInt("id_cliente"));
 	    cliente.setNombre(rs.getString("nombre_cliente"));
+	    cliente.setApellido(rs.getString("apellido_cliente"));
+
 	    cuenta.setCliente(cliente);
-	    
+
 	    TipoCuenta tipoCuenta = new TipoCuenta(rs.getInt("id_tipo_cuenta"), rs.getString("tipo_cuenta"));
 	    
-	    //tipoCuenta.setId(rs.getInt("id_tipo_cuenta"));
-	    //tipoCuenta.setNombre(rs.getString("tipo_cuenta"));
 	    cuenta.setTipoCuenta(tipoCuenta);
 	    
 	    cuenta.setFechaCreacion(rs.getDate("fecha_creacion"));
@@ -290,7 +350,123 @@ public class CuentaDaoImpl implements CuentaDao {
 	    cuenta.setCbu(rs.getString("cbu"));
 	    cuenta.setSaldo(rs.getBigDecimal("saldo"));
 	    cuenta.setActiva(rs.getBoolean("estado_cuenta"));
+
 	    
 	    return cuenta;
 	}
+
+	public List<Cuenta> obtenerCuentasRecientes() {
+	    List<Cuenta> cuentasRecientes = new ArrayList<>();
+	    String sql = "SELECT c.*, cl.nombre as nombre_cliente, cl.apellido as apellido_cliente, " +
+	                 "tc.tipo_cuenta as tipo_cuenta " +
+	                 "FROM cuentas c " +
+	                 "INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente " +
+	                 "INNER JOIN tipos_cuenta tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta " +
+	                 "ORDER BY c.fecha_creacion DESC LIMIT 3";//FLOR dice: Me gustaría que DESC LIMIT sean 5, no 3. Para mostrar en Home-Admin.
+	    
+	    try {
+	        Class.forName("com.mysql.jdbc.Driver");
+	    } catch (ClassNotFoundException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    try (Connection conexion = Conexion.getConnection();
+	         PreparedStatement statement = conexion.prepareStatement(sql);
+	         ResultSet rs = statement.executeQuery()) {
+	        
+	        while (rs.next()) {
+	            cuentasRecientes.add(mapResultSetDeCuenta(rs));
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return cuentasRecientes;
+	}
+
+  @Override
+	public int obtenerReporteCantidadDeCuentas(Date fechaInicio, Date fechaFin) {
+		String buscarCantidadCuentas = "SELECT  COALESCE(COUNT(*), 0) AS total FROM cuentas WHERE fecha_creacion BETWEEN ? AND ?;";
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(buscarCantidadCuentas)) {
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			statement.setString(1, sdf.format(fechaInicio));
+			statement.setString(2, sdf.format(fechaFin));
+			ResultSet rs = statement.executeQuery();
+
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	@Override
+	public BigDecimal obtenerReporteSumaDeSaldos(Date fechaInicio, Date fechaFin) {
+		String buscarSumaSaldos = "SELECT  COALESCE(SUM(saldo), 0) AS total FROM cuentas WHERE estado_cuenta = TRUE AND fecha_creacion BETWEEN ? AND ?;";
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(buscarSumaSaldos)) {
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			statement.setString(1, sdf.format(fechaInicio));
+			statement.setString(2, sdf.format(fechaFin));
+			ResultSet rs = statement.executeQuery();
+
+			if (rs.next()) {
+				return rs.getBigDecimal(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return new BigDecimal(0);
+	}
+
+	@Override
+	public BigDecimal obtenerReporteSaldoPromedio(Date fechaInicio, Date fechaFin) {
+		String buscarSumaSaldos = "SELECT COALESCE(AVG(saldo), 0) AS total FROM cuentas WHERE estado_cuenta = TRUE AND fecha_creacion BETWEEN ? AND ?;";
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(buscarSumaSaldos)) {
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			statement.setString(1, sdf.format(fechaInicio));
+			statement.setString(2, sdf.format(fechaFin));
+			ResultSet rs = statement.executeQuery();
+
+			if (rs.next()) {
+				return rs.getBigDecimal(1);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return new BigDecimal(0);
+	}
+  
 }
