@@ -1,6 +1,15 @@
+<%@page import="java.util.List"%>
+<%@page import="dominio.Prestamo"%>
+<%@page import="dominio.Cliente"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
+<%
+   if(request.getAttribute("listaPrestamos") == null) {
+       response.sendRedirect("PrestamosServlet");
+       return;
+   }
+%>
 <html lang="esp">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -30,50 +39,75 @@
 	<%@ include file="BarraMenu.jsp"%>
 	<div class="container mt-5" style="font-size: 0.8em">
 		<h1 class="text-center">Gestión de Prestamos</h1>
+		
+		<!--  TRAER LISTA DE PRESTAMOS -->
+		<%
+            List<Prestamo> prestamos = (List<Prestamo>) request.getAttribute("listaPrestamos");
+            if (prestamos == null || prestamos.isEmpty()) {
+        %>
+            <p></p>
+        <% }else{ %>     
+        
+            <p></p>
+            
+        <% } %>    
+		<!--  TRAIGO CLIENTE -->
+		<%
+            Cliente cliente= (Cliente) request.getAttribute("cliente");
+            if (cliente == null) {
+        %>
+            <p></p>
+            
+        <% }else{ %>     
+        
+            <p></p>
+            
+        <% } %>    	
+		
 
 		<div class="d-flex justify-content-between align-items-center mb-4">
 			<div class="p-2">
-				<h4>Bienvenida MARIA LAURA</h4>
+				<h2 class="my-3"><%= cliente.getApellido() +" "+ cliente.getNombre() %></h2>
 			</div>
 			<div class="p-2">
 				<a class="btn btn-primary"
-					href="SolicitudPrestamo.jsp">+
+					href="SolicitudPrestamoServlet?id=<%=cliente.getIdCliente()%>">+
 					Nuevo Prestamo</a>
 			</div>
 		</div>
-
-		<!-- BUSQUEDA POR FILTROS -->
+		
 		<div class="card mb-4">
 			<div class="card-body">
 				<h4>Filtros</h4>
-				<form id="filterForm" action="ACA VA EL SERVLEt" method="post">
+				<form id="filterForm" action="PrestamosServlet" method="post">
+					<input type="hidden" name="id" value="<%= cliente.getIdCliente() %>"/>
 					<div class="form-row">
 						<!--FILTRO POR TIPO DE CUENTA  -->
 						<div class="form-group col-md-3">
 							<label for="tipoCuenta">Tipo de Cuenta</label> <select
 								id="tipoCuenta" name="tipoCuenta" class="form-control">
 								<option value="">Todos</option>
-								<option value="CTA CTE">CTA CTE</option>
-								<option value="C.AHORRO">C.AHORRO</option>
+								<option value="Cuenta Corriente">Cuenta Corriente</option>
+								<option value="Caja de Ahorro">Caja de Ahorro</option>
 							</select>
 						</div>
 						<!-- FILTRO POR ESTADO  -->
 						<div class="form-group col-md-3">
-							<label for="estado">Estado</label> <select id="estado"
-								name="estado" class="form-control">
+							<label for="estadoPrestamo">Estado</label> <select id="estado"
+								name="estadoPrestamo" class="form-control">
 								<option value="">Todos</option>
-								<option value="Aprobado">Aprobado</option>
+								<option value="Autorizado">Autorizado</option>
 								<option value="Rechazado">Rechazado</option>
-								<option value="En Proceso">En Proceso</option>
+								<option value="Pendiente">Pendiente</option>
 							</select>
 						</div>
 						<!-- FILTRO POR IMPORTE MINIMO SOLICITADO -->
 						<div class="form-group col-md-3">
-							<label for="estado">Cuotas</label> <select id="estado"
-								name="estado" class="form-control">
+							<label for="cuotas">Cuotas</label> <select id="estado"
+								name="cuotas" class="form-control">
 								<option value="">Todos</option>
-								<option value="12 Cuotas">Aprobado</option>
-								<option value="6 Cuotas">Rechazado</option>
+								<option value="6">6</option>
+								<option value="12">12</option>
 							</select>
 						</div>
 						<!-- FILTRO POR IMPORTE MAXIMO SOLICITADO -->
@@ -99,49 +133,57 @@
 		<table id="tabla-prestamos" class="table table-striped table-bordered">
 			<thead class="thead-dark">
 				<tr>
-					<th>Cuenta</th>
-					<th>Tipo de Cuenta</th>
-					<th>Fecha Solicitud</th>
-					<th>Cuotas</th>
-					<th>Importe Solicitado</th>
-					<th>Total a Pagar</th>
-					<th>Estado</th>
-					<th>Acciones</th>
+					<th scope="col" class="text-center">Cuenta</th>
+					<th scope="col" class="text-center">Tipo de Cuenta</th>
+					<th scope="col" class="text-center">Fecha Solicitud</th>
+					<th scope="col" class="text-center">Cuotas</th>
+					<th scope="col" class="text-center">Importe Solicitado</th>
+					<th scope="col" class="text-center">Total a Pagar</th>
+					<th scope="col" class="text-center">Estado</th>
+					<th scope="col" class="text-center">Acciones</th>
 				</tr>
 			</thead>
 			<tbody>
+					<!-- OBTENGO LA LISTA DEL SERVLET  -->	
+					<%
+						
+						if(prestamos != null){
+							for(Prestamo p : prestamos) {	
+								
+					%>
+			
 				<tr>
-					<td>1</td>
-					<td>CTA CTE</td>
-					<td>2023-01-01</td>
-					<td>12</td>
-					<td>$10,000.00</td>
-					<td>$12,000.00</td>
-					<td><span class="badge badge-success">Aprobado</span></td>
-					<td><a href="PagoPrestamo.jsp?id=1"
-						class="btn btn-success btn-sm"
-						style="font-size: 0.8em; padding: 0.25rem 0.5rem;">Pagar</a></td>
+					<td class="text-center"> <%= p.getCuenta().getId() %></td>
+					<td class="text-center"> <%= p.getCuenta().getTipoCuenta().getNombre() %></td>
+					<td class="text-center"> <%= p.getFechaAltaPrestamo() %></td>
+					<td class="text-center"> <%= p.getCuotas() %></td>
+					<td class="text-center"> <%= p.getImportePrestamo() %></td>
+					<td class="text-center"> <%= p.getImportePrestamo() %></td>
+					<td class="text-center <%if (p.getEstadoValidacion().getNombre().equals("Pendiente")) { %> text-bg-secondary 
+					<% } else if (p.getEstadoValidacion().getNombre().equals("Autorizado")){ %>text-bg-success
+					<% } else if (p.getEstadoValidacion().getNombre().equals("Rechazado")){ %>text-bg-danger<% } %>">
+					
+					<%= p.getEstadoValidacion().getNombre() %>
+					
+					</td>
+					<td class ="d-flex justify-content-center">
+						
+						<% if (p.getEstadoValidacion().getNombre().equals("Autorizado")){ %>
+						
+						<form action="PagoPrestamo.jsp" method="post" onsubmit="return confirm('¿Está seguro de que desea Pagar el préstamo?')">
+							<input type="hidden" name="id" value="<%= p.getId() %>" />
+							<input type="hidden" name="accion" value="Pagar" />
+							<button type="submit" class="btn btn-outline-success btn-sm me-2">Pagar</button>
+						</form>												
+						
+						<%} else { %>
+							<span>-</span>	
+						<%} %>								
+					</td>
+					
 				</tr>
-				<tr>
-					<td>2</td>
-					<td>C.AHORRO</td>
-					<td>2023-02-01</td>
-					<td>6</td>
-					<td>$2,000.00</td>
-					<td>$6,000.00</td>
-					<td><span class="badge badge-danger">Rechazado</span></td>
-					<td>-</td>
-				</tr>
-				<tr>
-					<td>3</td>
-					<td>CTA CTE</td>
-					<td>2023-04-01</td>
-					<td>12</td>
-					<td>$27,000.00</td>
-					<td>$45,000.00</td>
-					<td><span class="badge badge-warning">En Proceso</span></td>
-					<td>-</td>
-				</tr>
+				<% }
+							}%>
 			</tbody>
 		</table>
 	</div>
