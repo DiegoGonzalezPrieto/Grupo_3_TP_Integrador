@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
+
+<%@ page import="dominio.Cliente" %>
+<%@ page import="dominio.Cuenta" %>
+<%@ page import="java.util.ArrayList" %>
 <html lang="es">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -58,30 +62,54 @@
 </head>
 <body class="bg-light">
 	<%@ include file="BarraMenu.jsp"%>
+	
+	<%
+		ArrayList<Cuenta> cuentasCliente = null; 
+		Cuenta cuenta = null;
+		Cliente cliente = null;
+		if(request.getAttribute("cliente") != null){
+			cliente = (Cliente) request.getAttribute("cliente");
+		}
+		if(request.getAttribute("listaCuentas") != null){
+			cuentasCliente = (ArrayList<Cuenta>) request.getAttribute("listaCuentas");
+		}
+			
+	%>
+	
+	
 	<div class="container mt-5">
 		<h1 class="text-center">Solicitud de Préstamos</h1>
 
 		<div class="text-center mb-4">
-			<h2 class="bg-success text-white p-3 rounded">Cliente: Maria
-				Laura</h2>
+			<h2 class="bg-success text-white p-3 rounded">Cliente: <%= cliente.getNombre()%> <%=cliente.getApellido() %></h2>
 		</div>
 
+		
 
 		<div class="row justify-content-center">
 			<div class="col-md-6">
-				<form action="AgregarSeguroServlet" method="post"
+				<form action="SolicitudPrestamoServlet" method="post"
 					class="bg-white p-4 rounded shadow">
 					<fieldset>
 						<legend>Datos de la Solicitud</legend>
 
-						<div class="form-group">
-							<label for="Cuenta">Cuenta</label> <select id="Cuenta"
-								name="cuenta" class="form-control">
+						<div class="form-group" >
+							<label for="Cuenta">Cuenta</label> 
+							<select id="Cuenta" name="cuenta" class="form-control">
 								<option value="" disabled selected>Seleccione una
 									cuenta</option>
-								<option value="Cuenta 1">Cuenta 1</option>
-								<option value="Cuenta 2">Cuenta 2</option>
-								<option value="Cuenta 3">Cuenta 3</option>
+									<%
+										for(Cuenta cu : cuentasCliente){
+											
+									%>
+									
+								<option value="<%= cu.getId() %> "><%=cu.getTipoCuenta().getNombre() %> - <%=cu.getNumeroCuenta() %> </option>
+									<%
+										}
+									
+									%>
+									
+								
 								<!-- ACA DEBERIA IR EL FOR PARA LAS CUENTAS QUE TENGA EL CLIENTE -->
 							</select>
 						</div>
@@ -119,7 +147,7 @@
 						</div>
 
 						<div class="form-group">
-							<p id="montoTotal" class="font-weight-bold">Monto Total a
+							<p id="montoTotal"  class="font-weight-bold">Monto Total a
 								Retornar: $0.00</p>
 							<p id="montoPorCuota" class="font-weight-bold">Monto Por
 								Cuota: $0.00</p>
