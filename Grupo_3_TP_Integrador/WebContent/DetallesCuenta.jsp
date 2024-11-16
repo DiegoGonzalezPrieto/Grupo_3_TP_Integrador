@@ -109,9 +109,9 @@
 								<td class="text-end text-success"><%=movimiento.getMonto()%></td>
 								<td class="text-center"><%=movimiento.getConcepto()%></td>
 							</tr>
-						</tbody>
 							<% }
 	                   		}%>
+						</tbody>
 					</table>
 						
 					<form action="HomeCliente.jsp" method="GET">

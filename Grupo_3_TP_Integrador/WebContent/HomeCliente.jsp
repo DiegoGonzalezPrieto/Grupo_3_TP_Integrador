@@ -54,7 +54,7 @@
 		            for(Cuenta cuenta : cuentasCliente) {
 		    %>
 		            <li class="nav-item my-1">
-		                <a class="border nav-link" href="DetallesCuenta.jsp?id=<%=cuenta.getId()%>">
+		                <a class="border nav-link" href="DetallesCuentaServlet?id=<%=cuenta.getId()%>">
 		                    <span class="text-black">Cuenta <%=cuenta.getNumeroCuenta()%></span><br>
 		                    <span class="text-black">CBU: <%=cuenta.getCbu()%></span><br>
 		                    <span class="text-black"><%=cuenta.getTipoCuenta().getNombre()%></span>
