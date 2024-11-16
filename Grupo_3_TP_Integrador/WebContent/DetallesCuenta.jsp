@@ -1,3 +1,5 @@
+<%@page import="dominio.Movimiento"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE>
@@ -17,68 +19,60 @@
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <style>
-.dataTables_wrapper .dataTables_length {
-	float: left;
-	margin-right: 20px;
-}
-
-.dataTables_wrapper .dataTables_filter {
-	float: none;
-	display: inline-block;
-}
-
-.filter-group {
-	float: right;
-	display: flex;
-	align-items: center;
-	gap: 20px;
-}
-
-.filter-group input {
-	width: 120px;
-}
-
-.dataTables_wrapper .row:first-child {
-	display: flex;
-	align-items: center;
-	margin-bottom: 1rem;
-}
-
-.filter-label {
-	margin-bottom: 0;
-	white-space: nowrap;
-}
+	.dataTables_wrapper .dataTables_length {
+		float: left;
+		margin-right: 20px;
+	}
+	
+	.dataTables_wrapper .dataTables_filter {
+		float: none;
+		display: inline-block;
+	}
+	
+	.filter-group {
+		float: right;
+		display: flex;
+		align-items: center;
+		gap: 20px;
+	}
+	
+	.filter-group input {
+		width: 120px;
+	}
+	
+	.dataTables_wrapper .row:first-child {
+		display: flex;
+		align-items: center;
+		margin-bottom: 1rem;
+	}
+	
+	.filter-label {
+		margin-bottom: 0;
+		white-space: nowrap;
+	}
 </style>
 </head>
 <body>
-
 	<%@ include file="BarraMenu.jsp"%>
-	
-	<div class="container">
-	<h1>Funcionalidad en desarrollo...</h1>
-	</div>
-
-<!--  
 	<div class="container mt-4">
 		<div class="card">
 			<div class="card-header bg-white">
 				<div>
-					<h4 class="card-header bg-primary text-white">Movimientos de
-						Cuenta</h4>
+					<h4 class="card-header bg-primary text-white">Movimientos de Cuenta</h4>
 				</div>
 
 				<div class="row mb-3">
 					<div class="col-md-4">
 						<label class="form-label text-muted">Tipo de Cuenta</label>
-						<p class="fw-bold mb-2">Caja de Ahorro</p>
+						<p class="fw-bold mb-2"><%= request.getAttribute("tipoCuenta")%></p>
 					</div>
 					<div class="col-md-4">
 						<label class="form-label text-muted">Número de Cuenta</label>
-						<p class="fw-bold mb-2">1234567890</p>
+						<p class="fw-bold mb-2"><%= request.getAttribute("numeroCuenta")%></p>
 					</div>
 					<div class="col-md-4">
 						<label class="form-label text-muted">CBU</label>
-						<p class="fw-bold mb-2">0123456789012345678901</p>
+						<p class="fw-bold mb-2"><%= request.getAttribute("cbu")%></p>
 					</div>
 				</div>
 			</div>
@@ -104,36 +98,25 @@
 							</tr>
 						</thead>
 						<tbody>
+						<%
+	                		List<Movimiento> movimientosPropios = (List<Movimiento>)request.getAttribute("movimientosPropios");
+	                		if(movimientosPropios != null) {
+	                    		for(Movimiento movimiento : movimientosPropios) {
+	            		%>
 							<tr>
-								<td class="text-center">01/03/2024</td>
-								<td class="text-center">Depósito inicial</td>
-								<td class="text-end text-success">10000.00</td>
-								<td class="text-center">Deposito</td>
-							</tr>
-							<tr>
-								<td class="text-center">02/03/2024</td>
-								<td class="text-center">Transferencia saliente</td>
-								<td class="text-end text-danger">-1500.00</td>
-								<td class="text-center">Transferencia</td>
-							</tr>
-							<tr>
-								<td class="text-center">03/03/2024</td>
-								<td class="text-center">Préstamo aprobado</td>
-								<td class="text-end text-success">5000.00</td>
-								<td class="text-center">Prestamo</td>
-							</tr>
-							<tr>
-								<td class="text-center">04/03/2024</td>
-								<td class="text-center">Pago cuota préstamo</td>
-								<td class="text-end text-danger">-800.00</td>
-								<td class="text-center">Pago Prestamo</td>
+								<td class="text-center"> <%=movimiento.getFecha()%></td>
+								<td class="text-center"><%=movimiento.getTipo()%></td>
+								<td class="text-end text-success"><%=movimiento.getMonto()%></td>
+								<td class="text-center"><%=movimiento.getConcepto()%></td>
 							</tr>
 						</tbody>
+							<% }
+	                   		}%>
 					</table>
+						
 					<form action="HomeCliente.jsp" method="GET">
 						<div class="text-center mt-4">
-							<button type="submit" class="btn btn-primary">Volver a
-								Home</button>
+							<button type="submit" class="btn btn-primary">Volver a Home</button>
 						</div>
 					</form>
 				</div>
@@ -175,6 +158,6 @@
 							});
 						});
 	</script>
--->
+
 </body>
 </html>
