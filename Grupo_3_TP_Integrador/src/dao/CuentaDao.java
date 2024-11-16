@@ -38,4 +38,5 @@ public interface CuentaDao {
     Long obtenerUltimoNumeroCuenta();
     String obtenerUltimoCBU();
 
+    Cuenta obtenerCuentaPorCbu(String cbu);
 }
