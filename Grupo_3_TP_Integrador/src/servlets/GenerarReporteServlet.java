@@ -23,9 +23,11 @@ import javax.servlet.http.HttpSession;
 import dominio.ReporteGuardado;
 import negocio.ClienteNegocio;
 import negocio.CuentaNegocio;
+import negocio.MovimientoNegocio;
 import negocio.PrestamoNegocio;
 import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.CuentaNegocioImpl;
+import negocioImpl.MovimientoNegocioImpl;
 import negocioImpl.PrestamoNegocioImpl;
 
 /**
@@ -49,12 +51,12 @@ public class GenerarReporteServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		HttpSession session = request.getSession();
-		if(session.getAttribute("reportes") == null) {
+		if (session.getAttribute("reportes") == null) {
 			session.setAttribute("reportes", new ArrayList<ReporteGuardado>());
 		}
-				
+
 		request.getRequestDispatcher("Reportes.jsp").forward(request, response);
 	}
 
@@ -65,10 +67,10 @@ public class GenerarReporteServlet extends HttpServlet {
 	@SuppressWarnings("deprecation")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		// crear atributo reportes si no existe
 		HttpSession session = request.getSession();
-		if(session.getAttribute("reportes") == null) {
+		if (session.getAttribute("reportes") == null) {
 			session.setAttribute("reportes", new ArrayList<ReporteGuardado>());
 		}
 
@@ -119,7 +121,7 @@ public class GenerarReporteServlet extends HttpServlet {
 
 		response.setContentType("text/plain");
 		response.setHeader("Content-disposition", "attachment; filename=" + nombreReporte);
-		
+
 		try (OutputStream out = response.getOutputStream()) {
 			out.write(reporte.getBytes());
 		}
@@ -132,17 +134,40 @@ public class GenerarReporteServlet extends HttpServlet {
 		reporte += "========================================\n\n";
 
 		CuentaNegocio n = new CuentaNegocioImpl();
+		MovimientoNegocio nm = new MovimientoNegocioImpl();
 		DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(Locale.ITALIAN);
 		df.setMaximumFractionDigits(2);
 
-		// TODO : estadísticas de movimientos
+		// Cuentas
 
 		reporte += "- Cantidad de Cuentas creadas durante el período: "
 				+ n.obtenerReporteCantidadDeCuentas(fechaInicio, fechaFin) + "\n\n";
 		reporte += "- Suma de saldos de Cuentas creadas durante el período: $"
 				+ df.format(n.obtenerReporteSumaDeSaldos(fechaInicio, fechaFin)) + "\n";
 		reporte += "- Promedio de saldos de Cuentas creadas durante el período: $"
-				+ df.format(n.obtenerReporteSaldoPromedio(fechaInicio, fechaFin)) + "\n";
+				+ df.format(n.obtenerReporteSaldoPromedio(fechaInicio, fechaFin)) + "\n\n";
+
+		// Movimientos
+
+		int cantMovimientos = nm.obtenerCantidadMovimientos(fechaInicio, fechaFin);
+		int cantidadAltasCuenta = nm.obtenerCantidadAltasCuenta(fechaInicio, fechaFin);
+		int cantidadTransferencias = nm.obtenerCantidadTransferencias(fechaInicio, fechaFin);
+		int cantidadAltasPrestamo = nm.obtenerCantidadAltasPrestamo(fechaInicio, fechaFin);
+		int cantidadPagosPrestamo = nm.obtenerCantidadPagosPrestamo(fechaInicio, fechaFin);
+
+		BigDecimal sumaTransferencias = nm.obtenerSumaTransferencias(fechaInicio, fechaFin);
+		BigDecimal promedioTransferencias = nm.obtenerPromedioTransferencias(fechaInicio, fechaFin);
+
+		reporte += "- Cantidad de Movimientos durante el período: " + cantMovimientos + "\n";
+		reporte += "- Cantidad de Altas de Cuenta durante el período: " + cantidadAltasCuenta + "\n";
+		reporte += "- Cantidad de Transferencias realizadas durante el período: " + cantidadTransferencias + " - "
+				+ cantidadTransferencias * 2 + " movimientos" + "\n";
+		reporte += "- Cantidad de Altas de Préstamo durante el período: " + cantidadAltasPrestamo + "\n";
+		reporte += "- Cantidad de Pagos de Préstamo durante el período: " + cantidadPagosPrestamo + "\n\n";
+
+		reporte += "- Monto transferido durante el período: $" + df.format(sumaTransferencias) + "\n";
+		reporte += "- Promedio de montos transferidos durante el período: $" + df.format(promedioTransferencias)
+				+ "\n\n";
 
 		return reporte;
 	}
@@ -158,9 +183,9 @@ public class GenerarReporteServlet extends HttpServlet {
 		df.setMaximumFractionDigits(2);
 
 		try {
-			
+
 			// TODO : estadísticas de cuotas
-			
+
 			int cantAprobados = n.contarPrestamosAprobados(fechaInicio, fechaFin);
 			int cantRechazados = n.contarPrestamosRechazados(fechaInicio, fechaFin);
 			int cantPendientes = n.contarPrestamosEnEvaluacion(fechaInicio, fechaFin);
@@ -247,7 +272,7 @@ public class GenerarReporteServlet extends HttpServlet {
 
 	HttpServletRequest guardarReporteEnSesion(HttpServletRequest request, String reporte, String nombre, String tipo) {
 		HttpSession session = request.getSession();
-		
+
 		List<ReporteGuardado> reportes = (List<ReporteGuardado>) session.getAttribute("reportes");
 
 		ReporteGuardado reporteGuardado = new ReporteGuardado();
@@ -267,4 +292,5 @@ public class GenerarReporteServlet extends HttpServlet {
 		session.setAttribute("reportes", reportes);
 		return request;
 	}
+
 }
