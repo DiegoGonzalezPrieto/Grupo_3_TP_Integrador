@@ -31,8 +31,16 @@
 		<% 
            Cliente cliente = (Cliente)request.getAttribute("cliente");
            if(cliente != null) {
+        	   String saludo = "Bienvenido/a";
+        	   if ("masculino" .equalsIgnoreCase(cliente.getGeneroCompleto())){
+        		   saludo = "Bienvenido, ";
+        		   } else if ("femenino" .equalsIgnoreCase(cliente.getGeneroCompleto())){
+        			   saludo = "Bienvenida, ";
+        			   } else if("otro" .equalsIgnoreCase(cliente.getGeneroCompleto())){
+        				   saludo = "Bienvenide, ";
+        				   }
 		%>
-		<h1 class="display-3 my-3">Bienvenido, <%=cliente.getApellido() + " " + cliente.getNombre()%></h1>
+		<h1 class="display-3 my-3"><%=saludo%> <%=cliente.getNombre() + " " + cliente.getApellido()%></h1>
 		<%} %>
 		<ul class="nav nav-pills nav-fill m-3">
 			<li class="nav-item mx-2"><a class="nav-link active"

@@ -66,7 +66,7 @@
 					<div class="row mb-3">
 						<div class="col-md-6">
 							<div class="form-group">
-								<label class="form-label">Sexo:</label> <input type="text"
+								<label class="form-label">Género:</label> <input type="text"
 									class="form-control w-50"
 									value="<%=cliente.getGeneroCompleto()%>" readonly>
 							</div>

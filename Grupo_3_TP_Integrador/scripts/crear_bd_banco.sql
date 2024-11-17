@@ -149,7 +149,7 @@ CREATE TABLE clientes (
     apellido varchar(25) NOT NULL,
     email varchar(40) NOT NULL,
     telefono varchar(15) NOT NULL,
-    sexo char(1) NOT NULL,
+    genero char(1) NOT NULL,
     id_nacionalidad int NOT NULL,
     fecha_nacimiento date NOT NULL,
     direccion varchar(30) NOT NULL,

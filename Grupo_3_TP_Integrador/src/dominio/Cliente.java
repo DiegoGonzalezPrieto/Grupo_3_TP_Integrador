@@ -145,7 +145,7 @@ public class Cliente extends Usuario {
 	}
 
 	public String getGeneroCompleto() {
-		return genero.toUpperCase().equals("V") ? "Varón" : genero.toUpperCase().equals("M") ? "Mujer" : "Otro";
+		return genero.toUpperCase().equals("F") ? "Femenino" : genero.toUpperCase().equals("M") ? "Masculino" : "Otro";
 	}
 
 }
