@@ -99,18 +99,20 @@ public class SolicitudPrestamoServlet extends HttpServlet {
 	    		
 	    		prestamo.setCuenta(cuenta);
 	    		prestamo.setFechaAltaPrestamo(fechaActual);
-	    		BigDecimal importe = new BigDecimal(request.getParameter(""));
+	    		BigDecimal importe = new BigDecimal(request.getParameter("montoTotal"));
 	    		prestamo.setImportePrestamo(importe);
-	    		prestamo.setMesesPlazo( Integer.parseInt(request.getParameter("")) );
-	    		BigDecimal importeMensual = new BigDecimal(request.getParameter(""));
+	    		prestamo.setMesesPlazo( Integer.parseInt(request.getParameter("PlazoPago")) );
+	    		BigDecimal importeMensual = new BigDecimal(request.getParameter("montoCuota"));
 	    		prestamo.setImporteMensual(importeMensual);
-	    		prestamo.setCuotas( Integer.parseInt(request.getParameter("")));
+	    		prestamo.setCuotas( Integer.parseInt(request.getParameter("CantidadDeCuotas")));
 	    		prestamo.setEstadoValidacion(estado);
 	    		System.out.println(prestamo.toString());
 	    		negoPrestamo.crearPrestamo(prestamo);
 	    		
 	    	}catch(Exception e) {
-	    		response.sendRedirect("SolicitudPrestamo.jsp?mensaje=Error al otorgar prestamo");
+	    		System.out.println(e.getMessage());
+	    		//response.sendRedirect("SolicitudPrestamo.jsp?mensaje=Error al otorgar prestamo");
+	    		
 	    	}
 	    	
 	    }

@@ -57,6 +57,9 @@
 				+ montoTotal.toFixed(2);
 		document.getElementById('montoPorCuota').textContent = 'Monto por Cuota: $'
 				+ cuotaMensual.toFixed(2);
+		//Agrego para poder capturar el monto en el servlet
+		document.getElementById('hiddenMontoTotal').value = montoTotal.toFixed(2);
+		document.getElementById('hiddenMontoCuota').value = cuotaMensual.toFixed(2);
 	}
 </script>
 </head>
@@ -149,8 +152,10 @@
 						<div class="form-group">
 							<p id="montoTotal"  class="font-weight-bold">Monto Total a
 								Retornar: $0.00</p>
+							<input type="hidden" id="hiddenMontoTotal" name="montoTotal" value="">
 							<p id="montoPorCuota" class="font-weight-bold">Monto Por
 								Cuota: $0.00</p>
+							<input type="hidden" id="hiddenMontoCuota" name="montoCuota" value="">
 						</div>
 					</fieldset>
 
