@@ -12,21 +12,20 @@
 	<style>
 		.row {
 			justify-content: space-around;
-			margin-bottom: 15px;
 		}
 	</style>
 </head>
 <body>
-	<footer class="bg-light text-center text-lg-start" style="background-color: rgba(0, 0, 0, 0.2);">
+	<footer class="bg-light text-center text-lg-start" style="background-color: rgba(0, 0, 0, 0.2); margin-top: 30px;">
 		<div class="container p-4" style="justify-content:center">
 			<div class="row">
-				<div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+				<div class="col-lg-6 col-md-12 mb-2 mb-md-0">
 					<h6 class="text-uppercase">Banco G3-L4</h6>
 					<p>Proporcionando servicios bancarios de calidad desde 2024.</p>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+				<div class="col-lg-3 col-md-6 mb-2 mb-md-0">
 					<h6 class="text-uppercase">Institucional</h6>
 					<ul class="list-unstyled mb-0">
 						<li><a href="#!" class="text-dark">Autoridades</a></li>
@@ -35,7 +34,7 @@
 						<li><a href="#!" class="text-dark">Mujeres y diversidades</a></li>
 					</ul>
 				</div>
-				<div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+				<div class="col-lg-3 col-md-6 mb-2 mb-md-0">
 					<h6 class="text-uppercase">Enlaces útiles</h6>
 					<ul class="list-unstyled mb-0">
 						<li><a href="#!" class="text-dark">Botón de arrepentimiento</a></li>
@@ -44,7 +43,7 @@
 						<li><a href="#!" class="text-dark">Defensa del consumidor</a></li>
 					</ul>
 				</div>
-				<div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+				<div class="col-lg-3 col-md-6 mb-2 mb-md-0">
 					<h6 class="text-uppercase">Contacto</h6>
 					<ul class="list-unstyled mb-0">
 						<li><a href="#!" class="text-dark">contacto@bancog3l4.com</a></li>
@@ -60,7 +59,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="text-center p-3">
+		<div class="text-center mb-2">
 			© 2024 Banco G3-L4
 		</div>
 	</footer>
