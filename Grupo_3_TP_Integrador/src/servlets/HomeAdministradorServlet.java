@@ -67,6 +67,7 @@ public class HomeAdministradorServlet extends HttpServlet {
 	        	request.setAttribute("saldo_" + cuenta.getNumeroCuenta(), cuenta.getSaldo().toString());
 	        	request.setAttribute("nombreCliente_" + cuenta.getNumeroCuenta(), cuenta.getCliente().getNombre());
 	        	request.setAttribute("apellidoCliente_" + cuenta.getNumeroCuenta(), cuenta.getCliente().getApellido());
+	        	request.setAttribute("id_" + cuenta.getNumeroCuenta(), cuenta.getId());
         	}else {
         		System.out.println("Cliente es null para la cuenta: " + cuenta.getNumeroCuenta());
         	}
