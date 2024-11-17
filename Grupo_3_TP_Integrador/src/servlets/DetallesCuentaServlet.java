@@ -52,6 +52,7 @@ public class DetallesCuentaServlet extends HttpServlet{
 			request.setAttribute("tipoCuenta", cuenta.getTipoCuenta().getNombre());
 			request.setAttribute("numeroCuenta", cuenta.getNumeroCuenta());
 			request.setAttribute("cbu", cuenta.getCbu());
+			request.setAttribute("saldo", cuenta.getSaldo());
 		}
 			request.setAttribute("movimientosPropios", movimientosPropios);
 			request.getRequestDispatcher("DetallesCuenta.jsp").forward(request, response);
