@@ -3,7 +3,6 @@ package servlets;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -13,12 +12,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dominio.Cliente;
 import dominio.Cuenta;
-import dominio.Cuota;
 import dominio.EstadoPrestamo;
 import dominio.Prestamo;
+import dominio.Usuario;
 import negocio.ClienteNegocio;
 import negocio.CuentaNegocio;
 import negocio.EstadoPrestamoNegocio;
@@ -34,102 +34,113 @@ import negocioImpl.PrestamoNegocioImpl;
 @WebServlet("/SolicitudPrestamoServlet")
 public class SolicitudPrestamoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	private ClienteNegocio negoCliente;
 	private Cliente cliente;
 	private CuentaNegocio negoCuenta;
 	private Cuenta cuenta;
 	private ArrayList<Cuenta> cuentasCliente;
-    private Cuota cuota;
-    private Prestamo prestamo;
-    private PrestamoNegocio negoPrestamo;
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public SolicitudPrestamoServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	private Prestamo prestamo;
+	private PrestamoNegocio negoPrestamo;
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		String idString = request.getParameter("id"); // Cambiar a getParameter
-	    int id = 0;
-	    negoCliente = new ClienteNegocioImpl();
-	    negoCuenta = new CuentaNegocioImpl();
-	    
-	    if (idString != null) {
-	        try {
-	            id = Integer.parseInt(idString); 
-	            cliente = negoCliente.buscarPorId(id); 
-	            System.out.println(cliente.toString());
-	            request.setAttribute("cliente", cliente); 
-	        } catch (NumberFormatException e) {
-	            
-	            request.setAttribute("error", "ID inválido");
-	        }
-	    } else {
-	        request.setAttribute("error", "No se proporcionó un ID");
-	    }
-	    
-	    try {
-	    	cuentasCliente = (ArrayList<Cuenta>) negoCuenta.listarPorCliente(cliente.getIdCliente());
-	    	request.setAttribute("listaCuentas", cuentasCliente);
-	    	
-	    }catch(Exception e) {
-	    	response.sendRedirect("SolicitudPrestamo.jsp?mensaje=Error al Obtener Cuentas");
-	    }
-	    
-	    if(request.getParameter("btnSolicitar") != null) {
-	    	  	
-	    	try {
-	    		Date fechaActual = new Date(Calendar.getInstance().getTimeInMillis());
-		    	prestamo = new Prestamo();
-		    	negoCuenta = new CuentaNegocioImpl();
-		    	
-		    	EstadoPrestamoNegocio negoEstado = new EstadoPrestamoNegocioImpl();
-		    	EstadoPrestamo estado = negoEstado.buscarPorId(1);
-	    		cuenta = negoCuenta.obtenerCuentaPorId(Integer.parseInt(request.getParameter("cuenta")));
-	    		negoPrestamo = new PrestamoNegocioImpl();
-	    		prestamo.setCliente((Cliente)request.getAttribute("cliente"));
-	    		
-	    		prestamo.setCuenta(cuenta);
-	    		prestamo.setFechaAltaPrestamo(fechaActual);
-	    		BigDecimal importe = new BigDecimal(request.getParameter("montoTotal"));
-	    		prestamo.setImportePrestamo(importe);
-	    		prestamo.setMesesPlazo( Integer.parseInt(request.getParameter("PlazoPago")) );
-	    		BigDecimal importeMensual = new BigDecimal(request.getParameter("montoCuota"));
-	    		prestamo.setImporteMensual(importeMensual);
-	    		prestamo.setCuotas( Integer.parseInt(request.getParameter("CantidadDeCuotas")));
-	    		prestamo.setEstadoValidacion(estado);
-	    		System.out.println(prestamo.toString());
-	    		negoPrestamo.crearPrestamo(prestamo);
-	    		
-	    	}catch(Exception e) {
-	    		System.out.println(e.getMessage());
-	    		//response.sendRedirect("SolicitudPrestamo.jsp?mensaje=Error al otorgar prestamo");
-	    		
-	    	}
-	    	
-	    }
-	    
-	    
-	    RequestDispatcher rd = request.getRequestDispatcher("/SolicitudPrestamo.jsp");
-		rd.forward(request, response); 
+	public SolicitudPrestamoServlet() {
+		super();
+		negoCliente = new ClienteNegocioImpl();
+		negoCuenta = new CuentaNegocioImpl();
+		prestamo = new Prestamo();
+		negoPrestamo = new PrestamoNegocioImpl();
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-		
-		
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String idString = request.getParameter("id"); // Cambiar a getParameter
+		int id = 0;
+
+		if (idString != null) {
+			try {
+				id = Integer.parseInt(idString);
+				cliente = negoCliente.buscarPorId(id);
+				request.setAttribute("cliente", cliente);
+			} catch (NumberFormatException e) {
+
+				request.setAttribute("error", "ID invï¿½lido");
+			}
+		} else {
+			request.setAttribute("error", "No se proporcionï¿½ un ID");
+		}
+
+		try {
+			cuentasCliente = (ArrayList<Cuenta>) negoCuenta.listarPorCliente(cliente.getIdCliente());
+			request.setAttribute("listaCuentas", cuentasCliente);
+
+		} catch (Exception e) {
+			response.sendRedirect("SolicitudPrestamo.jsp?mensaje=Error al ObtenerCuentas");
+		}
+
+		RequestDispatcher rd = request.getRequestDispatcher("/SolicitudPrestamo.jsp");
+		rd.forward(request, response);
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		HttpSession session = request.getSession();
+		Usuario usuario = (Usuario) session.getAttribute("usuario");
+
+		if (usuario == null) {
+			response.sendRedirect("Login.jsp");
+			return;
+		}
+
+		int idCliente = negoCliente.buscarPorIdUsuario(usuario.getId());
+
+		cliente = negoCliente.buscarPorId(idCliente);
+
+		cuentasCliente = (ArrayList<Cuenta>) negoCuenta.listarPorCliente(cliente.getIdCliente());
+
+		request.setAttribute("cliente", cliente);
+		request.setAttribute("listaCuentas", cuentasCliente);
+
+		if (request.getParameter("btnSolicitar") != null) {
+			try {
+				Date fechaActual = new Date(Calendar.getInstance().getTimeInMillis());
+
+				EstadoPrestamoNegocio negoEstado = new EstadoPrestamoNegocioImpl();
+				EstadoPrestamo estado = negoEstado.buscarPorId(1);
+
+				cuenta = negoCuenta.obtenerCuentaPorId(Integer.parseInt(request.getParameter("cuenta")));
+
+				prestamo.setCliente(cliente);
+				prestamo.setCuenta(cuenta);
+				prestamo.setFechaAltaPrestamo(fechaActual);
+				prestamo.setImportePrestamo(new BigDecimal(request.getParameter("montoTotal")));
+				prestamo.setMesesPlazo(Integer.parseInt(request.getParameter("PlazoPago")));
+				prestamo.setImporteMensual(new BigDecimal(request.getParameter("montoCuota")));
+				prestamo.setCuotas(Integer.parseInt(request.getParameter("CantidadDeCuotas")));
+				prestamo.setEstadoValidacion(estado);
+
+				if (negoPrestamo.crearPrestamo(prestamo)) {
+					request.setAttribute("mensaje", "PrÃ©stamo solicitado exitosamente, tiempo de aprobacion 48hs.");
+					request.setAttribute("tipoMensaje", "success");
+				} else {
+					request.setAttribute("mensaje", "Error al crear el prÃ©stamo.");
+					request.setAttribute("tipoMensaje", "danger");
+				}
+
+			} catch (Exception e) {
+				request.setAttribute("mensaje", "Error al crear el prÃ©stamo: " + e.getMessage());
+				request.setAttribute("tipoMensaje", "danger");
+				e.printStackTrace();
+			}
+		}
+
+		RequestDispatcher rd = request.getRequestDispatcher("/SolicitudPrestamo.jsp");
+		rd.forward(request, response);
+
 	}
 
 }

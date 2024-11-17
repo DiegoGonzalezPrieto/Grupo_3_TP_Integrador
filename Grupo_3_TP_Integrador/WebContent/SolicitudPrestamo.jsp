@@ -86,7 +86,20 @@
 		<div class="text-center mb-4">
 			<h2 class="bg-success text-white p-3 rounded">Cliente: <%= cliente.getNombre()%> <%=cliente.getApellido() %></h2>
 		</div>
-
+	<%
+	   String mensaje = (String) request.getAttribute("mensaje");
+	   String tipoMensaje = (String) request.getAttribute("tipoMensaje");
+	   if(mensaje != null && tipoMensaje != null) {
+	%>
+	   <div class="alert alert-<%=tipoMensaje%> alert-dismissible fade show" role="alert">
+	       <%=mensaje%>
+	       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	           <span aria-hidden="true">&times;</span>
+	       </button>
+	   </div>
+	<%
+	   }
+	%>
 		
 
 		<div class="row justify-content-center">
@@ -106,7 +119,7 @@
 											
 									%>
 									
-								<option value="<%= cu.getId() %> "><%=cu.getTipoCuenta().getNombre() %> - <%=cu.getNumeroCuenta() %> </option>
+								<option value="<%= cu.getId()%>"><%=cu.getTipoCuenta().getNombre() %> - <%=cu.getNumeroCuenta() %> </option>
 									<%
 										}
 									
