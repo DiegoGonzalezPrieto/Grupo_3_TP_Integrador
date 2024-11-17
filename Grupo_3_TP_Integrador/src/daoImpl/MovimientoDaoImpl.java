@@ -314,4 +314,80 @@ public class MovimientoDaoImpl implements MovimientoDao {
 		return cantMovimientos;
 	}
 
+	@Override
+	public BigDecimal obtenerSumaTransferencias(java.util.Date fechaInicio, java.util.Date fechaFin) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		String query = "SELECT COALESCE(SUM(importe_movimiento), 0) as suma FROM movimientos "
+				+ " WHERE id_tipo_movimiento = 4 AND fecha_movimiento BETWEEN ? AND ?;";
+
+		BigDecimal sumaMovimientos = new BigDecimal(0);
+		ArrayList<TipoMovimiento> tipos = new TipoMovimientoDaoImpl().buscarTodos();
+		CuentaDao cuentaDao = new CuentaDaoImpl();
+		TipoMovimientoDao tipoDao = new TipoMovimientoDaoImpl();
+
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(query)) {
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+			statement.setString(1, sdf.format(fechaInicio));
+			statement.setString(2, sdf.format(fechaFin));
+			ResultSet resultado = statement.executeQuery();
+
+			while (resultado.next()) {
+
+				sumaMovimientos = resultado.getBigDecimal("suma");
+			}
+
+			return sumaMovimientos;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return sumaMovimientos;
+	}
+
+	@Override
+	public BigDecimal obtenerPromedioTransferencias(java.util.Date fechaInicio, java.util.Date fechaFin) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		String query = "SELECT COALESCE(AVG(importe_movimiento), 0) as promedio FROM movimientos "
+				+ " WHERE id_tipo_movimiento = 4 AND fecha_movimiento BETWEEN ? AND ?;";
+
+		BigDecimal promedioTransferencias = new BigDecimal(0);
+		ArrayList<TipoMovimiento> tipos = new TipoMovimientoDaoImpl().buscarTodos();
+		CuentaDao cuentaDao = new CuentaDaoImpl();
+		TipoMovimientoDao tipoDao = new TipoMovimientoDaoImpl();
+
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(query)) {
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+			statement.setString(1, sdf.format(fechaInicio));
+			statement.setString(2, sdf.format(fechaFin));
+			ResultSet resultado = statement.executeQuery();
+
+			while (resultado.next()) {
+
+				promedioTransferencias = resultado.getBigDecimal("promedio");
+			}
+
+			return promedioTransferencias;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return promedioTransferencias;
+	}
+
 }

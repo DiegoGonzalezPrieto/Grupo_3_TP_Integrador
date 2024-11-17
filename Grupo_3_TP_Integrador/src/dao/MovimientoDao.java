@@ -1,5 +1,6 @@
 package dao;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -30,5 +31,9 @@ public interface MovimientoDao {
 	public int obtenerCantidadAltasPrestamo(Date fechaInicio, Date fechaFin);
 
 	public int obtenerCantidadPagosPrestamo(Date fechaInicio, Date fechaFin);
+
+	public BigDecimal obtenerSumaTransferencias(Date fechaInicio, Date fechaFin);
+
+	public BigDecimal obtenerPromedioTransferencias(Date fechaInicio, Date fechaFin);
 
 }

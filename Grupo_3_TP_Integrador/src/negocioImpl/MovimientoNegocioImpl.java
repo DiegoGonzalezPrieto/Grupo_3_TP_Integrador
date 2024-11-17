@@ -1,5 +1,6 @@
 package negocioImpl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -69,6 +70,16 @@ public class MovimientoNegocioImpl implements MovimientoNegocio {
 	@Override
 	public int obtenerCantidadPagosPrestamo(Date fechaInicio, Date fechaFin) {
 		return dao.obtenerCantidadPagosPrestamo(fechaInicio, fechaFin);
+	}
+
+	@Override
+	public BigDecimal obtenerSumaTransferencias(Date fechaInicio, Date fechaFin) {
+		return dao.obtenerSumaTransferencias(fechaInicio, fechaFin);
+	}
+
+	@Override
+	public BigDecimal obtenerPromedioTransferencias(Date fechaInicio, Date fechaFin) {
+		return dao.obtenerPromedioTransferencias(fechaInicio, fechaFin);
 	}
 
 }

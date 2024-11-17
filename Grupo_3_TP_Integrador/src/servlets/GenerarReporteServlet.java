@@ -155,12 +155,19 @@ public class GenerarReporteServlet extends HttpServlet {
 		int cantidadAltasPrestamo = nm.obtenerCantidadAltasPrestamo(fechaInicio, fechaFin);
 		int cantidadPagosPrestamo = nm.obtenerCantidadPagosPrestamo(fechaInicio, fechaFin);
 
+		BigDecimal sumaTransferencias = nm.obtenerSumaTransferencias(fechaInicio, fechaFin);
+		BigDecimal promedioTransferencias = nm.obtenerPromedioTransferencias(fechaInicio, fechaFin);
+
 		reporte += "- Cantidad de Movimientos durante el período: " + cantMovimientos + "\n";
 		reporte += "- Cantidad de Altas de Cuenta durante el período: " + cantidadAltasCuenta + "\n";
 		reporte += "- Cantidad de Transferencias realizadas durante el período: " + cantidadTransferencias + " - "
 				+ cantidadTransferencias * 2 + " movimientos" + "\n";
 		reporte += "- Cantidad de Altas de Préstamo durante el período: " + cantidadAltasPrestamo + "\n";
 		reporte += "- Cantidad de Pagos de Préstamo durante el período: " + cantidadPagosPrestamo + "\n\n";
+
+		reporte += "- Monto transferido durante el período: $" + df.format(sumaTransferencias) + "\n";
+		reporte += "- Promedio de montos transferidos durante el período: $" + df.format(promedioTransferencias)
+				+ "\n\n";
 
 		return reporte;
 	}
