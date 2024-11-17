@@ -26,26 +26,21 @@
 	///LA FUNCION SIRVE PARA CALCULAR EL DIV DE LOS MONTOS TOTALES Y CUOTAS DESDE EL FRONT
 	function calcularMontos() {
 		const importe = parseFloat(document.getElementById("ImporteaSolicitar").value) || 0;
-		const plazo = parseFloat(document.getElementById("PlazoPago").value) || 0;
 		const cantidadCuotas = parseFloat(document
 				.getElementById("CantidadDeCuotas").value) || 0;
 
 		let interes = 0;
 
 		//CALCULA EL INTERES
-		if (plazo === 1) {
-			if (cantidadCuotas === 6) {
-				interes = 0.15;
-			} else if (cantidadCuotas === 12) {
-				interes = 0.30;
-			}
-		} else if (plazo === 2) {
-			if (cantidadCuotas === 6) {
-				interes = 0.50;
-			} else if (cantidadCuotas === 12) {
-				interes = 0.70;
-			}
-		}
+		if (cantidadCuotas === 6) {
+    			interes = 0.15;  // Interés para 6 cuotas
+		} else if (cantidadCuotas === 12) {
+   			    interes = 0.30;  // Interés para 12 cuotas
+		} else if (cantidadCuotas === 18) {
+   			    interes = 0.50;  // Interés para 18 cuotas
+		} else if (cantidadCuotas === 24) {
+   				interes = 0.70;  // Interés para 24 cuotas
+		}		 
 
 		//CALCULA SEGUN EL INTERES EL MONTO FINAL Y LA CUOTA MENSUAL
 		const montoTotal = importe * (1 + interes);
@@ -135,21 +130,9 @@
 								id="ImporteaSolicitar" type="number" class="form-control"
 								placeholder="Ingrese el importe a solicitar (máx. $1.000.000)"
 								min="0" max="1000000" oninput="calcularMontos()" required
-								name="txtDescripcion">
+								name="ImporteaSolicitar">
 						</div>
-
-						<div class="form-group">
-							<label for="PlazoPago">Elige Plazo de Pago en Años</label> <select
-								id="PlazoPago" name="PlazoPago" class="form-control" required
-								onchange="calcularMontos()">
-								<option value="" disabled selected>Seleccione una
-									opción</option>
-								<option value="1">1</option>
-								<option value="2">2</option>
-								<!--ESTAS OPCIONES SE PUEDEN CAMBIAR -->
-							</select>
-						</div>
-
+												
 						<div class="form-group">
 							<label for="CantidadDeCuotas">Cantidad de cuotas</label> <select
 								id="CantidadDeCuotas" name="CantidadDeCuotas"
@@ -158,6 +141,8 @@
 									opción</option>
 								<option value="6">6</option>
 								<option value="12">12</option>
+								<option value="18">18</option>
+								<option value="24">24</option>
 								<!--ACA VAN A IR LAS CUOTAS QUE DAMOS PARA PAGAR -->
 							</select>
 						</div>

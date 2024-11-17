@@ -158,7 +158,7 @@
 					<td class="text-center"> <%= p.getFechaAltaPrestamo() %></td>
 					<td class="text-center"> <%= p.getCuotas() %></td>
 					<td class="text-center"> <%= p.getImportePrestamo() %></td>
-					<td class="text-center"> <%= p.getImportePrestamo() %></td>
+					<td class="text-center"> <%= p.totalAPagar() %></td>					
 					<td class="text-center <%if (p.getEstadoValidacion().getNombre().equals("Pendiente")) { %> text-bg-secondary 
 					<% } else if (p.getEstadoValidacion().getNombre().equals("Autorizado")){ %>text-bg-success
 					<% } else if (p.getEstadoValidacion().getNombre().equals("Rechazado")){ %>text-bg-danger<% } %>">

@@ -36,6 +36,14 @@ public class Prestamo {
 
 	public Prestamo () {}
 	
+	
+	//METODO PARA CALCULAR EL IMPORTE FINAL.
+	public BigDecimal totalAPagar() {
+		
+		return importeMensual.multiply(new BigDecimal(cuotas));
+	}
+	
+	
 	//GETTER AND SETTER
 	
 	public EstadoPrestamo getEstadoValidacion() {

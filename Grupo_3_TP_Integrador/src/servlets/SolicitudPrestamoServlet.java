@@ -95,7 +95,8 @@ public class SolicitudPrestamoServlet extends HttpServlet {
 			response.sendRedirect("Login.jsp");
 			return;
 		}
-
+		
+		
 		int idCliente = negoCliente.buscarPorIdUsuario(usuario.getId());
 
 		cliente = negoCliente.buscarPorId(idCliente);
@@ -113,12 +114,16 @@ public class SolicitudPrestamoServlet extends HttpServlet {
 				EstadoPrestamo estado = negoEstado.buscarPorId(1);
 
 				cuenta = negoCuenta.obtenerCuentaPorId(Integer.parseInt(request.getParameter("cuenta")));
-
+				
+				
+				///CALCULO DE MESES SEGUN CUOTAS
+				int plazoMes = calculoMeses(Integer.parseInt(request.getParameter("CantidadDeCuotas")));
+				
 				prestamo.setCliente(cliente);
 				prestamo.setCuenta(cuenta);
 				prestamo.setFechaAltaPrestamo(fechaActual);
-				prestamo.setImportePrestamo(new BigDecimal(request.getParameter("montoTotal")));
-				prestamo.setMesesPlazo(Integer.parseInt(request.getParameter("PlazoPago")));
+				prestamo.setImportePrestamo(new BigDecimal(request.getParameter("ImporteaSolicitar")));
+				prestamo.setMesesPlazo(plazoMes);
 				prestamo.setImporteMensual(new BigDecimal(request.getParameter("montoCuota")));
 				prestamo.setCuotas(Integer.parseInt(request.getParameter("CantidadDeCuotas")));
 				prestamo.setEstadoValidacion(estado);
@@ -141,6 +146,26 @@ public class SolicitudPrestamoServlet extends HttpServlet {
 		RequestDispatcher rd = request.getRequestDispatcher("/SolicitudPrestamo.jsp");
 		rd.forward(request, response);
 
+	}
+	
+	public int calculoMeses(int x) {
+		
+		int cantidadCuotas = x;
+		int plazoMeses = 0;
+		
+		
+		if (cantidadCuotas == 6) {
+	        plazoMeses = 6;  // 6 cuotas = 6 meses
+	    } else if (cantidadCuotas == 12) {
+	        plazoMeses = 12;  // 12 cuotas = 12 meses
+	    } else if (cantidadCuotas == 18) {
+	        plazoMeses = 18;  // 18 cuotas = 18 meses
+	    } else if (cantidadCuotas == 24) {
+	        plazoMeses = 24;  // 24 cuotas = 24 meses
+	    } 
+				
+		
+		return plazoMeses;
 	}
 
 }
