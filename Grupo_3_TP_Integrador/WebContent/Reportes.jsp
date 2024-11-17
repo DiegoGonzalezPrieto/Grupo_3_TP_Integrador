@@ -76,6 +76,7 @@ label {
 					</div>
 					<input type="submit" value="Generar Reporte"
 						class="btn btn-primary" onclick="recargarPagina()">
+				</div>
 			</form>
 		</div>
 
@@ -118,61 +119,11 @@ label {
 				<%
 					}
 				%>
-				<!--  <tr>
-					<td>2</td>
-					<td>Reporte de Cuentas</td>
-					<td>2024-11-01</td>
-					<td>Detalles del reporte de cuentas...</td>
-					<td>
-						<div class="btn-group btn-group-sm" role="group">
-							<a href="VerReporteServlet?id=1"
-								class="btn btn-primary me-2 mb-2"> <i class="fas fa-eye"></i>
-							</a> <a href="DescargarReporteServlet?id=1"
-								class="btn btn-warning mb-2"
-								onclick="return confirm('¿Está seguro que desea descargar?')">
-								<i class="fas fa-download"></i>
-							</a>
-						</div>
-					</td>
-				</tr>
-				-->
+
 			</tbody>
 		</table>
 	</div>
 
-
-
-	<!-- Form para programar unn reporte -->
-	<!--<div class="container">
-		<h2>Programar Reporte</h2>
-		<form action="ProgramarReporteServlet" method="POST">
-			<div class="mb-3">
-				<label for="tipoReporteProgramado">Tipo de Reporte:</label> <select
-					id="tipoReporteProgramado" name="tipoReporteProgramado"
-					class="form-select">
-					<option value="clientes">Reporte de Clientes</option>
-					<option value="cuentas">Reporte de Cuentas</option>
-					<option value="prestamos">Reporte de Préstamos</option>
-				</select> <label for="frecuencia">Frecuencia:</label> <select id="frecuencia"
-					name="frecuencia" class="form-select" required>
-					<option value="semanal">Semanal</option>
-					<option value="mensual">Mensual</option>
-					<option value="anual">Anual</option>
-				</select> <label for="diasSemana">Días de la semana:</label> <select
-					id="diasSemana" name="diasSemana" class="form-select" required>
-					<option value="lunes">Lunes</option>
-					<option value="martes">Martes</option>
-					<option value="miercoles">Miércoles</option>
-					<option value="jueves">Jueves</option>
-					<option value="viernes">Viernes</option>
-					<option value="sabado">Sábado</option>
-					<option value="domingo">Domingo</option>
-				</select> <input type="submit" value="Programar Reporte"
-					class="btn btn-secondary"
-					onclick="return confirm('¿Programar reporte?')">
-			</div>
-		</form>
-	</div>-->
 
 
 	<%@ include file="Footer.jsp"%>
