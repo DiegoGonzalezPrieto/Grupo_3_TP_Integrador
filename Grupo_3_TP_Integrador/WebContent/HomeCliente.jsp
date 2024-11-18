@@ -57,7 +57,9 @@
 		                <a class="border nav-link" href="DetallesCuentaServlet?id=<%=cuenta.getId()%>">
 		                    <span class="text-black">Cuenta <%=cuenta.getNumeroCuenta()%></span><br>
 		                    <span class="text-black">CBU: <%=cuenta.getCbu()%></span><br>
-		                    <span class="text-black"><%=cuenta.getTipoCuenta().getNombre()%></span>
+		                    <span class="text-black">Número: <%=cuenta.getNumeroCuenta()%></span><br>
+		                    <span class="text-black"><%=cuenta.getTipoCuenta().getNombre()%></span><br>
+		                    <span class="text-black">Saldo: $<%=cuenta.getSaldo()%></span>
 		                </a>
 		            </li>
 		    <%
