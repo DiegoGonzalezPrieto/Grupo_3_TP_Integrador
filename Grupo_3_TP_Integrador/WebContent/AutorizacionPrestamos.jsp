@@ -71,6 +71,21 @@
 
 
 		<div class="row align-items-center">
+			<div class="col">
+				<table class="inputs">
+					<tbody>
+						<tr>
+							<td>Monto mínimo:</td>
+							<td><input type="number" id="minMonto" name="minMonto"></td>
+						</tr>
+						<tr>
+							<td>Monto máximo:</td>
+							<td><input type="number" id="maxMonto" name="maxMonto"></td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
 			<div class="col d-flex justify-content-end">
 				<table class="inputs">
 					<tbody>
@@ -84,9 +99,21 @@
 						</tr>
 					</tbody>
 				</table>
-
 			</div>
-
+			<div class="col d-flex justify-content-end">
+				<table class="inputs">
+					<tbody>
+						<tr>
+							<td>Fecha desde:</td>
+							<td><input type="date" id="minFecha" name="minFecha"></td>
+						</tr>
+						<tr>
+							<td>Fecha hasta:</td>
+							<td><input type="date" id="maxFecha" name="maxFecha"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 
 		<table id="tabla-prestamos" class="table table-striped">
@@ -166,7 +193,7 @@
 				});
 
 		// Filtros por cantidad de cuotas mayor y menor
-		table.search.fixed('saldo', function(searchStr, data, index) {
+		table.search.fixed('cuotas', function(searchStr, data, index) {
 			var min = parseInt(minCuotas.value, 10);
 			var max = parseInt(maxCuotas.value, 10);
 			var cuotas = parseInt(data[5]) || 0;
@@ -184,6 +211,51 @@
 			table.draw();
 		});
 		maxCuotas.addEventListener('input', function() {
+			table.draw();
+		});
+
+		// Filtros por monto mayor y menor
+		table.search.fixed('monto',
+				function(searchStr, data, index) {
+					var min = parseInt(minMonto.value, 10);
+					var max = parseInt(maxMonto.value, 10);
+					var monto = parseFloat(data[3].replace("$", "").replace(
+							",", "")) || 0;
+
+					if ((isNaN(min) && isNaN(max))
+							|| (isNaN(min) && monto <= max)
+							|| (min <= monto && isNaN(max))
+							|| (min <= monto && monto <= max)) {
+						return true;
+					}
+
+					return false;
+				});
+
+		minMonto.addEventListener('input', function() {
+			table.draw();
+		});
+		maxMonto.addEventListener('input', function() {
+			table.draw();
+		});
+
+		// Filtros por fecha mayor y menor
+		table.search.fixed('fecha', function(searchStr, data, index) {
+			var min = minFecha.value ? new Date(minFecha.value) : false;
+			var max = maxFecha.value ? new Date(maxFecha.value) : false;
+			var fecha = new Date(data[4]);
+
+			if ((min <= fecha || !min) && (max >= fecha || !max)) {
+				return true;
+			}
+
+			return false;
+		});
+
+		minFecha.addEventListener('input', function() {
+			table.draw();
+		});
+		maxFecha.addEventListener('input', function() {
 			table.draw();
 		});
 	</script>
