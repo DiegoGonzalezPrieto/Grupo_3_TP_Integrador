@@ -25,49 +25,48 @@ import negocioImpl.CuentaNegocioImpl;
 public class HomeClienteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private CuentaNegocioImpl negocioCuentas;
-	
+
 	ClienteNegocio negocioCliente;
-    
-    public HomeClienteServlet() {
-        super();
-        negocioCuentas = new CuentaNegocioImpl();
-        negocioCliente = new ClienteNegocioImpl();
-    }
 
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		try {
-	        HttpSession session = request.getSession();
-	        Usuario usuario = (Usuario) session.getAttribute("usuario");
-	        
-	        if(usuario == null) {
-	            response.sendRedirect("Login.jsp");
-	            return;
-	        }
-
-	        int idCliente = negocioCliente.buscarPorIdUsuario(usuario.getId());
-	        
-	        Cliente cliente = negocioCliente.buscarPorId(idCliente);
-
-	        List<Cuenta> cuentasCliente = negocioCuentas.listarPorCliente(idCliente);
-	        
-	        request.setAttribute("cuentasCliente", cuentasCliente);
-	        request.setAttribute("cliente", cliente);
-	        
-	        RequestDispatcher dispatcher = request.getRequestDispatcher("/HomeCliente.jsp");
-	        dispatcher.forward(request, response);
-	        
-	        
-	    } catch (Exception e) {
-	        request.getSession().setAttribute("mensaje", "Error: " + e.getMessage());
-	        request.getSession().setAttribute("tipoMensaje", "danger");
-	        e.printStackTrace();
-	        response.sendRedirect("HomeCliente.jsp");
-	    }
+	public HomeClienteServlet() {
+		super();
+		negocioCuentas = new CuentaNegocioImpl();
+		negocioCliente = new ClienteNegocioImpl();
 	}
 
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {
+			HttpSession session = request.getSession();
+			Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+			if (usuario == null) {
+				response.sendRedirect("Login.jsp");
+				return;
+			}
+
+			int idCliente = negocioCliente.buscarPorIdUsuario(usuario.getId());
+
+			Cliente cliente = negocioCliente.buscarPorId(idCliente);
+
+			List<Cuenta> cuentasCliente = negocioCuentas.listarActivasPorCliente(idCliente);
+
+			request.setAttribute("cuentasCliente", cuentasCliente);
+			request.setAttribute("cliente", cliente);
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/HomeCliente.jsp");
+			dispatcher.forward(request, response);
+
+		} catch (Exception e) {
+			request.getSession().setAttribute("mensaje", "Error: " + e.getMessage());
+			request.getSession().setAttribute("tipoMensaje", "danger");
+			e.printStackTrace();
+			response.sendRedirect("HomeCliente.jsp");
+		}
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
