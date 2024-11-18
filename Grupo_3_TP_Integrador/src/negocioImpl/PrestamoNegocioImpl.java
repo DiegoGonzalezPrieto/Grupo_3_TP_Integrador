@@ -9,10 +9,14 @@ import java.util.Date;
 import dao.PrestamoDao;
 import daoImpl.PrestamoDaoImpl;
 import dominio.Cuenta;
+import dominio.Movimiento;
 import dominio.Prestamo;
+import dominio.TipoMovimiento;
 import negocio.CuentaNegocio;
 import negocio.CuotaNegocio;
+import negocio.MovimientoNegocio;
 import negocio.PrestamoNegocio;
+import negocio.TipoMovimientoNegocio;
 
 public class PrestamoNegocioImpl implements PrestamoNegocio {
 	
@@ -54,13 +58,36 @@ public class PrestamoNegocioImpl implements PrestamoNegocio {
 					boolean cuentaActualizada=cuNeg.actualizarCuenta(cuenta);				
 			
 					//5 PASO CREAR MOVIMIENTO
-						/*if(cuentaActualizada) {
-					 
-								//SETEAR MOVIMIENTO 
-								//INSERT MOVIMIENTO
+						if(cuentaActualizada) {
+							
+							///REGISTRA EL MOVIMIENTO EN BD
+							int idCuenta = prestamo.getCuenta().getId();
+							CuentaNegocio cNeg = new CuentaNegocioImpl();
+							
+							Movimiento movimientoNuevo = null;
+							MovimientoNegocio mNeg = new MovimientoNegocioImpl();
+							
+							TipoMovimiento tipoMovimiento;
+							TipoMovimientoNegocio tmNeg = new TipoMovimientoNegocioImpl();
+							
+							
+							cuenta = cNeg.obtenerCuentaPorId(idCuenta);
+							tipoMovimiento = tmNeg.buscarPorId(3);
+							
+							long tiempoActual = System.currentTimeMillis();
+							Date fechaActual = new Date(tiempoActual);
+							
+							
+							movimientoNuevo.setCuenta(cuenta);
+							movimientoNuevo.setTipo(tipoMovimiento);
+							movimientoNuevo.setFecha(fechaActual);
+							movimientoNuevo.setConcepto("Acreditacion de Prestamo a Cliente");
+							movimientoNuevo.setMonto(prestamo.getImportePrestamo());
+							
+							mNeg.insert(movimientoNuevo);
 					 				 
 						}
-						else {throw new SQLException("no se pudo crear el movimiento en la BD");}*/
+						else {throw new SQLException("no se pudo crear el movimiento en la BD");}
 				} 
 				else {throw new SQLException("no se pudo actualizar la cuenta en la BD");}	
 			}

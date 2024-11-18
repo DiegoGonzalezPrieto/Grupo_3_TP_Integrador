@@ -1,6 +1,18 @@
+<%@page import="java.util.List"%>
+<%@page import="dominio.Cuota"%>
+<%@page import="dominio.Cliente"%>
+<%@page import="dominio.Cuenta"%>
+<%@page import="dominio.Prestamo"%>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
+<%
+   if(request.getAttribute("listaCuotas") == null) {
+       response.sendRedirect("PagoPrestamoServlet");
+       return;
+   }
+%>
 <html lang="es">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -27,21 +39,75 @@
 	<%@ include file="BarraMenu.jsp"%>
 	<div class="container mt-5">
 		<h1 class="text-center">Pago de Préstamos</h1>
-
-		<!-- TRAEMOS DESDE EL SERVLET LOS PRESTAMOS Y LA CUOTAS DEL METODO DOGET -->
-		<!-- 
-					Prestamo prestamo = (Prestamo) request.getAttribute("prestamo") 
-			    	List<Cuota> cuotas = (List<Cuota>) request.getAttribute("cuotas")	
-				 -->
+		
+		<!--  TRAER LISTA DE CUOTAS -->
+		<%
+            List<Cuota> cuota = (List<Cuota>) request.getAttribute("listaCuotas");
+			
+            if (cuota == null || cuota.isEmpty()) {
+        %>
+            <p></p>
+        <% }else{ %>     
+        
+            <p></p>
+            
+        <% } %>    
+		<!--  TRAIGO CLIENTE -->
+		<%
+            Cliente cliente= (Cliente) request.getAttribute("cliente");
+            if (cliente == null) {
+        %>
+            <p></p>
+            
+        <% }else{ %>     
+        
+            <p></p>
+            
+        <% } %>    	
+        <!--  TRAIGO CUENTA -->
+        <%
+            List<Cuenta> listaCuenta = (List<Cuenta>) request.getAttribute("listaCuentas");
+            if (listaCuenta == null || listaCuenta.isEmpty()) {
+        %>
+            <p></p>
+        <% }else{ %>     
+        
+            <p></p>
+            
+        <% } %>    
+        <% 
+        	Prestamo prestamo = (Prestamo) request.getAttribute("prestamo"); 
+        %>
+		
 
 		<!-- NOMBRE DE RECEPCION DE CLIENTE -->
 		<div class="alert alert-secondary mt-4" role="alert">
-			<strong>CLIENTE:</strong> MARIA LAURA
+			<strong>CLIENTE:</strong> <%= cliente.getApellido() +" "+ cliente.getNombre() %>
 		</div>
+		
+		<div class="form-group mt-4">
+    		<label for="cuentas">Cuenta a Debitar:</label>
+    			<select class="form-control" id="cuentas" name="cuentaId" onchange="actualizarSaldo()">
+        			<option value="" disabled selected>Selecciona una Cuenta</option>
+        		
+        		<% 
+            		if (listaCuenta != null && !listaCuenta.isEmpty()) {
+              			 for (Cuenta cuenta : listaCuenta) {
+       			 %>
+         			   <option value="<%= cuenta.getId() %>" data-saldo="<%= cuenta.getSaldo() %>">
+                			<%= cuenta.getTipoCuenta().getNombre() %> - 
+                			<%= cuenta.getNumeroCuenta() %>                			 
+            		   </option>
+        		<% 
+               		 	}
+            		} 
+       			 %>
+   				 </select>
+		</div>
+		
 		<!-- INFORME ESTADO DE CUENTA QUE TIENE EL PRESTAMO -->
 		<div class="alert alert-info mt-4" role="alert">
-			<strong>Saldo Disponible en Cuenta:</strong> $<span
-				id="saldoDisponible">12,000.00</span>
+			<strong>Saldo Disponible en Cuenta:</strong> <span id="saldoDisponible"></span>
 		</div>
 
 		<h2 class="mt-4">Detalles del Prestamo</h2>
@@ -53,71 +119,72 @@
 				<table id="tabla-cuotas" class="table table-striped table-bordered">
 					<thead class="thead-dark">
 						<tr>
-							<th>Numero de Cuota</th>
-							<th>Fecha Solicitud</th>
-							<th>Monto</th>
-							<th>Pagar</th>
+							<th scope="col" class="text-center" width="100">Numero de Cuota</th>
+							<th scope="col" class="text-center" width="100">Fecha Vencimiento</th>
+							<th scope="col" class="text-center" width="100">Monto</th>
+							<th scope="col" class="text-center" width="100">Estado</th>
+							<th scope="col" class="text-center" width="100">Pagar</th>
 						</tr>
 					</thead>
 					<tbody>
-						<!-- ACA TRAEMOS CON UN FOR LA INFO DESDE EL DOGET PARA PONER EN LA TABLA
-							EJ: 
-							List<Cuota> cuotas = (List<Cuota>) request.getAttribute("cuotas"); // CAMBIO: Se obtiene la lista de cuotas
-							for (Cuota cuota : cuotas) {
-								String nroCuota = cuota.getNroCuota();
-								String fechaVenc = cuota.getFechaVencimiento();
-								double importeMensual = prestamo.getImporteMensual();						
-						 -->
+						<%
+						
+							//LISTAS DE CUOTAS QUE SE RECIBEN
+							if(cuota != null){
+							for(Cuota c : cuota) {
+						
+						
+						%>
 
 						<tr>
 
-							<td>1</td>
-							<td>2024-2-01</td>
-							<td>$1,000.00</td>
-
-							<td><input type="checkbox" name="cuotas" value="1">
+							<td class="text-center"><%= c.getNumeroCuota() %></td>
+							<td class="text-center"><%= c.getFechaPago() %></td>
+							<td class="text-center">$ <%= c.getMontoPagado() %></td>
+							<td class="text-center 
+   								 <% if (c.getEstadoPago()) { %> text-bg-secondary 
+    							 <% } else { %> text-bg-danger 
+                                 <% } %>">
+                                 <%= c.getEstadoPago() ? "Pagado" : "Sin pagar" %>
+							</td>
+							<td class="text-center">
+								<input type="radio" name="cuotas" value="<%= c.getNumeroCuota() %>"
+								<% if (c.getEstadoPago()) { %> disabled <% } %>>
 							</td>
 						</tr>
-						<tr>
-							<td>2</td>
-							<td>2023-06-01</td>
-							<td>$4,000.00</td>
-							<td><input type="checkbox" name="cuotas" value="2">
-							</td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>2023-06-01</td>
-							<td>$4,000.00</td>
-							<td><input type="checkbox" name="cuotas" value="2">
-							</td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>2023-06-01</td>
-							<td>$4,000.00</td>
-							<td><input type="checkbox" name="cuotas" value="2">
-							</td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>2023-06-01</td>
-							<td>$4,000.00</td>
-							<td><input type="checkbox" name="cuotas" value="2">
-							</td>
-						</tr>
+						<%
+							}
+            			}
+						
+						%>
 						<!-- } CERRAMOS EL FOR -->
 					</tbody>
 				</table>
 			</fieldset>
-			<div class="mt-3">
-				<input class="btn btn-success" type="submit"
-					value="Pagar Seleccionadas">
-				<a href="Prestamo.jsp" class="btn btn-secondary">Volver</a>
+
+            <div class="mt-3 row">
+    			<div class="col-auto">
+       				 <!-- BOTON PARA PAGAR TODAS -->
+       				<input type="hidden" name="idPrestamo" value="<%= prestamo.getId() %>">
+        			<button class="btn btn-primary" type="submit" name="accion" value="pagarTodas">Pagar Todas</button>
+    			</div>
+    			
+    			<div class="col-auto">
+        			<!-- BOTON PARA PAGAR CUOTA SELECCIONADA -->
+        			<button class="btn btn-success" type="submit" name="accion" value="pagarCuotaSeleccionada">Pagar Cuota Seleccionada</button>
+   			    </div>
+   			    
+					<!-- BOTON PARA PAGAR VOLVER -->            
+   			    <div class="col-auto">
+   			    	<a href="PrestamosServlet?id=<%=prestamo.getId()%>" class="btn btn-secondary">Volver</a>
+           		</div>
 			</div>
+              
 		</form>
 	</div>
 	<%@ include file="Footer.jsp"%>
+	
+	
 	<script type="text/javascript">
 		let table = new DataTable(
 				'#tabla-cuotas',
@@ -127,7 +194,21 @@
 					}
 				});
 	</script>
+	<!--  SCRIP PARA CALCULAR EL SALDO EN CUENTA DE MANERA DINAMICA  -->
+	<script type="text/javascript">
+	
+    function actualizarSaldo() {
+        ///OBTERNGO EL VALOR DE LA CUENTA.
+        var cuentaSeleccionada = document.getElementById('cuentas').value;
 
+        //OBTENGO LA OPCION DE LA CUENTA SELECCIONADA
+        var option = document.querySelector('#cuentas option[value="' + cuentaSeleccionada + '"]');
+        var saldo = option ? option.getAttribute('data-saldo') : 0;
+
+        //ACTUALIZO DE MANERA DINAMICA
+        document.getElementById('saldoDisponible').textContent = '$' + saldo;
+    }
+</script>
 
 </body>
 </html>

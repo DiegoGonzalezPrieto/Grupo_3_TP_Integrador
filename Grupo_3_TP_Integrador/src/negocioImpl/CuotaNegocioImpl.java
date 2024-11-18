@@ -9,9 +9,15 @@ import java.util.Calendar;
 
 import dao.CuotaDao;
 import daoImpl.CuotaDaoImp;
+import dominio.Cuenta;
 import dominio.Cuota;
+import dominio.Movimiento;
+import negocio.CuentaNegocio;
 import negocio.CuotaNegocio;
+import negocio.MovimientoNegocio;
+import negocio.TipoMovimientoNegocio;
 import dominio.Prestamo;
+import dominio.TipoMovimiento;
 
 public class CuotaNegocioImpl implements CuotaNegocio {
 	
@@ -28,16 +34,16 @@ public class CuotaNegocioImpl implements CuotaNegocio {
 		try {
 			
 			boolean cuotasGeneradas = false;
+			Calendar calendar = Calendar.getInstance();
+			///calendar.setTime(prestamo.getFechaAltaPrestamo());
 			for(int i = 1; i <= prestamo.getCuotas(); i++) {
 				
 				cuota.setPrestamo(prestamo);
 				cuota.setNumeroCuota(i);
 				cuota.setMontoPagado(prestamo.getImporteMensual());
 
-				//FECHA CASTEADA A 1900-1-1.
-				Calendar C  = Calendar.getInstance();
-				C.set(1900, Calendar.JANUARY, 1);
-				cuota.setFechaPago(new java.sql.Date(C.getTimeInMillis()));
+				calendar.add(Calendar.MONTH, 1);
+				cuota.setFechaPago(new java.sql.Date(calendar.getTimeInMillis()));
 				
 										
 				cuotaDao.insert(cuota);
@@ -55,11 +61,65 @@ public class CuotaNegocioImpl implements CuotaNegocio {
 			throw ex;
 		}	}
 
+	
 	@Override
 	public boolean registrarPago(int idCuenta, Cuota cuota) throws Exception, SQLException {
 		
+		Cuenta cuenta = new Cuenta();
+		CuentaNegocio cNeg = new CuentaNegocioImpl();
 		
-		return false;
+		Movimiento movimientoNuevo = null;
+		MovimientoNegocio mNeg = new MovimientoNegocioImpl();
+		
+		TipoMovimiento tipoMovimiento;
+		TipoMovimientoNegocio tmNeg = new TipoMovimientoNegocioImpl();
+		
+		try {
+			
+			boolean cuotaPagada = false;
+				
+			//SETEA LA CUENTA COMO PAGA 
+			cuotaPagada = cuotaDao.registrarPago(cuota.getId(), 1);
+			
+			
+			if(cuotaPagada) {
+				//DESCONTAMOS SALDO A LA CUENTA
+				cuenta.setSaldo(cuenta.getSaldo().subtract(cuota.getMontoPagado()));
+				
+				//ACTUALIZAMOS LA CUENTA 
+				boolean cuentaActualizada=cNeg.actualizarCuenta(cuenta);
+				
+				if(cuentaActualizada) {
+						
+					//REGISTRA EL MOVIMIENTO EN BD
+					cuenta = cNeg.obtenerCuentaPorId(idCuenta);
+					tipoMovimiento = tmNeg.buscarPorId(2);
+					
+					long tiempoActual = System.currentTimeMillis();
+					Date fechaActual = new Date(tiempoActual);
+					
+					
+					movimientoNuevo.setCuenta(cuenta);
+					movimientoNuevo.setTipo(tipoMovimiento);
+					movimientoNuevo.setFecha(fechaActual);
+					movimientoNuevo.setConcepto("Pago Cuota");
+					movimientoNuevo.setMonto(cuota.getMontoPagado());
+					
+					mNeg.insert(movimientoNuevo);
+					
+				}else {throw new SQLException("no se actualizo la cuenta");}
+				
+			}else {throw new SQLException("no se registro el pago");}
+			
+			return cuotaPagada;
+		}
+		catch (SQLException ex) {
+			throw ex;
+		}
+		catch (Exception ex) {
+			throw ex;
+		}	
+		
 	}
 	
 	
