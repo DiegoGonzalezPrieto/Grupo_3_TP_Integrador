@@ -4,10 +4,10 @@
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html >
 <%
-   if(request.getAttribute("listaPrestamos") == null) {
-       response.sendRedirect("AutorizacionPrestamoServlet");
-       return;
-   }
+	if (request.getAttribute("listaPrestamos") == null) {
+		response.sendRedirect("AutorizacionPrestamoServlet");
+		return;
+	}
 %>
 <html>
 <head>
@@ -34,38 +34,61 @@
 <body>
 	<%@ include file="BarraMenu.jsp"%>
 	<div class="container">
-		<h1 class="display-3">Autorización de Préstamos</h1>		
-       	
-       	<!-- MOSTRAR MENSAJE DE EXITO DESPUES DE LA OPERACION -->
-       	<% 
-       		String mensajeExito = (String) request.getAttribute("mensajeExito"); 
-        	if (mensajeExito != null) {
-   		 %>
-        	<div class="alert alert-success alert-dismissible fade show" role="alert">
-            	<%= mensajeExito %>
-           		 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-       		</div>
-    	<% 
-       		 }
-  	     %>
-		
+		<h1 class="display-3">Autorización de Préstamos</h1>
+
+		<!-- MOSTRAR MENSAJE DE EXITO DESPUES DE LA OPERACION -->
+		<%
+			String mensajeExito = (String) request.getAttribute("mensajeExito");
+			if (mensajeExito != null) {
+		%>
+		<div class="alert alert-success alert-dismissible fade show"
+			role="alert">
+			<%=mensajeExito%>
+			<button type="button" class="btn-close" data-bs-dismiss="alert"
+				aria-label="Close"></button>
+		</div>
+		<%
+			}
+		%>
+
 		<!--  TRAER LISTA DE PRESTAMOS -->
 		<%
-            List<Prestamo> prestamos = (List<Prestamo>) request.getAttribute("listaPrestamos");
-            if (prestamos == null || prestamos.isEmpty()) {
-        %>
-            <p></p>
-            
-        <% }else{ %>     
-        
-            <p></p>
-            
-        <% } %>    
-       
-       
-       
-       
-       
+			List<Prestamo> prestamos = (List<Prestamo>) request.getAttribute("listaPrestamos");
+			if (prestamos == null || prestamos.isEmpty()) {
+		%>
+		<p></p>
+
+		<%
+			} else {
+		%>
+
+		<p></p>
+
+		<%
+			}
+		%>
+
+
+
+		<div class="row align-items-center">
+			<div class="col d-flex justify-content-end">
+				<table class="inputs">
+					<tbody>
+						<tr>
+							<td>Cantidad de cuotas mínima:</td>
+							<td><input type="number" id="minCuotas" name="minCuotas"></td>
+						</tr>
+						<tr>
+							<td>Cantidad de cuotas máxima:</td>
+							<td><input type="number" id="maxCuotas" name="maxCuotas"></td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+
+		</div>
+
 		<table id="tabla-prestamos" class="table table-striped">
 			<thead>
 				<tr>
@@ -80,55 +103,55 @@
 				</tr>
 			</thead>
 			<tbody>
-					<!-- OBTENGO LA LISTA DEL SERVLET  -->	
-					<%
-						
-						if(prestamos != null){
-							for(Prestamo p : prestamos) {	
-								
-					%>
-					
-				<tr>	
-					<td class="text-center"><%=p.getCliente().getNombre() %></td>
-					<td class="text-center"><%=p.getCliente().getApellido() %></td>
-					<td class="text-center"><%=p.getCuenta().getNumeroCuenta() %></td>
-					<td class="text-center">$ <%=p.getImportePrestamo() %></td>
-					<td class="text-center"><%=p.getFechaAltaPrestamo() %></td>
-					<td class="text-center"><%=p.getCuotas() %></td>
-					<td class="text-center <%if (p.getEstadoValidacion().getNombre().equals("Pendiente")) { %> text-bg-secondary 
-					<% } else if (p.getEstadoValidacion().getNombre().equals("Autorizado")){ %>text-bg-success
-					<% } else if (p.getEstadoValidacion().getNombre().equals("Rechazado")){ %>text-bg-danger<% } %>">
-					
-					<%= p.getEstadoValidacion().getNombre() %>
-					
-					</td>
-					<td class ="d-flex justify-content-center">
-						
-						<% if (p.getEstadoValidacion().getNombre().equals("Pendiente")){ %>
-						
-						<form action="AutorizacionPrestamoServlet" method="post" onsubmit="return confirm('¿Está seguro de que desea Autorizar el préstamo?')">
-							<input type="hidden" name="id" value="<%= p.getId() %>" />
-							<input type="hidden" name="accion" value="Aprobar" />
-							<button type="submit" class="btn btn-outline-success btn-sm me-2">Aprobar</button>
-						</form>
-						
-						<!-- Formulario para rechazar el préstamo -->
-						<form action="AutorizacionPrestamoServlet" method="post" onsubmit="return confirm('¿Está seguro de que desea Rechazar el préstamo?')">
-							<input type="hidden" name="id" value="<%= p.getId() %>" />
-							<input type="hidden" name="accion" value="Rechazar" />
-							<button type="submit" class="btn btn-outline-danger btn-sm me-2">Rechazar</button>
-						</form>						
-						
-						<%} else { %>
-							<span>-</span>	
-						<%} %>								
-					</td>
-				</tr>	
+				<!-- OBTENGO LA LISTA DEL SERVLET  -->
 				<%
-							}
-						}
+					if (prestamos != null) {
+						for (Prestamo p : prestamos) {
 				%>
-								
+
+				<tr>
+					<td class="text-center"><%=p.getCliente().getNombre()%></td>
+					<td class="text-center"><%=p.getCliente().getApellido()%></td>
+					<td class="text-center"><%=p.getCuenta().getNumeroCuenta()%></td>
+					<td class="text-center">$ <%=p.getImportePrestamo()%></td>
+					<td class="text-center"><%=p.getFechaAltaPrestamo()%></td>
+					<td class="text-center"><%=p.getCuotas()%></td>
+					<td
+						class="text-center <%if (p.getEstadoValidacion().getNombre().equals("Pendiente")) {%> text-bg-secondary 
+					<%} else if (p.getEstadoValidacion().getNombre().equals("Autorizado")) {%>text-bg-success
+					<%} else if (p.getEstadoValidacion().getNombre().equals("Rechazado")) {%>text-bg-danger<%}%>">
+
+						<%=p.getEstadoValidacion().getNombre()%>
+
+					</td>
+					<td class="d-flex justify-content-center">
+						<%
+							if (p.getEstadoValidacion().getNombre().equals("Pendiente")) {
+						%>
+
+						<form action="AutorizacionPrestamoServlet" method="post"
+							onsubmit="return confirm('¿Está seguro de que desea Autorizar el préstamo?')">
+							<input type="hidden" name="id" value="<%=p.getId()%>" /> <input
+								type="hidden" name="accion" value="Aprobar" />
+							<button type="submit" class="btn btn-outline-success btn-sm me-2">Aprobar</button>
+						</form> <!-- Formulario para rechazar el préstamo -->
+						<form action="AutorizacionPrestamoServlet" method="post"
+							onsubmit="return confirm('¿Está seguro de que desea Rechazar el préstamo?')">
+							<input type="hidden" name="id" value="<%=p.getId()%>" /> <input
+								type="hidden" name="accion" value="Rechazar" />
+							<button type="submit" class="btn btn-outline-danger btn-sm me-2">Rechazar</button>
+						</form> <%
+ 	} else {
+ %> <span>-</span> <%
+ 	}
+ %>
+					</td>
+				</tr>
+				<%
+					}
+					}
+				%>
+
 			</tbody>
 		</table>
 	</div>
@@ -141,6 +164,28 @@
 						url : 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
 					}
 				});
+
+		// Filtros por cantidad de cuotas mayor y menor
+		table.search.fixed('saldo', function(searchStr, data, index) {
+			var min = parseInt(minCuotas.value, 10);
+			var max = parseInt(maxCuotas.value, 10);
+			var cuotas = parseInt(data[5]) || 0;
+
+			if ((isNaN(min) && isNaN(max)) || (isNaN(min) && cuotas <= max)
+					|| (min <= cuotas && isNaN(max))
+					|| (min <= cuotas && cuotas <= max)) {
+				return true;
+			}
+
+			return false;
+		});
+
+		minCuotas.addEventListener('input', function() {
+			table.draw();
+		});
+		maxCuotas.addEventListener('input', function() {
+			table.draw();
+		});
 	</script>
 
 </body>
