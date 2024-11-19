@@ -25,8 +25,8 @@ public class AdministracionClientesServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 
-	ClienteNegocio negoCli = new ClienteNegocioImpl();
-	ClienteDao daoCliente = new ClienteDaoImpl();
+	ClienteNegocioImpl negoCli = new ClienteNegocioImpl();
+	
 	public AdministracionClientesServlet() {
 		super();
 	
@@ -35,8 +35,8 @@ public class AdministracionClientesServlet extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-		ClienteNegocioImpl cliente = new ClienteNegocioImpl();
-		List<Cliente> listaClientes = cliente.listarActivos();
+		
+		List<Cliente> listaClientes = negoCli.listarActivos();
 
 		
 		request.setAttribute("listaClientes", listaClientes);
@@ -47,7 +47,7 @@ public class AdministracionClientesServlet extends HttpServlet {
 
     private void verCliente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int clienteId = Integer.parseInt(request.getParameter("id"));
-        Cliente cliente = daoCliente.encontrarPorId(clienteId);
+        Cliente cliente = negoCli.buscarPorId(clienteId);
         request.setAttribute("cliente", cliente);
         RequestDispatcher rd = request.getRequestDispatcher("/GestionDatos.jsp");
         rd.forward(request, response);
@@ -55,7 +55,7 @@ public class AdministracionClientesServlet extends HttpServlet {
 
     private void editarCliente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int clienteId = Integer.parseInt(request.getParameter("id"));
-        Cliente cliente = daoCliente.encontrarPorId(clienteId);
+        Cliente cliente = negoCli.buscarPorId(clienteId);
         request.setAttribute("cliente", cliente);
         request.setAttribute("accion", "editar");
         RequestDispatcher rd = request.getRequestDispatcher("/GestionDatos.jsp");
@@ -69,7 +69,7 @@ public class AdministracionClientesServlet extends HttpServlet {
     }
 
     private void listarClientes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ArrayList<Cliente> listadoClientes = daoCliente.buscarTodos();
+        ArrayList<Cliente> listadoClientes = negoCli.listarTodos();
         request.setAttribute("listaC", listadoClientes);
         RequestDispatcher rd = request.getRequestDispatcher("/AdministracionClientes.jsp");
         rd.forward(request, response);
