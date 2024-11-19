@@ -253,7 +253,7 @@ public class ClienteDaoImpl implements ClienteDao {
 		}
 
 		String select = "Select	 C.id_cliente as id_cliente, C.id_usuario as id_usuario,   C.dni as dni,   C.cuil as cuil,    C.nombre as nombre,"
-				+ "    C.apellido as apellido ,    C.email as email,    C.telefono as telefono ,     C.genero as género ,"
+				+ "    C.apellido as apellido ,    C.email as email,    C.telefono as telefono ,     C.genero as genero ,"
 				+ "    C.fecha_nacimiento as fecha_nacimiento ,     C.direccion as direccion , 	 C.id_localidad as id_localidad,     C.id_nacionalidad as id_nacionalidad,"
 				+ "    C.id_provincia as id_provincia     from clientes C";
 
