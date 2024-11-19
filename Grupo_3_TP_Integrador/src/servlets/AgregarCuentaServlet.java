@@ -28,9 +28,6 @@ import negocioImpl.MovimientoNegocioImpl;
 import negocioImpl.TipoCuentaNegocioImpl;
 import negocioImpl.TipoMovimientoNegocioImpl;
 
-/**
- * Servlet implementation class AgregarCuentaServlet
- */
 @WebServlet("/AgregarCuentaServlet")
 public class AgregarCuentaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -41,9 +38,6 @@ public class AgregarCuentaServlet extends HttpServlet {
         negocioCuentas = new CuentaNegocioImpl();
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ClienteNegocioImpl clientes = new ClienteNegocioImpl();
         TipoCuentaNegocioImpl tiposCuenta = new TipoCuentaNegocioImpl();
@@ -59,7 +53,6 @@ public class AgregarCuentaServlet extends HttpServlet {
         BigInteger nuevoCBUNumero = cbuActual.add(BigInteger.ONE);
         String nuevoCBU = String.format("%022d", nuevoCBUNumero);
         
-
         request.setAttribute("listaClientes", listaClientes);
         request.setAttribute("listaTiposCuenta", listaTiposCuenta);
         request.setAttribute("nuevaCuenta", nuevoNumeroCuenta);
@@ -69,25 +62,20 @@ public class AgregarCuentaServlet extends HttpServlet {
         dispatcher.forward(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<Cuenta> listaCuentas = new ArrayList<Cuenta>();
 		Cuenta aRegistrar = null;
+		
 		try {
-			
-	        int idCliente = Integer.parseInt(request.getParameter("cliente"));
+			int idCliente = Integer.parseInt(request.getParameter("cliente"));
 	        int idTipoCuenta = Integer.parseInt(request.getParameter("tipoCuenta"));
 	        Long numeroCuenta = Long.parseLong(request.getParameter("numeroCuenta"));
-	        String cbu = request.getParameter("cbu");
-	        
-	        Cuenta cuenta = new Cuenta();
-	        
+	        String cbu = request.getParameter("cbu");	        
+	        Cuenta cuenta = new Cuenta();	        
 	        Cliente cliente = new Cliente();
+	        
 	        cliente.setIdCliente(idCliente);
 	        cuenta.setCliente(cliente);
-	        
 	        TipoCuenta tipoCuenta = new TipoCuenta();
 	        tipoCuenta.setId(idTipoCuenta);
 	        cuenta.setTipoCuenta(tipoCuenta);
@@ -95,13 +83,11 @@ public class AgregarCuentaServlet extends HttpServlet {
 	        cuenta.setNumeroCuenta(numeroCuenta);
 	        cuenta.setCbu(cbu);
 	        
-	        if(negocioCuentas.crearCuenta(cuenta)) {
-	        	//Agrego el registro del movimiento
+	        if(negocioCuentas.crearCuenta(cuenta)) {	      	
 	        	listaCuentas = negocioCuentas.listarActivasPorCliente(cliente.getIdCliente());
 	        	aRegistrar = listaCuentas.get(listaCuentas.size() - 1);
 	        	generarMovimiento(aRegistrar);
-	        			
-	        	//----------------------------------
+
 	            request.setAttribute("mensaje", "Cuenta creada exitosamente");
 	            request.setAttribute("tipoMensaje", "success");
 	        } else {
@@ -113,19 +99,12 @@ public class AgregarCuentaServlet extends HttpServlet {
 	        request.setAttribute("tipoMensaje", "danger");
 	        e.printStackTrace();
 	    }
-		
-		
-			
-		
-		
-          
+		   
         RequestDispatcher dispatcher = request.getRequestDispatcher("/AdministracionCuentasServlet");
         dispatcher.forward(request, response);
     }
 	
-	private void generarMovimiento(Cuenta cuenta) {
-		
-		
+	private void generarMovimiento(Cuenta cuenta) {	
 		MovimientoNegocioImpl negoMovimiento = new MovimientoNegocioImpl();
 		TipoMovimientoNegocioImpl negoTipo = new TipoMovimientoNegocioImpl();
 		TipoMovimiento tipo = negoTipo.buscarPorId(1);
@@ -135,14 +114,14 @@ public class AgregarCuentaServlet extends HttpServlet {
 												tipo,
 												Date.valueOf(LocalDate.now()),
 												"Alta de cuentas",
-												new BigDecimal(10000)
+												//new BigDecimal(10000)
 												//Si la cuenta es nueva solo se va a crear con 10000 que 
 												//tiene en el constructor de la clase por lo que si eso cambia acá tambien.
-												//cuenta.getSaldo()
+												cuenta.getSaldo()
 												
 				);
 		negoMovimiento.insert(movimiento);
-		System.out.println(movimiento.toString());
+		
 		
 		
 	}
