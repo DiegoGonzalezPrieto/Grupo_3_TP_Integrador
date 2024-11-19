@@ -39,7 +39,16 @@
 	<%@ include file="BarraMenu.jsp"%>
 	<div class="container mt-5">
 		<h1 class="text-center">Pago de Préstamos</h1>
-		
+		<%
+   			 String mensajeExito = (String) request.getAttribute("mensajeExito");
+    		if (mensajeExito != null && !mensajeExito.isEmpty()) {
+		%>
+        	<div class="alert alert-success mt-4" role="alert">
+            	<strong>¡Éxito!</strong> <%= mensajeExito %>
+        	</div>
+		<%
+    		}
+		%>
 		<!--  TRAER LISTA DE CUOTAS -->
 		<%
             List<Cuota> cuota = (List<Cuota>) request.getAttribute("listaCuotas");
@@ -85,35 +94,35 @@
 			<strong>CLIENTE:</strong> <%= cliente.getApellido() +" "+ cliente.getNombre() %>
 		</div>
 		
-		<div class="form-group mt-4">
-    		<label for="cuentas">Cuenta a Debitar:</label>
-    			<select class="form-control" id="cuentas" name="cuentaId" onchange="actualizarSaldo()">
-        			<option value="" disabled selected>Selecciona una Cuenta</option>
-        		
-        		<% 
-            		if (listaCuenta != null && !listaCuenta.isEmpty()) {
-              			 for (Cuenta cuenta : listaCuenta) {
-       			 %>
-         			   <option value="<%= cuenta.getId() %>" data-saldo="<%= cuenta.getSaldo() %>">
-                			<%= cuenta.getTipoCuenta().getNombre() %> - 
-                			<%= cuenta.getNumeroCuenta() %>                			 
-            		   </option>
-        		<% 
-               		 	}
-            		} 
-       			 %>
-   				 </select>
-		</div>
-		
-		<!-- INFORME ESTADO DE CUENTA QUE TIENE EL PRESTAMO -->
-		<div class="alert alert-info mt-4" role="alert">
-			<strong>Saldo Disponible en Cuenta:</strong> <span id="saldoDisponible"></span>
-		</div>
-
 		<h2 class="mt-4">Detalles del Prestamo</h2>
-		<form action="ProcesarPagoServlet" method="post">
-			<input type="hidden" name="idPrestamo"
-				value="metodo para traer el id de Prestamo">
+		
+		<form action="PagoPrestamoServlet" method="post">
+				
+				<div class="form-group mt-4">
+		    		<label for="cuentas">Cuenta a Debitar:</label>
+		    			<select class="form-control" id="Cuentas" name="cuentas" onchange="actualizarSaldo()">
+		        			<option value="" disabled selected>Selecciona una Cuenta</option>
+		        		
+		        		<% 
+		            		if (listaCuenta != null && !listaCuenta.isEmpty()) {
+		              			 for (Cuenta cuenta : listaCuenta) {
+		       			 %>
+		         			   <option value="<%= cuenta.getId() %>" data-saldo="<%= cuenta.getSaldo() %>">
+		                			<%= cuenta.getTipoCuenta().getNombre() %> - 
+		                			<%= cuenta.getNumeroCuenta() %>                			 
+		            		   </option>
+		        		<% 
+		               		 	}
+		            		} 
+		       			 %>
+		   				 </select>
+				</div>
+				
+				<!-- INFORME ESTADO DE CUENTA QUE TIENE EL PRESTAMO -->
+				<div class="alert alert-info mt-4" role="alert">
+					<strong>Saldo Disponible en Cuenta:</strong> <span id="saldoDisponible"></span>
+				</div>
+			
 			<fieldset class="border p-3">
 				<legend class="w-auto">Cuota a Pagar</legend>
 				<table id="tabla-cuotas" class="table table-striped table-bordered">
@@ -148,7 +157,7 @@
                                  <%= c.getEstadoPago() ? "Pagado" : "Sin pagar" %>
 							</td>
 							<td class="text-center">
-								<input type="radio" name="cuotas" value="<%= c.getNumeroCuota() %>"
+								<input type="radio" name="cuotas" value="<%= c.getId() %>"
 								<% if (c.getEstadoPago()) { %> disabled <% } %>>
 							</td>
 						</tr>
@@ -157,7 +166,7 @@
             			}
 						
 						%>
-						<!-- } CERRAMOS EL FOR -->
+						
 					</tbody>
 				</table>
 			</fieldset>
@@ -196,19 +205,28 @@
 	</script>
 	<!--  SCRIP PARA CALCULAR EL SALDO EN CUENTA DE MANERA DINAMICA  -->
 	<script type="text/javascript">
-	
-    function actualizarSaldo() {
-        ///OBTERNGO EL VALOR DE LA CUENTA.
-        var cuentaSeleccionada = document.getElementById('cuentas').value;
+    document.addEventListener('DOMContentLoaded', function () {
+        
+        function actualizarSaldo() {
+            var cuentaSeleccionada = document.getElementById('Cuentas').value;
 
-        //OBTENGO LA OPCION DE LA CUENTA SELECCIONADA
-        var option = document.querySelector('#cuentas option[value="' + cuentaSeleccionada + '"]');
-        var saldo = option ? option.getAttribute('data-saldo') : 0;
+            /// SINO SELECCIONA CUENTA, SETEA EL SALDO EN 0
+            if (!cuentaSeleccionada) {
+                document.getElementById('saldoDisponible').textContent = '$0';
+                return;
+            }
 
-        //ACTUALIZO DE MANERA DINAMICA
-        document.getElementById('saldoDisponible').textContent = '$' + saldo;
-    }
+            // OBTIENE SELECCION Y SALDO.
+            var option = document.querySelector('#Cuentas option[value="' + cuentaSeleccionada + '"]');
+            var saldo = option ? option.getAttribute('data-saldo') : 0;
+
+            // ACTUALIZA EL TEXXTO
+            document.getElementById('saldoDisponible').textContent = '$' + saldo;
+        }
+
+        // Asignar el evento para actualizar el saldo cuando se cambie la cuenta seleccionada
+        document.getElementById('Cuentas').addEventListener('change', actualizarSaldo);
+    });
 </script>
-
 </body>
 </html>

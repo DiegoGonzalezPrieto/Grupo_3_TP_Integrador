@@ -31,27 +31,28 @@ public class PagoPrestamoServlet extends HttpServlet {
 	//ATRIBUTOS
 	private static final long serialVersionUID = 1L;
 	
-	private ClienteNegocio clNeg;
+	private ClienteNegocio clienteNeg;
 	private Cliente cliente;
 	
-	private CuentaNegocio cNeg;	
+	private CuentaNegocio cuentaNeg;	
+	private Cuenta cuenta;
 	private ArrayList<Cuenta> cuentasCliente;
 	
 	private Prestamo prestamo;
 	private PrestamoNegocio pNeg; 
 	
-	private CuotaNegocio cuNeg;
+	private CuotaNegocio cuotaNeg;
 	private ArrayList<Cuota> cuotasPrestamo;
    
     public PagoPrestamoServlet() {
         super();
-        clNeg = new ClienteNegocioImpl();
-		cNeg = new CuentaNegocioImpl();
+        clienteNeg = new ClienteNegocioImpl();
+		cuentaNeg = new CuentaNegocioImpl();
 		
 		prestamo = new Prestamo();
 		
 		pNeg = new PrestamoNegocioImpl();
-		cuNeg = new CuotaNegocioImpl();
+		cuotaNeg = new CuotaNegocioImpl();
        
     }
 
@@ -68,9 +69,8 @@ public class PagoPrestamoServlet extends HttpServlet {
 			{				
 				prestamo = pNeg.obtenerPrestamoPorId(idPrestamo);
 				idCliente = prestamo.getCliente().getIdCliente();
-				
-				
-				cliente = clNeg.buscarPorId(idCliente);
+							
+				cliente = clienteNeg.buscarPorId(idCliente);
 				request.setAttribute("cliente", cliente);
 				request.setAttribute("prestamo", prestamo);
 			}
@@ -85,7 +85,7 @@ public class PagoPrestamoServlet extends HttpServlet {
 			//CAPTURO LAS CUOTAS POR ID PRESTAMO
 			try {
 				//capturar lista de cuotas por IdPrestamo
-				cuotasPrestamo = cuNeg.listarCuotasPorPrestamo(idPrestamo);
+				cuotasPrestamo = cuotaNeg.listarCuotasPorPrestamo(idPrestamo);
 				request.setAttribute("listaCuotas", cuotasPrestamo);							
 			}
 			catch (SQLException e){
@@ -100,7 +100,7 @@ public class PagoPrestamoServlet extends HttpServlet {
 			try 
 			{			
 				//captura la cuenta del cliente
-				cuentasCliente = (ArrayList<Cuenta>) cNeg.listarPorCliente(cliente.getIdCliente());
+				cuentasCliente = (ArrayList<Cuenta>) cuentaNeg.listarPorCliente(cliente.getIdCliente());
 				request.setAttribute("listaCuentas", cuentasCliente);						
 			}
 			catch (Exception e){
@@ -119,50 +119,73 @@ public class PagoPrestamoServlet extends HttpServlet {
 		
 		String accion = request.getParameter("accion");
 		String idPrestamo = request.getParameter("idPrestamo");
-		int idCuenta = -1;
-		CuotaNegocio cNeg = new CuotaNegocioImpl();
+		String cuentaString = request.getParameter("cuentas");
 		Cuota cuota = new Cuota();
 		
+		if (cuentaString == null || cuentaString.isEmpty()) {
+		    System.out.println("Error: no se seleccionó ninguna cuenta");
+		    request.setAttribute("error", "Debe seleccionar una cuenta");
+		    RequestDispatcher rd = request.getRequestDispatcher("/PagoPrestamo.jsp");
+		    rd.forward(request, response);
+		    return;
+		}	
+			
 		//OBTENGO ID CLIENTE
 		try {
 			
 			prestamo = pNeg.obtenerPrestamoPorId(Integer.parseInt(idPrestamo));
-			idCuenta = prestamo.getCuenta().getId();
+			//Cuenta cuenta = cuNeg.obtenerCuentaPorId(Integer.parseInt(cuentaString));
 			
-		} catch (SQLException e1) {
-			
+			//idCuenta = cuenta.getId();
+						
+		} catch (SQLException e1) {			
 			request.setAttribute("error","No se pudo obtener idCuenta");
 		}
 		
 		
-		if("pagarCuotaSeleccionada".equals(accion)) {
+		if("pagarCuotaSeleccionada".equals(accion)) {			
 			String cuotaSeleccionada = request.getParameter("cuotas");
 			
-			if(cuotaSeleccionada != null && !cuotaSeleccionada.isEmpty() && idCuenta >0) 
+			cuenta = cuentaNeg.obtenerCuentaPorId(Integer.parseInt(request.getParameter("cuentas")));
+						
+			if(cuotaSeleccionada != null && !cuotaSeleccionada.isEmpty()) 
 			{
-				try {
-					cuota= cNeg.obtenerCuotaPorId(Integer.parseInt(cuotaSeleccionada));
-					cNeg.registrarPago(idCuenta, cuota);
+				
+				try {					
+					cuota= cuotaNeg.obtenerCuotaPorId(Integer.parseInt(cuotaSeleccionada));
+					cuotaNeg.registrarPago(cuenta.getId(), cuota);
+					
+					request.setAttribute("mensaje de exito", "Pago Realizado con Exito");
+					response.sendRedirect("PagoPrestamoServlet?id=" + idPrestamo);
+					return;
+					
 				}
 				catch (SQLException e){
 					request.setAttribute("error","No se pudo actualizar la cuotas");
-				} catch (Exception e) {
+				}catch (Exception e) {
 					request.setAttribute("error","Fallo Cuenta CuotaSeleccionada");
 				}
 				
-			}			
-		
+			}
+			
 		}
-		
 		
 		if("pagarTodas".equals(accion)) {
 			
+			cuenta = cuentaNeg.obtenerCuentaPorId(Integer.parseInt(request.getParameter("cuentas")));
+			
 			try {
-				cuotasPrestamo = cNeg.listarCuotasPorPrestamo(Integer.parseInt(idPrestamo));
-				for(Cuota cuota1 : cuotasPrestamo) {
-					
-					cNeg.registrarPago(idCuenta, cuota1);			
+				
+				cuotasPrestamo = cuotaNeg.listarCuotasPorPrestamo(Integer.parseInt(idPrestamo));
+				for(Cuota cuota1 : cuotasPrestamo) {					
+									
+					if(!cuota1.getEstadoPago()) {
+						cuotaNeg.registrarPago(cuenta.getId(), cuota1);							
+					}
 				}
+				request.setAttribute("mensaje de exito", "Pago Realizado con Exito");
+				response.sendRedirect("PagoPrestamoServlet?id=" + idPrestamo);
+	            return;
 			}
 			catch (SQLException e) {
 				request.setAttribute("error","No se pudo actualizar la cuotas");
@@ -171,6 +194,9 @@ public class PagoPrestamoServlet extends HttpServlet {
 			}
 			
 		}
+		
+		
+		
 	}	
-
+		
 }

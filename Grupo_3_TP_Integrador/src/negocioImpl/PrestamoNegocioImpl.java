@@ -4,6 +4,7 @@ package negocioImpl;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import dao.PrestamoDao;
@@ -63,28 +64,20 @@ public class PrestamoNegocioImpl implements PrestamoNegocio {
 							///REGISTRA EL MOVIMIENTO EN BD
 							int idCuenta = prestamo.getCuenta().getId();
 							CuentaNegocio cNeg = new CuentaNegocioImpl();
-							
-							Movimiento movimientoNuevo = null;
+														
 							MovimientoNegocio mNeg = new MovimientoNegocioImpl();
 							
 							TipoMovimiento tipoMovimiento;
 							TipoMovimientoNegocio tmNeg = new TipoMovimientoNegocioImpl();
 							
-							
 							cuenta = cNeg.obtenerCuentaPorId(idCuenta);
 							tipoMovimiento = tmNeg.buscarPorId(3);
 							
-							long tiempoActual = System.currentTimeMillis();
-							Date fechaActual = new Date(tiempoActual);
+							java.util.Date date = new java.util.Date();
+							java.sql.Date hoy = new java.sql.Date(date.getTime());							
 							
-							
-							movimientoNuevo.setCuenta(cuenta);
-							movimientoNuevo.setTipo(tipoMovimiento);
-							movimientoNuevo.setFecha(fechaActual);
-							movimientoNuevo.setConcepto("Acreditacion de Prestamo a Cliente");
-							movimientoNuevo.setMonto(prestamo.getImportePrestamo());
-							
-							mNeg.insert(movimientoNuevo);
+							Movimiento movimientoPrestamo = new Movimiento(0,cuenta,tipoMovimiento,hoy,"Acreditacion de Prestamo",prestamo.getImportePrestamo());
+							mNeg.insert(movimientoPrestamo);
 					 				 
 						}
 						else {throw new SQLException("no se pudo crear el movimiento en la BD");}

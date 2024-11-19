@@ -68,7 +68,6 @@ public class CuotaNegocioImpl implements CuotaNegocio {
 		Cuenta cuenta = new Cuenta();
 		CuentaNegocio cNeg = new CuentaNegocioImpl();
 		
-		Movimiento movimientoNuevo = null;
 		MovimientoNegocio mNeg = new MovimientoNegocioImpl();
 		
 		TipoMovimiento tipoMovimiento;
@@ -77,13 +76,14 @@ public class CuotaNegocioImpl implements CuotaNegocio {
 		try {
 			
 			boolean cuotaPagada = false;
-				
+			
 			//SETEA LA CUENTA COMO PAGA 
 			cuotaPagada = cuotaDao.registrarPago(cuota.getId(), 1);
 			
 			
 			if(cuotaPagada) {
 				//DESCONTAMOS SALDO A LA CUENTA
+				cuenta = cNeg.obtenerCuentaPorId(idCuenta);
 				cuenta.setSaldo(cuenta.getSaldo().subtract(cuota.getMontoPagado()));
 				
 				//ACTUALIZAMOS LA CUENTA 
@@ -92,20 +92,15 @@ public class CuotaNegocioImpl implements CuotaNegocio {
 				if(cuentaActualizada) {
 						
 					//REGISTRA EL MOVIMIENTO EN BD
-					cuenta = cNeg.obtenerCuentaPorId(idCuenta);
 					tipoMovimiento = tmNeg.buscarPorId(2);
+										
+					java.util.Date date = new java.util.Date();
+					java.sql.Date hoy = new java.sql.Date(date.getTime());							
 					
-					long tiempoActual = System.currentTimeMillis();
-					Date fechaActual = new Date(tiempoActual);
+					Movimiento movimientoCuota = new Movimiento(0,cuenta,tipoMovimiento,hoy,"Pago de Cuota",cuota.getMontoPagado());
 					
-					
-					movimientoNuevo.setCuenta(cuenta);
-					movimientoNuevo.setTipo(tipoMovimiento);
-					movimientoNuevo.setFecha(fechaActual);
-					movimientoNuevo.setConcepto("Pago Cuota");
-					movimientoNuevo.setMonto(cuota.getMontoPagado());
-					
-					mNeg.insert(movimientoNuevo);
+										
+					mNeg.insert(movimientoCuota);
 					
 				}else {throw new SQLException("no se actualizo la cuenta");}
 				
