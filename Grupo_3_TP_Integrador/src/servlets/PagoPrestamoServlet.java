@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -95,6 +96,7 @@ public class PagoPrestamoServlet extends HttpServlet {
 		} else {
 			request.setAttribute("error", "No se proporciono un ID");
 		}
+
 		RequestDispatcher rd = request.getRequestDispatcher("/PagoPrestamo.jsp");
 		rd.forward(request, response);
 	}
@@ -128,35 +130,41 @@ public class PagoPrestamoServlet extends HttpServlet {
 			} else if ("pagarTodas".equals(accion)) {
 				cuenta = cuentaNeg.obtenerCuentaPorId(Integer.parseInt(idCuenta));
 				cuotasPrestamo = cuotaNeg.listarCuotasPorPrestamo(Integer.parseInt(idPrestamo));
+				BigDecimal totalAPagar = new BigDecimal(0);
+
 				for (Cuota cuota : cuotasPrestamo) {
-					if (!cuota.getEstadoPago() && (cuenta.getSaldo().compareTo(cuota.getMontoPagado()) >= 0)) {
+					if (!cuota.getEstadoPago())
+						totalAPagar = totalAPagar.add(cuota.getMontoPagado());
+				}
+				if (totalAPagar.compareTo(cuenta.getSaldo()) == 1) {
+					request.setAttribute("mensaje", "No se pudieron realizar todos los pagos. Saldo insuficiente");
+					request.setAttribute("tipoMensaje", "danger");
+				} else {
+					// pagar todas las cuotas
+					for (Cuota cuota : cuotasPrestamo) {
 						try {
 							cuotaNeg.registrarPago(cuenta.getId(), cuota);
-							request.setAttribute("mensaje", "Todos los pagos realizados con éxito");
-							request.setAttribute("tipoMensaje", "success");
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
-					} else {
-						request.setAttribute("mensaje", "No se pudieron realizar todos los pagos. Saldo insuficiente");
-						request.setAttribute("tipoMensaje", "danger");
 					}
+					request.setAttribute("mensaje", "Todos los pagos realizados con éxito");
+					request.setAttribute("tipoMensaje", "success");
 				}
 
+				prestamo = pNeg.obtenerPrestamoPorId(Integer.parseInt(idPrestamo));
+				int idCliente = prestamo.getCliente().getIdCliente();
+				cliente = clienteNeg.buscarPorId(idCliente);
+				request.setAttribute("cliente", cliente);
+				request.setAttribute("prestamo", prestamo);
+
+				cuotasPrestamo = cuotaNeg.listarCuotasPorPrestamo(Integer.parseInt(idPrestamo));
+				request.setAttribute("listaCuotas", cuotasPrestamo);
+
+				cuentasCliente = (ArrayList<Cuenta>) cuentaNeg.listarPorCliente(cliente.getIdCliente());
+				request.setAttribute("listaCuentas", cuentasCliente);
+
 			}
-
-			prestamo = pNeg.obtenerPrestamoPorId(Integer.parseInt(idPrestamo));
-			int idCliente = prestamo.getCliente().getIdCliente();
-			cliente = clienteNeg.buscarPorId(idCliente);
-			request.setAttribute("cliente", cliente);
-			request.setAttribute("prestamo", prestamo);
-
-			cuotasPrestamo = cuotaNeg.listarCuotasPorPrestamo(Integer.parseInt(idPrestamo));
-			request.setAttribute("listaCuotas", cuotasPrestamo);
-
-			cuentasCliente = (ArrayList<Cuenta>) cuentaNeg.listarPorCliente(cliente.getIdCliente());
-			request.setAttribute("listaCuentas", cuentasCliente);
-
 		} catch (Exception e) {
 			request.setAttribute("mensaje", "Error: " + e.getMessage());
 			request.setAttribute("tipoMensaje", "danger");
