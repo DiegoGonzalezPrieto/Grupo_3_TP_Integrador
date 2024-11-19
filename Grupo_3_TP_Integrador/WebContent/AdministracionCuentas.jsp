@@ -53,6 +53,11 @@
 	display: inline-block;
 	width: auto;
 }
+	
+.dataTables_wrapper .dataTables_scrollBody td {
+    text-align: center;
+}
+
 </style>
 
 </head>
@@ -116,10 +121,14 @@
 						</tbody>
 					</table>
 				</div>
-			</div>
+				</div>
+				<div class="col d-flex justify-content-end" style="border-bottom:1px;">
+					<a href="#" id="limpiar-filtros">Limpiar filtros</a>
+				</div>
+			<hr>
 
 
-			<table id="cuentasTable" class="table table-striped table-bordered">
+			<table id="cuentasTable" class="table table-striped table-bordered" data-order='[[3, "asc"]]'>
 				<thead>
 					<tr>
 						<th>ID</th>
@@ -140,7 +149,7 @@
 					%>
 					<tr>
 						<td><%=cuenta.getId()%></td>
-						<td><%=cuenta.getCliente().getNombre() + " " + cuenta.getCliente().getApellido()%></td>
+						<td><%=cuenta.getCliente().getApellido() + ", " + cuenta.getCliente().getNombre()%></td>
 						<td><%=cuenta.getFechaCreacion()%></td>
 						<td><%=cuenta.getTipoCuenta().getNombre()%></td>
 						<td><%=cuenta.getNumeroCuenta()%></td>
@@ -150,10 +159,10 @@
 							$<%=String.format("%,.2f", cuenta.getSaldo())%>
 						</td>
 						<td><a href="ModificarCuentaServlet?id=<%=cuenta.getId()%>"
-							class="btn btn-outline-primary"> <i class="fas fa-edit"></i>
+							class="btn btn-outline-primary" title="Editar cuenta"> <i class="fas fa-edit"></i>
 						</a> <a href="EliminarCuentaServlet?id=<%=cuenta.getId()%>"
 							class="btn btn-outline-danger"
-							onclick="return confirm('¿Seguro que desea eliminar esta cuenta?')">
+							onclick="return confirm('¿Seguro que desea eliminar esta cuenta?')" title="Eliminar cuenta">
 								<i class="fa-regular fa-trash-can"></i>
 						</a></td>
 					</tr>
