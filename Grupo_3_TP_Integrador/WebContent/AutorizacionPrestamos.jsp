@@ -91,11 +91,11 @@
 					<tbody>
 						<tr>
 							<td>Cantidad de cuotas mínima:</td>
-							<td><input type="number" id="minCuotas" name="minCuotas" step="6" max="24"></td>
+							<td><input type="number" id="minCuotas" name="minCuotas" step="6" max="24" min="6"></td>
 						</tr>
 						<tr>
 							<td>Cantidad de cuotas máxima:</td>
-							<td><input type="number" id="maxCuotas" name="maxCuotas" step="6" max="24"></td>
+							<td><input type="number" id="maxCuotas" name="maxCuotas" step="6" max="24" min="6"></td>
 						</tr>
 					</tbody>
 				</table>

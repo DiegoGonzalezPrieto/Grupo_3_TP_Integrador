@@ -57,11 +57,11 @@ li {
 
 		<ul class="nav nav-pills nav-fill m-4">
 			<li class="nav-item mx-2"><a class="nav-link active"
-				href="AutorizacionPrestamos.jsp">Autorización de préstamos</a></li>
+				href="AdministracionClientes.jsp">Administración de clientes</a></li>
 			<li class="nav-item mx-2"><a class="nav-link active"
 				href="AdministracionCuentas.jsp">Administración de cuentas</a></li>
 			<li class="nav-item mx-2"><a class="nav-link active"
-				href="AdministracionClientes.jsp">Administración de clientes</a></li>
+				href="AutorizacionPrestamos.jsp">Autorización de préstamos</a></li>
 			<li class="nav-item mx-2"><a class="nav-link active"
 				href="Reportes.jsp">Reportes</a></li>
 		</ul>

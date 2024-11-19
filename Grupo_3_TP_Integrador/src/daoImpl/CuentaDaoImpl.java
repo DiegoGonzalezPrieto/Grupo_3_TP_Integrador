@@ -362,7 +362,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	                 "FROM cuentas c " +
 	                 "INNER JOIN clientes cl ON c.id_cliente = cl.id_cliente " +
 	                 "INNER JOIN tipos_cuenta tc ON c.id_tipo_cuenta = tc.id_tipo_cuenta " +
-	                 "ORDER BY c.fecha_creacion DESC LIMIT 3";//FLOR dice: Me gustaría que DESC LIMIT sean 5, no 3. Para mostrar en Home-Admin.
+	                 "ORDER BY c.fecha_creacion DESC LIMIT 5";
 	    
 	    try {
 	        Class.forName("com.mysql.jdbc.Driver");
