@@ -36,11 +36,11 @@
 		<%} %>
 		<ul class="nav nav-pills nav-fill m-3">
 			<li class="nav-item mx-2"><a class="nav-link active"
-				href="TransferenciaServlet?cliente=<%=cliente.getIdCliente()%>">Transferencias</a></li>
+				href="Transferencia.jsp">Transferencias</a></li>
 			<li class="nav-item mx-2"><a class="nav-link active"
-				href="Prestamo.jsp">Préstamos</a></li>
+				href="PrestamosServlet?id=<%=cliente.getIdCliente()%>">Préstamos</a></li>
 			<li class="nav-item mx-2"><a class="nav-link active"
-				href="PagoPrestamo.jsp">Pago de Cuotas</a></li>
+				href="PagoPrestamoServlet?id=<%=cliente.getIdCliente()%>">Pago de Cuotas</a></li>
 			<li class="nav-item mx-2"><a class="nav-link active"
 				href="GestionDatosServlet?id=<%=cliente.getIdCliente()%>">Mis Datos</a></li>
 		</ul>

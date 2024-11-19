@@ -13,7 +13,7 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 
 	@Override
 	public void insert(Cliente c) {
-			clienteDao.insert(c);
+		clienteDao.insert(c);
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 	public Cliente buscarPorNombre(String nombre) {
 		return clienteDao.encontrarPorNombre(nombre);
 	}
-	
+
 	public int contarClientesActivos() {
 		return clienteDao.buscarTodosActivos().size();
 	}
@@ -63,7 +63,7 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 
 	public boolean existeDNI(String DNI) {
 		return clienteDao.existeDNI(DNI);
-		
+
 	}
 
 	@Override
@@ -71,7 +71,12 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 		return clienteDao.existeCUIL(CUIL);
 	}
 
-  @Override
+	@Override
+	public boolean cantCoutasImpagas(int id) {
+		return clienteDao.existeCuotasPendientes(id);
+	}
+
+	@Override
 	public int contarTodos() {
 		return clienteDao.contarTodos();
 	}
