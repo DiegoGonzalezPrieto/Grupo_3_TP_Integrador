@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -72,8 +73,9 @@ public class AgregarCuentaServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		List<Cuenta> listaCuentas = new ArrayList<Cuenta>();
+		Cuenta aRegistrar = null;
 		try {
-			
 			
 	        int idCliente = Integer.parseInt(request.getParameter("cliente"));
 	        int idTipoCuenta = Integer.parseInt(request.getParameter("tipoCuenta"));
@@ -94,10 +96,10 @@ public class AgregarCuentaServlet extends HttpServlet {
 	        cuenta.setCbu(cbu);
 	        
 	        if(negocioCuentas.crearCuenta(cuenta)) {
-	        	
 	        	//Agrego el registro del movimiento
-	        	
-	        	generarMovimiento(cuenta);
+	        	listaCuentas = negocioCuentas.listarActivasPorCliente(cliente.getIdCliente());
+	        	aRegistrar = listaCuentas.get(listaCuentas.size() - 1);
+	        	generarMovimiento(aRegistrar);
 	        			
 	        	//----------------------------------
 	            request.setAttribute("mensaje", "Cuenta creada exitosamente");
@@ -111,6 +113,11 @@ public class AgregarCuentaServlet extends HttpServlet {
 	        request.setAttribute("tipoMensaje", "danger");
 	        e.printStackTrace();
 	    }
+		
+		
+			
+		
+		
           
         RequestDispatcher dispatcher = request.getRequestDispatcher("/AdministracionCuentasServlet");
         dispatcher.forward(request, response);
@@ -119,21 +126,23 @@ public class AgregarCuentaServlet extends HttpServlet {
 	private void generarMovimiento(Cuenta cuenta) {
 		
 		
-			MovimientoNegocioImpl negoMovimiento = new MovimientoNegocioImpl();
-			TipoMovimientoNegocioImpl negoTipo = new TipoMovimientoNegocioImpl();
-			TipoMovimiento tipo = negoTipo.buscarPorId(1);
-			Movimiento movimiento = new Movimiento(
-													0,
-													cuenta,
-													tipo,
-													Date.valueOf(LocalDate.now()),
-													"Alta de cuentas",
-													//Si la cuenta es nueva solo se va a crear con 10000 que 
-													//tiene en el constructor de la clase por lo que si eso cambia acá tambien.
-													cuenta.getSaldo()
-												);
-			negoMovimiento.insert(movimiento);
-			System.out.println(movimiento.toString());
+		MovimientoNegocioImpl negoMovimiento = new MovimientoNegocioImpl();
+		TipoMovimientoNegocioImpl negoTipo = new TipoMovimientoNegocioImpl();
+		TipoMovimiento tipo = negoTipo.buscarPorId(1);
+		Movimiento movimiento = new Movimiento(
+												0,
+												cuenta,
+												tipo,
+												Date.valueOf(LocalDate.now()),
+												"Alta de cuentas",
+												new BigDecimal(10000)
+												//Si la cuenta es nueva solo se va a crear con 10000 que 
+												//tiene en el constructor de la clase por lo que si eso cambia acá tambien.
+												//cuenta.getSaldo()
+												
+				);
+		negoMovimiento.insert(movimiento);
+		System.out.println(movimiento.toString());
 		
 		
 	}
