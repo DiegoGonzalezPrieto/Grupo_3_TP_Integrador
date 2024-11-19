@@ -38,17 +38,6 @@
 <body>
 	<%@ include file="BarraMenu.jsp"%>
 	<div class="container mt-5">
-		<h1 class="text-center">Pago de Préstamos</h1>
-		<%
-   			 String mensajeExito = (String) request.getAttribute("mensajeExito");
-    		if (mensajeExito != null && !mensajeExito.isEmpty()) {
-		%>
-        	<div class="alert alert-success mt-4" role="alert">
-            	<strong>¡Éxito!</strong> <%= mensajeExito %>
-        	</div>
-		<%
-    		}
-		%>
 		<!--  TRAER LISTA DE CUOTAS -->
 		<%
             List<Cuota> cuota = (List<Cuota>) request.getAttribute("listaCuotas");
@@ -100,7 +89,7 @@
 				
 				<div class="form-group mt-4">
 		    		<label for="cuentas">Cuenta a Debitar:</label>
-		    			<select class="form-control" id="Cuentas" name="cuentas" onchange="actualizarSaldo()">
+		    			<select class="form-control" id="Cuentas" name="cuentas" onchange="actualizarSaldo()" required>
 		        			<option value="" disabled selected>Selecciona una Cuenta</option>
 		        		
 		        		<% 
@@ -122,7 +111,20 @@
 				<div class="alert alert-info mt-4" role="alert">
 					<strong>Saldo Disponible en Cuenta:</strong> <span id="saldoDisponible"></span>
 				</div>
-			
+			<%
+	   String mensaje = (String) request.getAttribute("mensaje");
+	   String tipoMensaje = (String) request.getAttribute("tipoMensaje");
+	   if(mensaje != null && tipoMensaje != null) {
+	%>
+	   <div class="alert alert-<%=tipoMensaje%> alert-dismissible fade show" role="alert">
+	       <%=mensaje%>
+	       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	           <span aria-hidden="true">&times;</span>
+	       </button>
+	   </div>
+	<%
+	   }
+	%>
 			<fieldset class="border p-3">
 				<legend class="w-auto">Cuota a Pagar</legend>
 				<table id="tabla-cuotas" class="table table-striped table-bordered">
@@ -136,17 +138,12 @@
 						</tr>
 					</thead>
 					<tbody>
-						<%
-						
+						<%					
 							//LISTAS DE CUOTAS QUE SE RECIBEN
 							if(cuota != null){
-							for(Cuota c : cuota) {
-						
-						
+							for(Cuota c : cuota) {	
 						%>
-
 						<tr>
-
 							<td class="text-center"><%= c.getNumeroCuota() %></td>
 							<td class="text-center"><%= c.getFechaPago() %></td>
 							<td class="text-center">$ <%= c.getMontoPagado() %></td>
@@ -158,7 +155,7 @@
 							</td>
 							<td class="text-center">
 								<input type="radio" name="cuotas" value="<%= c.getId() %>"
-								<% if (c.getEstadoPago()) { %> disabled <% } %>>
+								<% if (c.getEstadoPago()) { %> disabled <% } %> required>
 							</td>
 						</tr>
 						<%
@@ -185,7 +182,7 @@
    			    
 					<!-- BOTON PARA PAGAR VOLVER -->            
    			    <div class="col-auto">
-   			    	<a href="PrestamosServlet?id=<%=prestamo.getId()%>" class="btn btn-secondary">Volver</a>
+   			    	<a href="PrestamosServlet?id=<%=prestamo.getCliente().getIdCliente()%>" class="btn btn-secondary">Volver</a>
            		</div>
 			</div>
               
