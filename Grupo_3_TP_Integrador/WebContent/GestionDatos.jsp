@@ -42,6 +42,15 @@
 		<%
 			Cliente cliente = new Cliente();
 			cliente = (Cliente) request.getAttribute("clienteEditar");
+			
+			boolean reintentoCreacion = false;
+			
+			if (cliente == null) {
+				cliente = (Cliente) request.getAttribute("clienteParcial");
+				if (cliente != null)
+					reintentoCreacion = true;
+					
+			}
 
 			ArrayList<Nacionalidad> listaNaciones = null;
 			ArrayList<Localidad> listaLocalidades = null;
@@ -89,7 +98,7 @@
 		<!-- En el JSP: -->
 		<form action="GestionDatosServlet" method="POST" id="form">
 
-		<% if (cliente != null){%>
+		<% if (cliente != null && !reintentoCreacion){%>
 			<input type="hidden" value="<%= cliente.getIdCliente()%>" name="idCliente" id="idCliente">
 		<% } %>
 

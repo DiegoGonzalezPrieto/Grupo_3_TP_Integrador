@@ -184,6 +184,11 @@ public class GestionDatosServlet extends HttpServlet {
 
 	private void validarYCrearCliente(HttpServletRequest request, HttpServletResponse response) {
 		try {
+
+			// Agregado para rellenar el formulario en caso de error de validación al crear
+			Cliente clienteParcial = obtenerCliente(request);
+			request.setAttribute("clienteParcial", clienteParcial);
+
 			String dni = request.getParameter("dni");
 			String cuil = request.getParameter("cuil");
 			String user = request.getParameter("usuario");
@@ -510,6 +515,50 @@ public class GestionDatosServlet extends HttpServlet {
 			request.getRequestDispatcher("/GestionDatos.jsp").forward(request, response);
 			return;
 		}
+
+	}
+
+	private Cliente obtenerCliente(HttpServletRequest request) {
+		request.setAttribute("provincias", daoProvincia.buscarTodos());
+		request.setAttribute("localidades", NegocioLocalidad.buscarTodos());
+		request.setAttribute("naciones", NegocioNacion.buscarTodos());
+		request.setAttribute("nuevo", true);
+
+		Cliente cliente = new Cliente();
+		cliente.setNombreUsuario(request.getParameter("usuario"));
+		cliente.setNombre(request.getParameter("nombre"));
+		cliente.setApellido(request.getParameter("apellido"));
+		cliente.setDni(request.getParameter("dni"));
+		cliente.setCuil(request.getParameter("cuil"));
+		cliente.setCorreoElectronico(request.getParameter("email"));
+		cliente.setTelefono(request.getParameter("telefono"));
+		cliente.setDireccion(request.getParameter("direccion"));
+		cliente.setGenero(request.getParameter("genero"));
+		cliente.setPass(request.getParameter("pass"));
+		String[] fragmentosFecha = request.getParameter("fechaNacimiento").split("-");
+		Date fechaNacimiento = new Date(Integer.parseInt(fragmentosFecha[0]) - 1900,
+				Integer.parseInt(fragmentosFecha[1]) - 1, Integer.parseInt(fragmentosFecha[2]));
+		cliente.setFechaNacimiento(fechaNacimiento);
+
+		String provinciaId = request.getParameter("provincia");
+		if (provinciaId != null && !provinciaId.isEmpty()) {
+			Provincia provincia = daoProvincia.buscarPorId(Integer.parseInt(provinciaId));
+			cliente.setProvincia(provincia);
+		}
+
+		String localidadId = request.getParameter("localidad");
+		if (localidadId != null && !localidadId.isEmpty()) {
+			Localidad localidad = NegocioLocalidad.buscarPorId(Integer.parseInt(localidadId));
+			cliente.setLocalidad(localidad);
+		}
+
+		String nacionalidadId = request.getParameter("nacionalidad");
+		if (nacionalidadId != null && !nacionalidadId.isEmpty()) {
+			Nacionalidad nacionalidad = NegocioNacion.buscarPorId(Integer.parseInt(nacionalidadId));
+			cliente.setNacionalidad(nacionalidad);
+		}
+
+		return cliente;
 
 	}
 
