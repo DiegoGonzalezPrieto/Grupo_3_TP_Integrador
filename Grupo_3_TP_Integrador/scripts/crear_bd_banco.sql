@@ -216,3 +216,5 @@ CREATE TABLE cuotas (
     
     FOREIGN KEY (id_prestamo) REFERENCES prestamos(id_prestamo)
 );
+
+INSERT INTO `banco`.`usuarios` (`nombre_usuario`, `pass`, `tipo_usuario`, `estado_usuario`) VALUES ('usuarioadmin', 'admin1234', 2, true);
