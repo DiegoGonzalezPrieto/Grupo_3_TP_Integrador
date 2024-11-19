@@ -172,10 +172,10 @@
 						
 						<% if (p.getEstadoValidacion().getNombre().equals("Autorizado")){ %>
 						
-						<form action="PagoPrestamoServlet" method="get" onsubmit="return confirm('¿Está seguro de que desea Pagar el préstamo?')">
+						<form action="PagoPrestamoServlet" method="get">
 							<input type="hidden" name="id" value="<%= p.getId() %>" />
 							<input type="hidden" name="accion" value="Pagar" />
-							<button type="submit" class="btn btn-outline-success btn-sm me-2">Pagar</button>
+							<button type="submit" class="btn btn-outline-success btn-sm me-2">Ir a Pagar</button>
 						</form>												
 						
 						<%} else { %>
