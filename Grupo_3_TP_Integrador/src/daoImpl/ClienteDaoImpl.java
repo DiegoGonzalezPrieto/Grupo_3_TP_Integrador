@@ -35,7 +35,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	@Override
 	public boolean insert(Cliente c) {
 		String insert = "INSERT INTO clientes (id_usuario, dni, cuil, nombre, apellido, email, telefono, "
-				+ "sexo, id_nacionalidad, fecha_nacimiento, direccion, id_localidad, id_provincia) "
+				+ "genero, id_nacionalidad, fecha_nacimiento, direccion, id_localidad, id_provincia) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -70,7 +70,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	@Override
 	public boolean update(int id, Cliente c) {
 		String updateCliente = "UPDATE clientes SET dni = ?, cuil = ?, nombre = ?, apellido = ?, email = ?, "
-				+ "telefono = ?, sexo = ?, id_nacionalidad = ?, fecha_nacimiento = ?, direccion = ?, "
+				+ "telefono = ?, genero = ?, id_nacionalidad = ?, fecha_nacimiento = ?, direccion = ?, "
 				+ "id_localidad = ?, id_provincia = ? WHERE id_cliente = ?";
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -116,7 +116,7 @@ public class ClienteDaoImpl implements ClienteDao {
 		String selectCliente = "Select "
 				+ "	C.id_cliente, C.id_usuario, C.id_nacionalidad, C.id_localidad, C.id_provincia,  " + "    C.dni, "
 				+ "    C.cuil, " + "    C.nombre, " + "    C.apellido, " + "    C.email, " + "    C.telefono, "
-				+ "    C.sexo, " + "    C.fecha_nacimiento," + "    C.direccion from clientes C"
+				+ "    C.genero, " + "    C.fecha_nacimiento," + "    C.direccion from clientes C"
 				+ "	 Where C.id_cliente = ?";
 
 		try {
@@ -141,7 +141,7 @@ public class ClienteDaoImpl implements ClienteDao {
 				cliente.setApellido(resultSet.getString("apellido"));
 				cliente.setCorreoElectronico(resultSet.getString("email"));
 				cliente.setTelefono(resultSet.getString("telefono"));
-				cliente.setGenero(resultSet.getString("sexo"));
+				cliente.setGenero(resultSet.getString("genero"));
 				cliente.setFechaNacimiento(resultSet.getDate("fecha_nacimiento"));
 				cliente.setDireccion(resultSet.getString("direccion"));
 
@@ -190,7 +190,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	public Cliente encontrarPorNombre(String nombre) {
 
 		String selectCliente = "Select C.id_cliente, C.id_usuario,  C.dni , C.cuil,"
-				+ "    C.nombre,  C.apellido ,    C.email , C.telefono,    C.sexo ,  C.fecha_nacimiento ,"
+				+ "    C.nombre,  C.apellido ,    C.email , C.telefono,    C.genero ,  C.fecha_nacimiento ,"
 				+ "    C.direccion, C.id_nacionalidad, C.id_provincia, C.id_localidad "
 				+ " from clientes C  Where C.nombre = ?";
 
@@ -218,7 +218,7 @@ public class ClienteDaoImpl implements ClienteDao {
 				cliente.setApellido(resultSet.getString("apellido"));
 				cliente.setCorreoElectronico(resultSet.getString("email"));
 				cliente.setTelefono(resultSet.getString("telefono"));
-				cliente.setGenero(resultSet.getString("sexo"));
+				cliente.setGenero(resultSet.getString("genero"));
 				cliente.setFechaNacimiento(resultSet.getDate("fecha_nacimiento"));
 				cliente.setDireccion(resultSet.getString("direccion"));
 
@@ -253,7 +253,7 @@ public class ClienteDaoImpl implements ClienteDao {
 		}
 
 		String select = "Select	 C.id_cliente as id_cliente, C.id_usuario as id_usuario,   C.dni as dni,   C.cuil as cuil,    C.nombre as nombre,"
-				+ "    C.apellido as apellido ,    C.email as email,    C.telefono as telefono ,     C.sexo as sexo ,"
+				+ "    C.apellido as apellido ,    C.email as email,    C.telefono as telefono ,     C.genero as género ,"
 				+ "    C.fecha_nacimiento as fecha_nacimiento ,     C.direccion as direccion , 	 C.id_localidad as id_localidad,     C.id_nacionalidad as id_nacionalidad,"
 				+ "    C.id_provincia as id_provincia     from clientes C";
 
@@ -302,7 +302,7 @@ public class ClienteDaoImpl implements ClienteDao {
 				cliente.setApellido(result.getString("apellido"));
 				cliente.setCorreoElectronico(result.getString("email"));
 				cliente.setTelefono(result.getString("telefono"));
-				cliente.setGenero(result.getString("sexo"));
+				cliente.setGenero(result.getString("genero"));
 				cliente.setFechaNacimiento(result.getDate("fecha_nacimiento"));
 				cliente.setDireccion(result.getString("direccion"));
 				cliente.setNacionalidad(n);
