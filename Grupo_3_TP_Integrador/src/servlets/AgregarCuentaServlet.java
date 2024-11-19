@@ -1,7 +1,6 @@
 package servlets;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -21,7 +20,6 @@ import dominio.Movimiento;
 import dominio.TipoCuenta;
 import dominio.TipoMovimiento;
 import negocio.CuentaNegocio;
-import negocio.MovimientoNegocio;
 import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.CuentaNegocioImpl;
 import negocioImpl.MovimientoNegocioImpl;
@@ -32,97 +30,92 @@ import negocioImpl.TipoMovimientoNegocioImpl;
 public class AgregarCuentaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private CuentaNegocio negocioCuentas;
-    
-    public AgregarCuentaServlet() {
-        super();
-        negocioCuentas = new CuentaNegocioImpl();
-    }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ClienteNegocioImpl clientes = new ClienteNegocioImpl();
-        TipoCuentaNegocioImpl tiposCuenta = new TipoCuentaNegocioImpl();
-        
-        List<Cliente> listaClientes = clientes.listarTodos();
-        List<TipoCuenta> listaTiposCuenta = tiposCuenta.buscarTodos();
-        
-        Long ultimoNumeroCuenta = negocioCuentas.obtenerUltimoNumeroCuenta();
-        Long nuevoNumeroCuenta = ultimoNumeroCuenta + 1;
-        
-        String ultimoCBU = negocioCuentas.obtenerUltimoCBU();
-        BigInteger cbuActual = new BigInteger(ultimoCBU);
-        BigInteger nuevoCBUNumero = cbuActual.add(BigInteger.ONE);
-        String nuevoCBU = String.format("%022d", nuevoCBUNumero);
-        
-        request.setAttribute("listaClientes", listaClientes);
-        request.setAttribute("listaTiposCuenta", listaTiposCuenta);
-        request.setAttribute("nuevaCuenta", nuevoNumeroCuenta);
-        request.setAttribute("nuevoCBU", nuevoCBU);
-        
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/AgregarCuenta.jsp");
-        dispatcher.forward(request, response);
+	public AgregarCuentaServlet() {
+		super();
+		negocioCuentas = new CuentaNegocioImpl();
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		ClienteNegocioImpl clientes = new ClienteNegocioImpl();
+		TipoCuentaNegocioImpl tiposCuenta = new TipoCuentaNegocioImpl();
+
+		List<Cliente> listaClientes = clientes.listarTodos();
+		List<TipoCuenta> listaTiposCuenta = tiposCuenta.buscarTodos();
+
+		Long ultimoNumeroCuenta = negocioCuentas.obtenerUltimoNumeroCuenta();
+		Long nuevoNumeroCuenta = ultimoNumeroCuenta + 1;
+
+		String ultimoCBU = negocioCuentas.obtenerUltimoCBU();
+		BigInteger cbuActual = new BigInteger(ultimoCBU);
+		BigInteger nuevoCBUNumero = cbuActual.add(BigInteger.ONE);
+		String nuevoCBU = String.format("%022d", nuevoCBUNumero);
+
+		request.setAttribute("listaClientes", listaClientes);
+		request.setAttribute("listaTiposCuenta", listaTiposCuenta);
+		request.setAttribute("nuevaCuenta", nuevoNumeroCuenta);
+		request.setAttribute("nuevoCBU", nuevoCBU);
+
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/AgregarCuenta.jsp");
+		dispatcher.forward(request, response);
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		List<Cuenta> listaCuentas = new ArrayList<Cuenta>();
 		Cuenta aRegistrar = null;
-		
+
 		try {
 			int idCliente = Integer.parseInt(request.getParameter("cliente"));
-	        int idTipoCuenta = Integer.parseInt(request.getParameter("tipoCuenta"));
-	        Long numeroCuenta = Long.parseLong(request.getParameter("numeroCuenta"));
-	        String cbu = request.getParameter("cbu");	        
-	        Cuenta cuenta = new Cuenta();	        
-	        Cliente cliente = new Cliente();
-	        
-	        cliente.setIdCliente(idCliente);
-	        cuenta.setCliente(cliente);
-	        TipoCuenta tipoCuenta = new TipoCuenta();
-	        tipoCuenta.setId(idTipoCuenta);
-	        cuenta.setTipoCuenta(tipoCuenta);
-	        
-	        cuenta.setNumeroCuenta(numeroCuenta);
-	        cuenta.setCbu(cbu);
-	        
-	        if(negocioCuentas.crearCuenta(cuenta)) {	      	
-	        	listaCuentas = negocioCuentas.listarActivasPorCliente(cliente.getIdCliente());
-	        	aRegistrar = listaCuentas.get(listaCuentas.size() - 1);
-	        	generarMovimiento(aRegistrar);
+			int idTipoCuenta = Integer.parseInt(request.getParameter("tipoCuenta"));
+			Long numeroCuenta = Long.parseLong(request.getParameter("numeroCuenta"));
+			String cbu = request.getParameter("cbu");
+			Cuenta cuenta = new Cuenta();
+			Cliente cliente = new Cliente();
 
-	            request.setAttribute("mensaje", "Cuenta creada exitosamente");
-	            request.setAttribute("tipoMensaje", "success");
-	        } else {
-	            request.setAttribute("mensaje", "Error al crear la cuenta, el cliente no puede tener m√°s de 3 cuentas.");
-	            request.setAttribute("tipoMensaje", "danger");
-	        }
-	    } catch (Exception e) {
-	        request.setAttribute("mensaje", "Error al procesar la solicitud: " + e.getMessage());
-	        request.setAttribute("tipoMensaje", "danger");
-	        e.printStackTrace();
-	    }
-		   
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/AdministracionCuentasServlet");
-        dispatcher.forward(request, response);
-    }
-	
-	private void generarMovimiento(Cuenta cuenta) {	
+			cliente.setIdCliente(idCliente);
+			cuenta.setCliente(cliente);
+			TipoCuenta tipoCuenta = new TipoCuenta();
+			tipoCuenta.setId(idTipoCuenta);
+			cuenta.setTipoCuenta(tipoCuenta);
+
+			cuenta.setNumeroCuenta(numeroCuenta);
+			cuenta.setCbu(cbu);
+
+			if (negocioCuentas.crearCuenta(cuenta)) {
+				aRegistrar = negocioCuentas.obtenerCuentaPorCbu(cbu);
+				generarMovimiento(aRegistrar);
+
+				request.setAttribute("mensaje", "Cuenta creada exitosamente");
+				request.setAttribute("tipoMensaje", "success");
+			} else {
+				request.setAttribute("mensaje",
+						"Error al crear la cuenta, el cliente no puede tener m·s de 3 cuentas.");
+				request.setAttribute("tipoMensaje", "danger");
+			}
+		} catch (Exception e) {
+			request.setAttribute("mensaje", "Error al procesar la solicitud: " + e.getMessage());
+			request.setAttribute("tipoMensaje", "danger");
+			e.printStackTrace();
+		}
+
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/AdministracionCuentasServlet");
+		dispatcher.forward(request, response);
+	}
+
+	private void generarMovimiento(Cuenta cuenta) {
 		MovimientoNegocioImpl negoMovimiento = new MovimientoNegocioImpl();
 		TipoMovimientoNegocioImpl negoTipo = new TipoMovimientoNegocioImpl();
 		TipoMovimiento tipo = negoTipo.buscarPorId(1);
-		Movimiento movimiento = new Movimiento(
-												0,
-												cuenta,
-												tipo,
-												Date.valueOf(LocalDate.now()),
-												"Alta de cuentas",
-												//new BigDecimal(10000)
-												//Si la cuenta es nueva solo se va a crear con 10000 que 
-												//tiene en el constructor de la clase por lo que si eso cambia ac· tambien.
-												cuenta.getSaldo()
-												
-				);
+		Movimiento movimiento = new Movimiento(0, cuenta, tipo, Date.valueOf(LocalDate.now()), "Alta de cuentas",
+				// new BigDecimal(10000)
+				// Si la cuenta es nueva solo se va a crear con 10000 que
+				// tiene en el constructor de la clase por lo que si eso cambia ac· tambien.
+				cuenta.getSaldo()
+
+		);
 		negoMovimiento.insert(movimiento);
-		
-		
-		
+
 	}
 }
