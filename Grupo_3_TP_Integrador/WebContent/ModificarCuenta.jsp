@@ -69,7 +69,7 @@
                         <label class="col-sm-3 col-form-label">Saldo:</label>
                         <div class="col-sm-9">
                             <input type="number" name="saldo" class="form-control" 
-                                   value="<%=cuenta.getSaldo()%>" step="0.01" required>
+                                   value="<%=cuenta.getSaldo()%>" step="0.01" min="0" required>
                         </div>
                     </div>
                     <div class="text-right">
