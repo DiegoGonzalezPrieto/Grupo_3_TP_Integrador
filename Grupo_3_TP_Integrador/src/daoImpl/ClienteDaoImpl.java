@@ -7,16 +7,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import dao.ClienteDao;
-import dao.UsuarioDao;
 import dominio.Cliente;
 import dominio.Localidad;
 import dominio.Nacionalidad;
 import dominio.Provincia;
-import dominio.TipoUsuario;
 import dominio.Usuario;
 import negocioImpl.LocalidadNegocioImpl;
 import negocioImpl.NacionalidadNegocioImpl;
@@ -168,26 +164,26 @@ public class ClienteDaoImpl implements ClienteDao {
 			return null;
 		}
 	}
-	
+
 	@Override
-	public int encontrarPorIdUsuario(int idUsuario) {  
-		 String query = "SELECT id_cliente FROM clientes WHERE id_usuario = ?";
-		    
-		    try (Connection conexion = Conexion.getConnection();
-		         PreparedStatement statement = conexion.prepareStatement(query)) {
-		        
-		        statement.setInt(1, idUsuario);
-		        ResultSet rs = statement.executeQuery();
-		        
-		        if(rs.next()) {
-		            return rs.getInt("id_cliente");
-		        }
-		        
-		    } catch (SQLException e) {
-		        e.printStackTrace();
-		    }
-		    
-		    return 0; // o lanzar excepción
+	public int encontrarPorIdUsuario(int idUsuario) {
+		String query = "SELECT id_cliente FROM clientes WHERE id_usuario = ?";
+
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(query)) {
+
+			statement.setInt(1, idUsuario);
+			ResultSet rs = statement.executeQuery();
+
+			if (rs.next()) {
+				return rs.getInt("id_cliente");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return 0; // o lanzar excepción
 	}
 
 	@Override
@@ -274,8 +270,8 @@ public class ClienteDaoImpl implements ClienteDao {
 			while (result.next()) {
 
 				Usuario usuario = new UsuarioNegocioImpl().buscarPorId(result.getInt("id_usuario"));
-				Cliente cliente = new Cliente(result.getInt("id_cliente"), usuario.getNombreUsuario(), usuario.getPass(),
-						usuario.getTipoUsuario(), usuario.activo());
+				Cliente cliente = new Cliente(result.getInt("id_cliente"), usuario.getNombreUsuario(),
+						usuario.getPass(), usuario.getTipoUsuario(), usuario.activo());
 
 				Nacionalidad n = null;
 				Provincia p = null;
@@ -298,7 +294,7 @@ public class ClienteDaoImpl implements ClienteDao {
 						break;
 					}
 				}
-				
+
 				cliente.setIdCliente(result.getInt("id_cliente"));
 				cliente.setDni(result.getString("dni"));
 				cliente.setCuil(result.getString("cuil"));
@@ -330,42 +326,60 @@ public class ClienteDaoImpl implements ClienteDao {
 	}
 
 	@Override
-  public boolean existeDNI(String dni) {
+	public boolean existeDNI(String dni) {
 		String buscarDNI = "SELECT COUNT(*) FROM clientes WHERE dni = ?";
-	    
+
 		try (Connection conexion = Conexion.getConnection();
-	         PreparedStatement statement = conexion.prepareStatement(buscarDNI)) {
-	        statement.setString(1, dni);
-	        
-	        ResultSet rs = statement.executeQuery();
-	        
-	        return rs.next() && rs.getInt(1) > 0;
-	    
+				PreparedStatement statement = conexion.prepareStatement(buscarDNI)) {
+			statement.setString(1, dni);
+
+			ResultSet rs = statement.executeQuery();
+
+			return rs.next() && rs.getInt(1) > 0;
+
 		} catch (SQLException e) {
-	        e.printStackTrace();
-	        return false;
-	    }
+			e.printStackTrace();
+			return false;
+		}
 	}
-  
-  @Override
+
+	@Override
 	public boolean existeCUIL(String cuil) {
 		String buscarDNI = "SELECT COUNT(*) FROM clientes WHERE cuil = ?";
-	    
-		try (Connection conexion = Conexion.getConnection();
-	         PreparedStatement statement = conexion.prepareStatement(buscarDNI)) {
-	        statement.setString(1, cuil);
-	        
-	        ResultSet rs = statement.executeQuery();
-	        
-	        return rs.next() && rs.getInt(1) > 0;
-	    
-		} catch (SQLException e) {
-	        e.printStackTrace();
-	        return false;
-	    }
-  }
 
-	
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(buscarDNI)) {
+			statement.setString(1, cuil);
+
+			ResultSet rs = statement.executeQuery();
+
+			return rs.next() && rs.getInt(1) > 0;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@Override
+	public boolean existeCuotasPendientes(int id) {
+		String contarCuotas = "SELECT count(*) as totalCuotasImpagas FROM cuotas as c INNER JOIN prestamos as p ON c.id_prestamo = p.id_prestamo INNER JOIN clientes as cl\r\n"
+				+ "ON p.id_cliente = cl.id_cliente WHERE p.id_estado_prestamo = 2 and c.estado_pago = 0 and cl.id_cliente = ?";
+
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(contarCuotas)) {
+			statement.setInt(1, id);
+
+			ResultSet rs = statement.executeQuery();
+
+			return rs.next() && rs.getInt(1) == 0;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 	@Override
 	public int contarTodos() {
 		String selectTodos = "SELECT COUNT(*) as cantidad FROM banco.clientes;";
@@ -517,9 +531,8 @@ public class ClienteDaoImpl implements ClienteDao {
 		String selectClientesPorNacionalidadActivos = "SELECT nacionalidades.id_nacionalidad, nacionalidad, COUNT(clientes.id_usuario) as cantidad "
 				+ " FROM banco.clientes  JOIN nacionalidades on clientes.id_nacionalidad = nacionalidades.id_nacionalidad "
 				+ " JOIN usuarios on clientes.id_usuario = usuarios.id_usuario "
-				+ " WHERE usuarios.estado_usuario = true "
-				+ " GROUP BY id_nacionalidad, nacionalidad "
-				+ " ORDER BY COUNT(id_usuario) DESC;"; 
+				+ " WHERE usuarios.estado_usuario = true " + " GROUP BY id_nacionalidad, nacionalidad "
+				+ " ORDER BY COUNT(id_usuario) DESC;";
 
 		HashMap<String, Integer> resultado = new HashMap<String, Integer>();
 
@@ -545,7 +558,5 @@ public class ClienteDaoImpl implements ClienteDao {
 			return resultado;
 		}
 	}
-
-
 
 }

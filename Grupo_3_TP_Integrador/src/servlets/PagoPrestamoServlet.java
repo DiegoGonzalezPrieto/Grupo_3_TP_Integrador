@@ -119,6 +119,8 @@ public class PagoPrestamoServlet extends HttpServlet {
 							cuotaNeg.registrarPago(cuenta.getId(), cuota);
 							request.setAttribute("mensaje", "Pago realizado con éxito");
 							request.setAttribute("tipoMensaje", "success");
+							response.sendRedirect("PagoPrestamoServlet?id=" + idPrestamo);
+							return;
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -144,6 +146,7 @@ public class PagoPrestamoServlet extends HttpServlet {
 					for (Cuota cuota : cuotasPrestamo) {
 						try {
 							cuotaNeg.registrarPago(cuenta.getId(), cuota);
+
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -152,19 +155,18 @@ public class PagoPrestamoServlet extends HttpServlet {
 					request.setAttribute("tipoMensaje", "success");
 				}
 
-				prestamo = pNeg.obtenerPrestamoPorId(Integer.parseInt(idPrestamo));
-				int idCliente = prestamo.getCliente().getIdCliente();
-				cliente = clienteNeg.buscarPorId(idCliente);
-				request.setAttribute("cliente", cliente);
-				request.setAttribute("prestamo", prestamo);
-
-				cuotasPrestamo = cuotaNeg.listarCuotasPorPrestamo(Integer.parseInt(idPrestamo));
-				request.setAttribute("listaCuotas", cuotasPrestamo);
-
-				cuentasCliente = (ArrayList<Cuenta>) cuentaNeg.listarPorCliente(cliente.getIdCliente());
-				request.setAttribute("listaCuentas", cuentasCliente);
-
 			}
+			prestamo = pNeg.obtenerPrestamoPorId(Integer.parseInt(idPrestamo));
+			int idCliente = prestamo.getCliente().getIdCliente();
+			cliente = clienteNeg.buscarPorId(idCliente);
+			request.setAttribute("cliente", cliente);
+			request.setAttribute("prestamo", prestamo);
+
+			cuotasPrestamo = cuotaNeg.listarCuotasPorPrestamo(Integer.parseInt(idPrestamo));
+			request.setAttribute("listaCuotas", cuotasPrestamo);
+
+			cuentasCliente = (ArrayList<Cuenta>) cuentaNeg.listarPorCliente(cliente.getIdCliente());
+			request.setAttribute("listaCuentas", cuentasCliente);
 		} catch (Exception e) {
 			request.setAttribute("mensaje", "Error: " + e.getMessage());
 			request.setAttribute("tipoMensaje", "danger");

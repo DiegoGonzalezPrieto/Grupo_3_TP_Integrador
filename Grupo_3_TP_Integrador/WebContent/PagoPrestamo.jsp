@@ -110,6 +110,7 @@
 					<%
 						if (listaCuenta != null && !listaCuenta.isEmpty()) {
 							for (Cuenta cuenta : listaCuenta) {
+								if(cuenta.Activa()){
 					%>
 					<option value="<%=cuenta.getId()%>"
 						data-saldo="<%=cuenta.getSaldo()%>">
@@ -118,7 +119,8 @@
 					</option>
 					<%
 						}
-						}
+					}
+				}
 					%>
 				</select>
 			</div>
