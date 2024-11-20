@@ -117,6 +117,7 @@ public class PagoPrestamoServlet extends HttpServlet {
 					if (cuenta.getSaldo().compareTo(cuota.getMontoPagado()) >= 0) {
 						try {
 							cuotaNeg.registrarPago(cuenta.getId(), cuota);
+							prestamoPagado(Integer.parseInt(idPrestamo));
 							request.setAttribute("mensaje", "Pago realizado con éxito");
 							request.setAttribute("tipoMensaje", "success");
 							response.sendRedirect("PagoPrestamoServlet?id=" + idPrestamo);
@@ -146,9 +147,11 @@ public class PagoPrestamoServlet extends HttpServlet {
 					for (Cuota cuota : cuotasPrestamo) {
 						try {
 							cuotaNeg.registrarPago(cuenta.getId(), cuota);
-
+							
 						} catch (Exception e) {
 							e.printStackTrace();
+						} finally {
+							prestamoPagado(Integer.parseInt(idPrestamo));
 						}
 					}
 					request.setAttribute("mensaje", "Todos los pagos realizados con éxito");
@@ -175,6 +178,34 @@ public class PagoPrestamoServlet extends HttpServlet {
 
 		RequestDispatcher rd = request.getRequestDispatcher("/PagoPrestamo.jsp");
 		rd.forward(request, response);
+	}
+	
+	private boolean prestamoPagado (int idPrestamo) throws SQLException {
+		
+		Prestamo prestamo = new Prestamo ();
+		PrestamoNegocio prestamoNegocio = new PrestamoNegocioImpl();
+		
+		CuotaNegocio cuotaNegocio = new CuotaNegocioImpl();
+		
+		int cuotasPagas = 0;
+		int cuotasTotales = 0;
+		
+		try {
+			prestamo = prestamoNegocio.obtenerPrestamoPorId(idPrestamo);
+			cuotasTotales = cuotaNegocio.contarCuotas(prestamo.getId());
+			cuotasPagas = cuotaNegocio.contarCuotasPagadas(prestamo.getId());
+		}
+		catch (Exception e) {
+			e.printStackTrace();			
+		}
+		
+		
+		
+		if(cuotasTotales == cuotasPagas) {
+			return prestamoNegocio.actualizarEstadoSolicitud(prestamo.getId(), 4);
+			
+		}else {return false;}			
+		
 	}
 
 }

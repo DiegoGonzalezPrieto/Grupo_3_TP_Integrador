@@ -99,6 +99,7 @@
 								<option value="Autorizado">Autorizado</option>
 								<option value="Rechazado">Rechazado</option>
 								<option value="Pendiente">Pendiente</option>
+								<option value="Pagado">Pagado</option>
 							</select>
 						</div>
 						<!-- FILTRO POR IMPORTE MINIMO SOLICITADO -->
@@ -163,8 +164,8 @@
 					<td class="text-center"> <%= p.totalAPagar() %></td>					
 					<td class="text-center <%if (p.getEstadoValidacion().getNombre().equals("Pendiente")) { %> text-bg-secondary 
 					<% } else if (p.getEstadoValidacion().getNombre().equals("Autorizado")){ %>text-bg-success
-					<% } else if (p.getEstadoValidacion().getNombre().equals("Rechazado")){ %>text-bg-danger<% } %>">
-					
+					<% } else if (p.getEstadoValidacion().getNombre().equals("Rechazado")){ %>text-bg-danger
+					<% } else if (p.getEstadoValidacion().getNombre().equals("Pagado")){ %>text-bg-succes<% } %>">
 					<%= p.getEstadoValidacion().getNombre() %>
 					
 					</td>
