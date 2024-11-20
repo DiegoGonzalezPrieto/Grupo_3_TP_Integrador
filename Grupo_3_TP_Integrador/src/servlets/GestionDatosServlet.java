@@ -150,7 +150,7 @@ public class GestionDatosServlet extends HttpServlet {
 				Cliente cliente = negoCliente.buscarPorId(idCliente);
 
 				request.setAttribute("clienteEditar", cliente);
-				request.setAttribute("editar", true);
+				request.setAttribute("nuevo", false);
 				request.setAttribute("provincias", daoProvincia.buscarTodos());
 				request.setAttribute("localidades", NegocioLocalidad.buscarTodos());
 				request.setAttribute("naciones", NegocioNacion.buscarTodos());
@@ -185,7 +185,7 @@ public class GestionDatosServlet extends HttpServlet {
 	private void validarYCrearCliente(HttpServletRequest request, HttpServletResponse response) {
 		try {
 
-			// Agregado para rellenar el formulario en caso de error de validación al crear
+			// Agregado para rellenar el formulario en caso de error de validaciï¿½n al crear
 			Cliente clienteParcial = obtenerCliente(request);
 			request.setAttribute("clienteParcial", clienteParcial);
 
@@ -197,7 +197,7 @@ public class GestionDatosServlet extends HttpServlet {
 				request.getSession().setAttribute("mensaje", "El DNI ya existe en la base de datos");
 				request.getSession().setAttribute("tipoMensaje", "danger");
 
-				datosFormulario(request);
+				datosFormulario(request, true);
 				// response.sendRedirect("GestionDatosServlet?nuevo=true");
 				// return;
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/GestionDatos.jsp");
@@ -210,7 +210,7 @@ public class GestionDatosServlet extends HttpServlet {
 						"El CUIL ya existe en la base de datos, verifique que sea correcto.");
 				request.getSession().setAttribute("tipoMensaje", "danger");
 
-				datosFormulario(request);
+				datosFormulario(request, true);
 				// response.sendRedirect("GestionDatosServlet?nuevo=true");
 				// return;
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/GestionDatos.jsp");
@@ -223,7 +223,7 @@ public class GestionDatosServlet extends HttpServlet {
 						"El Usuario ya existe en la base de datos, intente con otro usuario.");
 				request.getSession().setAttribute("tipoMensaje", "danger");
 
-				datosFormulario(request);
+				datosFormulario(request, true);
 				// response.sendRedirect("GestionDatosServlet?nuevo=true");
 				// return;
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/GestionDatos.jsp");
@@ -339,7 +339,7 @@ public class GestionDatosServlet extends HttpServlet {
 			} catch (Exception e) {
 				request.getSession().setAttribute("mensaje", "Error: " + e.getMessage());
 				request.getSession().setAttribute("tipoMensaje", "danger");
-				datosFormulario(request);
+				datosFormulario(request, true);
 				request.getRequestDispatcher("/GestionDatos.jsp").forward(request, response);
 				return;
 			}
@@ -347,26 +347,25 @@ public class GestionDatosServlet extends HttpServlet {
 		} catch (DNIInvalidoException | CuilInvalidoException e) {
 			request.getSession().setAttribute("mensaje", e.getMessage());
 			request.getSession().setAttribute("tipoMensaje", "danger");
-			datosFormulario(request);
+			datosFormulario(request, true);
 			request.getRequestDispatcher("/GestionDatos.jsp").forward(request, response);
 			return;
 		} catch (Exception e) {
 			request.getSession().setAttribute("mensaje", "Error inesperado: " + e.getMessage());
 			request.getSession().setAttribute("tipoMensaje", "danger");
 			e.printStackTrace();
-			datosFormulario(request);
+			datosFormulario(request, true);
 			request.getRequestDispatcher("/GestionDatos.jsp").forward(request, response);
 			return;
 		}
 	}
 
-	private void datosFormulario(HttpServletRequest request) {
+	private void datosFormulario(HttpServletRequest request, boolean nuevo) {
 		try {
 
 			request.setAttribute("provincias", daoProvincia.buscarTodos());
 			request.setAttribute("localidades", NegocioLocalidad.buscarTodos());
 			request.setAttribute("naciones", NegocioNacion.buscarTodos());
-			request.setAttribute("nuevo", true);
 
 			Cliente cliente = new Cliente();
 			cliente.setNombreUsuario(request.getParameter("usuario"));
@@ -378,6 +377,22 @@ public class GestionDatosServlet extends HttpServlet {
 			cliente.setTelefono(request.getParameter("telefono"));
 			cliente.setDireccion(request.getParameter("direccion"));
 			cliente.setGenero(request.getParameter("genero"));
+			cliente.setPass(request.getParameter("pass"));
+
+			String idCliente = request.getParameter("idCliente");
+			if (!nuevo && idCliente != null && !idCliente.isEmpty()) {
+				int id = Integer.parseInt(idCliente);
+				cliente.setId(id);
+				cliente.setIdCliente(id);
+				request.setAttribute("idCliente", id);
+			}
+
+			String[] fecha = request.getParameter("fechaNacimiento").split("-");
+			if (fecha.length == 3) {
+				Date fechaNacimiento = new Date(Integer.parseInt(fecha[0]) - 1900, Integer.parseInt(fecha[1]) - 1,
+						Integer.parseInt(fecha[2]));
+				cliente.setFechaNacimiento(fechaNacimiento);
+			}
 
 			String provinciaId = request.getParameter("provincia");
 			if (provinciaId != null && !provinciaId.isEmpty()) {
@@ -397,7 +412,13 @@ public class GestionDatosServlet extends HttpServlet {
 				cliente.setNacionalidad(nacionalidad);
 			}
 
-			request.setAttribute("cliente", cliente);
+			if (nuevo) {
+				request.setAttribute("clienteParcial", cliente);
+			} else {
+				request.setAttribute("clienteEditar", cliente);
+			}
+
+			request.setAttribute("nuevo", nuevo);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -419,7 +440,9 @@ public class GestionDatosServlet extends HttpServlet {
 				request.getSession().setAttribute("mensaje", "El DNI ya existe en la base de datos");
 				request.getSession().setAttribute("tipoMensaje", "danger");
 
-				datosFormulario(request);
+				request.setAttribute("idCliente", idCliente);
+				datosFormulario(request, false);
+
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/GestionDatos.jsp");
 				dispatcher.forward(request, response);
 				return;
@@ -430,7 +453,7 @@ public class GestionDatosServlet extends HttpServlet {
 						"El CUIL ya existe en la base de datos, verifique que sea correcto.");
 				request.getSession().setAttribute("tipoMensaje", "danger");
 
-				datosFormulario(request);
+				datosFormulario(request, false);
 
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/GestionDatos.jsp");
 				dispatcher.forward(request, response);
@@ -442,7 +465,7 @@ public class GestionDatosServlet extends HttpServlet {
 						"El Usuario ya existe en la base de datos, intente con otro usuario.");
 				request.getSession().setAttribute("tipoMensaje", "danger");
 
-				datosFormulario(request);
+				datosFormulario(request, false);
 
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/GestionDatos.jsp");
 				dispatcher.forward(request, response);
@@ -454,7 +477,12 @@ public class GestionDatosServlet extends HttpServlet {
 		} catch (Exception e) {
 			request.setAttribute("mensaje", "Error: " + e.getMessage());
 			request.setAttribute("tipoMensaje", "danger");
-			e.printStackTrace();
+			try {
+				datosFormulario(request, false);
+				request.getRequestDispatcher("/GestionDatos.jsp").forward(request, response);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		}
 
 	}
@@ -497,23 +525,25 @@ public class GestionDatosServlet extends HttpServlet {
 					.setLocalidad(NegocioLocalidad.buscarPorId(Integer.parseInt(request.getParameter("localidad"))));
 
 			negoCliente.update(clienteAEditar);
+
 			request.getSession().setAttribute("mensaje", "Cliente editado exitosamente");
 			request.getSession().setAttribute("tipoMensaje", "success");
 			response.sendRedirect("AdministracionClientesServlet");
+			return;
 
 		} catch (DNIInvalidoException | CuilInvalidoException e) {
 			request.getSession().setAttribute("mensaje", e.getMessage());
 			request.getSession().setAttribute("tipoMensaje", "danger");
-			datosFormulario(request);
+			request.setAttribute("idCliente", clienteAEditar.getIdCliente());
+			datosFormulario(request, false);
 			request.getRequestDispatcher("/GestionDatos.jsp").forward(request, response);
-			return;
+
 		} catch (Exception e) {
 			request.getSession().setAttribute("mensaje", "Error inesperado: " + e.getMessage());
 			request.getSession().setAttribute("tipoMensaje", "danger");
 			e.printStackTrace();
-			datosFormulario(request);
+			datosFormulario(request, false);
 			request.getRequestDispatcher("/GestionDatos.jsp").forward(request, response);
-			return;
 		}
 
 	}
@@ -522,7 +552,6 @@ public class GestionDatosServlet extends HttpServlet {
 		request.setAttribute("provincias", daoProvincia.buscarTodos());
 		request.setAttribute("localidades", NegocioLocalidad.buscarTodos());
 		request.setAttribute("naciones", NegocioNacion.buscarTodos());
-		request.setAttribute("nuevo", true);
 
 		Cliente cliente = new Cliente();
 		cliente.setNombreUsuario(request.getParameter("usuario"));

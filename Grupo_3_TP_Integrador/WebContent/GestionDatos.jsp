@@ -69,15 +69,17 @@
 		%>
 
 		<%
-			String encabezado = "Datos Personales";
-			String accion = "editar";
-			if (request.getAttribute("nuevo") != null) {
-				encabezado = "Nuevo Cliente";
-				accion = "crear";
-			}else{
-				accion="editar";
-				encabezado="Editar Cliente";
-			}
+		    String encabezado = "Datos Personales";
+		    String accion = "editar";
+		    Boolean esNuevo = (Boolean) request.getAttribute("nuevo");
+		    
+		    if (esNuevo != null && esNuevo) {
+		        encabezado = "Nuevo Cliente";
+		        accion = "crear";
+		    } else {
+		        accion = "editar";
+		        encabezado = "Editar Cliente";
+		    }
 		%>
 		
 		<%
@@ -98,9 +100,9 @@
 		<!-- En el JSP: -->
 		<form action="GestionDatosServlet" method="POST" id="form">
 
-		<% if (cliente != null && !reintentoCreacion){%>
-			<input type="hidden" value="<%= cliente.getIdCliente()%>" name="idCliente" id="idCliente">
-		<% } %>
+		<% if (!esNuevo) { %>
+        	<input type="hidden" name="idCliente" value="${clienteEditar.idCliente}">
+    	<% } %>
 
 			<div class="form-group">
 				<label for="usuario">Usuario:</label> <input type="text"
@@ -284,15 +286,8 @@
 				</select>
 			</div>
 
-			<%
-				String accionBoton = "Crear";
-				if (accion == "editar") {
-					accionBoton = "Editar";
-				}
-			%>
-
-			<input type="submit" value="<%=accionBoton%>" name="<%= accion.equals("editar")? "editar" : "crear" %>"
-				class="btn btn-primary" onclick="return confirm ('¿Seguro que desea <%=accionBoton%> el usuario?');">
+			<input type="submit" value="<%= esNuevo ? "Crear" : "Editar" %>" name="<%= esNuevo ? "crear" : "editar" %>"
+				class="btn btn-primary" onclick="return confirm('¿Seguro que desea <%= esNuevo ? "crear" : "editar" %> el usuario?');">
 				<a href="AdministracionClientes.jsp" class="btn btn-primary">Volver</a>
 
 		</form>
