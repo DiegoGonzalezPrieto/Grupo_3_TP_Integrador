@@ -159,10 +159,9 @@
 
 					<div class="form-group text-center mt-4">
 						<input id="btnSolicitar" type="submit" class="btn btn-success"
-							value="Solicitar" required name="btnSolicitar"> <input
-							id="btnCancelar" type="button" class="btn btn-danger"
-							value="Cancelar">
-						<a href="Prestamo.jsp" class="btn btn-secondary">Volver</a>
+							value="Solicitar" required name="btnSolicitar"> 
+						<a class="btn btn-danger" href="PrestamosServlet?id=<%=cliente.getIdCliente()%>"
+							>Cancelar</a>
 					</div>
 				</form>
 			</div>
