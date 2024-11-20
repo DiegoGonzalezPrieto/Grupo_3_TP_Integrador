@@ -187,77 +187,95 @@
 		</table>
 	</div>
 	<%@ include file="Footer.jsp"%>
+
 	<script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function() {
-        const limpiarFiltrosLink = document.getElementById('limpiar-filtros');
-        const minCuotasInput = document.getElementById('minCuotas');
-        const maxCuotasInput = document.getElementById('maxCuotas');
-        const minFechaInput = document.getElementById('minFecha');
-        const maxFechaInput = document.getElementById('maxFecha');
-        const table = new DataTable('#tabla-prestamos', {
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
-            }
-        });
-
-        // Filtros por cantidad de cuotas mayor y menor
-        table.search.fixed('cuotas', function(searchStr, data, index) {
-            var min = parseInt(minCuotasInput.value, 10);
-            var max = parseInt(maxCuotasInput.value, 10);
-            var cuotas = parseInt(data[5]) || 0;
-
-            if ((isNaN(min) && isNaN(max)) || (isNaN(min) && cuotas <= max)
-                    || (min <= cuotas && isNaN(max))
-                    || (min <= cuotas && cuotas <= max)) {
-                return true;
-            }
-
-            return false;
-        });
-
-        minCuotasInput.addEventListener('input', function() {
-            table.draw();
-        });
-        maxCuotasInput.addEventListener('input', function() {
-            table.draw();
-        });
-
-        // Filtros por fecha mayor y menor
-        table.search.fixed('fecha', function(searchStr, data, index) {
-            var min = minFechaInput.value ? new Date(minFechaInput.value) : false;
-            var max = maxFechaInput.value ? new Date(maxFechaInput.value) : false;
-            var fecha = new Date(data[4]);
-
-            if ((min <= fecha || !min) && (max >= fecha || !max)) {
-                return true;
-            }
-
-            return false;
-        });
-
-        minFechaInput.addEventListener('input', function() {
-            table.draw();
-        });
-        maxFechaInput.addEventListener('input', function() {
-            table.draw();
-        });
-
-        // Evento para limpiar filtros
-        limpiarFiltrosLink.addEventListener('click', function(event) {
-            event.preventDefault();
-            // Restablecer valores de los filtros
-            minCuotasInput.value = '';
-            maxCuotasInput.value = '';
-            minFechaInput.value = '';
-            maxFechaInput.value = '';
-
-            // Actualizar la tabla
-            table.search('').columns().search('').draw();
-        });
-    });
-</script>
-
+	    let table = new DataTable('#tabla-prestamos', {
+	        language: {
+	            url: 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
+	        },
+	        paging: true,
+	        searching: true,
+	        info: true
+	    });
 	
+	    // Filtros por monto
+	    table.search.fixed('monto', function(searchStr, data, index) {
+	        var min = parseFloat(minMonto.value) || 0;
+	        var max = parseFloat(maxMonto.value) || Infinity;
+	        var monto = parseFloat(data[3].replace('$', '').replace(/\s/g, '')) || 0;
+	        
+	        if ((isNaN(min) && isNaN(max)) || 
+	            (isNaN(min) && monto <= max) ||
+	            (min <= monto && isNaN(max)) ||
+	            (min <= monto && monto <= max)) {
+	            return true;
+	        }
+	        return false;
+	    });
+	
+	    // Eventos para monto
+	    minMonto.addEventListener('input', function() {
+	        table.draw();
+	    });
+	    maxMonto.addEventListener('input', function() {
+	        table.draw();
+	    });
+	
+	    // Filtros por cuotas
+	    table.search.fixed('cuotas', function(searchStr, data, index) {
+	        var min = parseInt(minCuotas.value) || 0;
+	        var max = parseInt(maxCuotas.value) || Infinity;
+	        var cuotas = parseInt(data[5]) || 0;
+	        
+	        if ((isNaN(min) && isNaN(max)) || 
+	            (isNaN(min) && cuotas <= max) ||
+	            (min <= cuotas && isNaN(max)) ||
+	            (min <= cuotas && cuotas <= max)) {
+	            return true;
+	        }
+	        return false;
+	    });
+	
+	    // Eventos para cuotas
+	    minCuotas.addEventListener('input', function() {
+	        table.draw();
+	    });
+	    maxCuotas.addEventListener('input', function() {
+	        table.draw();
+	    });
+	
+	    // Filtros por fecha
+	    table.search.fixed('fecha', function(searchStr, data, index) {
+	        var min = minFecha.value ? new Date(minFecha.value) : false;
+	        var max = maxFecha.value ? new Date(maxFecha.value) : false;
+	        var fecha = new Date(data[4]);
+	        
+	        if ((min <= fecha || !min) && (max >= fecha || !max)) {
+	            return true;
+	        }
+	        return false;
+	    });
+	
+	    // Eventos para fecha
+	    minFecha.addEventListener('input', function() {
+	        table.draw();
+	    });
+	    maxFecha.addEventListener('input', function() {
+	        table.draw();
+	    });
+	
+	    // Limpiar filtros
+	    document.getElementById('limpiar-filtros').addEventListener('click', function(e) {
+	        e.preventDefault();
+	        minMonto.value = '';
+	        maxMonto.value = '';
+	        minCuotas.value = '';
+	        maxCuotas.value = '';
+	        minFecha.value = '';
+	        maxFecha.value = '';
 
+	        table.search('').columns().search('').draw();
+	    });
+	</script>
 </body>
 </html>
