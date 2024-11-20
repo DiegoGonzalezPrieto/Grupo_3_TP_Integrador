@@ -127,7 +127,7 @@
 					title="La contraseña debe tener al menos 8 caracteres, incluyendo letras y números"
 					required>
 			</div>
-			
+			<% if (accion.equals("crear")) { %>
 			<div class="form-group">
 				<label for="pass">Confirmar contraseña:</label> <input type="password"
 					class="form-control" id="ConfPass" name="ConfPass"
@@ -136,6 +136,7 @@
 					title="La contraseña debe tener al menos 8 caracteres, incluyendo letras y números"
 					required>
 			</div>
+			<% }%>
 			
 			<div id="error-message" style="display:none; color: red;">
         		Las contraseñas no coinciden.
