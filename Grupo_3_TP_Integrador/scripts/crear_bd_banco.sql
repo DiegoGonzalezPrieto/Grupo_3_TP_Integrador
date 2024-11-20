@@ -125,7 +125,8 @@ INSERT INTO tipos_movimiento (id_tipo_movimiento, tipo_movimiento) VALUES
 INSERT INTO estados_prestamo (id_estado_prestamo, estado_prestamo) VALUES
 (1, 'Pendiente'),
 (2, 'Autorizado'),
-(3, 'Rechazado');
+(3, 'Rechazado'),
+(4, 'Pagado');
 
 -- tablas transaccionales (registran datos de operaciones en el sistema)
 
@@ -217,4 +218,6 @@ CREATE TABLE cuotas (
     FOREIGN KEY (id_prestamo) REFERENCES prestamos(id_prestamo)
 );
 
-INSERT INTO `banco`.`usuarios` (`nombre_usuario`, `pass`, `tipo_usuario`, `estado_usuario`) VALUES ('usuarioadmin', 'admin1234', 2, true);
+INSERT INTO usuarios (nombre_usuario, pass, tipo_usuario, estado_usuario) VALUES
+('usuarioadmin', 'admin1234', 2, true);
+
