@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -13,10 +14,13 @@ import javax.servlet.http.HttpSession;
 
 import dominio.Cliente;
 import dominio.Cuenta;
+import dominio.Prestamo;
 import dominio.Usuario;
 import negocio.ClienteNegocio;
+import negocio.PrestamoNegocio;
 import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.CuentaNegocioImpl;
+import negocioImpl.PrestamoNegocioImpl;
 
 /**
  * Servlet implementation class HomeClienteServlet
@@ -27,11 +31,13 @@ public class HomeClienteServlet extends HttpServlet {
 	private CuentaNegocioImpl negocioCuentas;
 
 	ClienteNegocio negocioCliente;
+	PrestamoNegocio negocioPrestamo;
 
 	public HomeClienteServlet() {
 		super();
 		negocioCuentas = new CuentaNegocioImpl();
 		negocioCliente = new ClienteNegocioImpl();
+		negocioPrestamo = new PrestamoNegocioImpl();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -39,7 +45,7 @@ public class HomeClienteServlet extends HttpServlet {
 		try {
 			HttpSession session = request.getSession();
 			Usuario usuario = (Usuario) session.getAttribute("usuario");
-
+			List<Prestamo> prestamosCliente = new ArrayList<Prestamo>();
 			if (usuario == null) {
 				response.sendRedirect("Login.jsp");
 				return;
@@ -50,9 +56,12 @@ public class HomeClienteServlet extends HttpServlet {
 			Cliente cliente = negocioCliente.buscarPorId(idCliente);
 
 			List<Cuenta> cuentasCliente = negocioCuentas.listarActivasPorCliente(idCliente);
-
+			
 			request.setAttribute("cuentasCliente", cuentasCliente);
 			request.setAttribute("cliente", cliente);
+	
+			prestamosCliente = negocioPrestamo.listarPrestamosXCliente(idCliente);
+			request.setAttribute("prestamos", prestamosCliente);
 
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/HomeCliente.jsp");
 			dispatcher.forward(request, response);

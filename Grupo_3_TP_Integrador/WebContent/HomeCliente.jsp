@@ -1,5 +1,6 @@
 <%@page import="dominio.Cliente"%>
 <%@page import="dominio.Cuenta"%>
+<%@page import="dominio.Prestamo"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -42,13 +43,27 @@
 		%>
 		<h1 class="display-3 my-3"><%=saludo%> <%=cliente.getNombre() + " " + cliente.getApellido()%></h1>
 		<%} %>
+		
+		
+		
 		<ul class="nav nav-pills nav-fill m-3">
 			<li class="nav-item mx-2"><a class="nav-link active"
 				href="TransferenciaServlet?cliente=<%=cliente.getIdCliente()%>">Transferencias</a></li>
 			<li class="nav-item mx-2"><a class="nav-link active"
 				href="PrestamosServlet?id=<%=cliente.getIdCliente()%>">Préstamos</a></li>
+			
+			<%
+				List<Prestamo> prestamosCliente = (List<Prestamo>) request.getAttribute("prestamos");
+				
+				if( prestamosCliente != null && !prestamosCliente.isEmpty()){
+					
+			%>
+			
 			<li class="nav-item mx-2"><a class="nav-link active"
 				href="PagoPrestamoServlet?id=<%=cliente.getIdCliente()%>">Pago de Cuotas</a></li>
+			<% 
+				}
+			%>	
 			<li class="nav-item mx-2"><a class="nav-link active"
 				href="GestionDatosServlet?id=<%=cliente.getIdCliente()%>">Mis Datos</a></li>
 		</ul>
