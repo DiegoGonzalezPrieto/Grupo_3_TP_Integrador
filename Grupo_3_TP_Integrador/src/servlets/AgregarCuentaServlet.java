@@ -41,7 +41,7 @@ public class AgregarCuentaServlet extends HttpServlet {
 		ClienteNegocioImpl clientes = new ClienteNegocioImpl();
 		TipoCuentaNegocioImpl tiposCuenta = new TipoCuentaNegocioImpl();
 
-		List<Cliente> listaClientes = clientes.listarTodos();
+		List<Cliente> listaClientes = clientes.listarActivos();
 		List<TipoCuenta> listaTiposCuenta = tiposCuenta.buscarTodos();
 
 		Long ultimoNumeroCuenta = negocioCuentas.obtenerUltimoNumeroCuenta();
@@ -91,7 +91,7 @@ public class AgregarCuentaServlet extends HttpServlet {
 				request.setAttribute("tipoMensaje", "success");
 			} else {
 				request.setAttribute("mensaje",
-						"Error al crear la cuenta, el cliente no puede tener más de 3 cuentas.");
+						"Error al crear la cuenta, el cliente no puede tener mï¿½s de 3 cuentas.");
 				request.setAttribute("tipoMensaje", "danger");
 			}
 		} catch (Exception e) {
@@ -111,7 +111,7 @@ public class AgregarCuentaServlet extends HttpServlet {
 		Movimiento movimiento = new Movimiento(0, cuenta, tipo, Date.valueOf(LocalDate.now()), "Alta de cuentas",
 				// new BigDecimal(10000)
 				// Si la cuenta es nueva solo se va a crear con 10000 que
-				// tiene en el constructor de la clase por lo que si eso cambia acá tambien.
+				// tiene en el constructor de la clase por lo que si eso cambia acï¿½ tambien.
 				cuenta.getSaldo()
 
 		);
