@@ -172,8 +172,8 @@
 			</div>
 			<div class="form-group">
     			<label for="genero">Género:</label>
-    				<select class="form-select form-select-sm" id="genero" name="genero">
-       					 <option value="" <%= cliente == null || cliente.getGenero() == null ? "selected" : "" %>>Seleccione un género</option>
+    				<select class="form-select form-select-sm" id="genero" name="genero" required>
+       					 <option value="" <%= cliente == null || cliente.getGenero() == null ? "selected" : "" %> disabled>Seleccione un género</option>
        					 <option value="V" <%= cliente != null && "V".equals(cliente.getGenero()) ? "selected" : "" %>>Masculino</option>
        					 <option value="M" <%= cliente != null && "M".equals(cliente.getGenero()) ? "selected" : "" %>>Femenino</option>
         				 <option value="O" <%= cliente != null && "O".equals(cliente.getGenero()) ? "selected" : "" %>>Otro</option>
