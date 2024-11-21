@@ -75,13 +75,13 @@
 				href="HomeAdministradorServlet">Inicio</a></li>
 			<li class="nav-item" title="Administración de Clientes"><a
 				class="nav-link <%=urlActual.toLowerCase().contains("cliente") ? "active" : ""%>"
-				href="AdministracionClientes.jsp">Adm. de Clientes</a></li>
+				href="AdministracionClientes.jsp">Clientes</a></li>
 			<li class="nav-item" title="Administración de Cuentas"><a
 				class="nav-link <%=urlActual.toLowerCase().contains("cuenta") ? "active" : ""%>"
-				href="AdministracionCuentas.jsp">Adm. de Cuentas</a></li>
+				href="AdministracionCuentas.jsp">Cuentas</a></li>
 			<li class="nav-item" title="Autorización de Préstamos"><a
 				class="nav-link <%=urlActual.toLowerCase().contains("autorizacion") ? "active" : ""%>"
-				href="AutorizacionPrestamos.jsp">Autorización de Préstamos</a></li>
+				href="AutorizacionPrestamos.jsp">Préstamos</a></li>
 			<li class="nav-item" title="Reportes"><a
 				class="nav-link <%=urlActual.toLowerCase().contains("reporte") ? "active" : ""%>"
 				href="Reportes.jsp">Reportes</a></li>
