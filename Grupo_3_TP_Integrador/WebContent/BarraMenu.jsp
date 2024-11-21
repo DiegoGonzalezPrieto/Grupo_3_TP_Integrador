@@ -11,6 +11,8 @@
 
 		response.sendRedirect("Login.jsp");
 	}
+
+	String urlActual = request.getRequestURL().toString();
 %>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -20,6 +22,7 @@
 		aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
+
 	<div class="collapse navbar-collapse" id="navbarNav">
 		<ul class="navbar-nav ml-auto">
 			<%
@@ -27,7 +30,8 @@
 			%>
 			<li class="nav-item"><a
 				class="nav-link btn btn-info rounded-5 text-white"
-				href="<%=usuario.esAdmin() ? "HomeAdministradorServlet" : "GestionDatosServlet?id="+ clienteMenu.getIdCliente()%>">
+				href="<%=usuario.esAdmin() ? "HomeAdministradorServlet"
+						: "GestionDatosServlet?id=" + clienteMenu.getIdCliente()%>">
 					<%=clienteMenu != null ? clienteMenu.getNombre() + " " + clienteMenu.getApellido()
 						: usuario.getNombreUsuario()%></a></li>
 
@@ -36,27 +40,33 @@
 				if (usuario != null && usuario.esAdmin()) {
 			%>
 
-			<li class="nav-item"><a class="nav-link"
+			<li class="nav-item"><a
+				class="nav-link <%=urlActual.toLowerCase().contains("home") ? "active" : ""%>"
 				href="HomeAdministradorServlet">Inicio</a></li>
-			<li class="nav-item"><a class="nav-link"
+			<li class="nav-item"><a
+				class="nav-link <%=urlActual.toLowerCase().contains("cliente") ? "active" : ""%>"
 				href="AdministracionClientes.jsp">Adm. de Clientes</a></li>
-			<li class="nav-item"><a class="nav-link"
+			<li class="nav-item"><a
+				class="nav-link <%=urlActual.toLowerCase().contains("cuenta") ? "active" : ""%>"
 				href="AdministracionCuentas.jsp">Adm. de Cuentas</a></li>
-			<li class="nav-item"><a class="nav-link"
+			<li class="nav-item"><a
+				class="nav-link <%=urlActual.toLowerCase().contains("autorizacion") ? "active" : ""%>"
 				href="AutorizacionPrestamos.jsp">Autorización de Préstamos</a></li>
-			<li class="nav-item"><a class="nav-link" href="Reportes.jsp">Reportes</a>
-			</li>
+			<li class="nav-item"><a
+				class="nav-link <%=urlActual.toLowerCase().contains("reporte") ? "active" : ""%>"
+				href="Reportes.jsp">Reportes</a></li>
 			<%
 				} else {
 			%>
-			<li class="nav-item"><a class="nav-link"
+			<li class="nav-item"><a
+				class="nav-link <%=urlActual.toLowerCase().contains("home") ? "active" : ""%>"
 				href="HomeClienteServlet">Inicio</a></li>
-			<li class="nav-item"><a class="nav-link"
+			<li class="nav-item"><a class="nav-link <%= urlActual.toLowerCase().contains("prestamo") ? "active" : "" %>"
 				href="PrestamosServlet?id=<%=clienteMenu.getIdCliente()%>">Préstamos</a></li>
-			<li class="nav-item"><a class="nav-link"
+			<li class="nav-item"><a class="nav-link <%= urlActual.toLowerCase().contains("datos") ? "active" : "" %>"
 				href="GestionDatosServlet?id=<%=clienteMenu.getIdCliente()%>">Mis
 					Datos</a></li>
-			<li class="nav-item"><a class="nav-link"
+			<li class="nav-item"><a class="nav-link <%= urlActual.toLowerCase().contains("transferencia") ? "active" : "" %>"
 				href="TransferenciaServlet?cliente=<%=clienteMenu.getIdCliente()%>">Transferencia</a></li>
 			<%
 				}
@@ -64,10 +74,10 @@
 			<%
 				}
 			%>
-			<li class="nav-item">
-				<a class="nav-link" href="LoginServlet">
-					<i class="fas fa-sign-out-alt" onclick="return confirm('¿Estás seguro/a que deseas cerrar sesión?')"></i>
-				</a></li>
+			<li class="nav-item"><a class="nav-link" href="LoginServlet">
+					<i class="fas fa-sign-out-alt"
+					onclick="return confirm('¿Estás seguro/a que deseas cerrar sesión?')"></i>
+			</a></li>
 		</ul>
 	</div>
 </nav>
