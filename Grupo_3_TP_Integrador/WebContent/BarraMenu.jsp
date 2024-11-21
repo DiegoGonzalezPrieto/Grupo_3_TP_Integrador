@@ -73,15 +73,15 @@
 			<li class="nav-item" title="Inicio"><a
 				class="nav-link <%=urlActual.toLowerCase().contains("home") ? "active" : ""%>"
 				href="HomeAdministradorServlet">Inicio</a></li>
-			<li class="nav-item" title="Administraci髇 de Clientes"><a
+			<li class="nav-item" title="Administraci贸n de Clientes"><a
 				class="nav-link <%=urlActual.toLowerCase().contains("cliente") ? "active" : ""%>"
 				href="AdministracionClientes.jsp">Clientes</a></li>
-			<li class="nav-item" title="Administraci髇 de Cuentas"><a
+			<li class="nav-item" title="Administraci贸n de Cuentas"><a
 				class="nav-link <%=urlActual.toLowerCase().contains("cuenta") ? "active" : ""%>"
 				href="AdministracionCuentas.jsp">Cuentas</a></li>
-			<li class="nav-item" title="Autorizaci髇 de Pr閟tamos"><a
+			<li class="nav-item" title="Autorizaci贸n de Pr茅stamos"><a
 				class="nav-link <%=urlActual.toLowerCase().contains("autorizacion") ? "active" : ""%>"
-				href="AutorizacionPrestamos.jsp">Pr閟tamos</a></li>
+				href="AutorizacionPrestamos.jsp">Pr茅stamos</a></li>
 			<li class="nav-item" title="Reportes"><a
 				class="nav-link <%=urlActual.toLowerCase().contains("reporte") ? "active" : ""%>"
 				href="Reportes.jsp">Reportes</a></li>
@@ -93,8 +93,8 @@
 				href="HomeClienteServlet">Inicio</a></li>
 			<li class="nav-item" title="Transferencia"><a class="nav-link <%= urlActual.toLowerCase().contains("transferencia") ? "active" : "" %>"
 				href="TransferenciaServlet?cliente=<%=clienteMenu.getIdCliente()%>">Transferencia</a></li>			
-			<li class="nav-item" title="Pr閟tamos"><a class="nav-link <%= urlActual.toLowerCase().contains("prestamo") ? "active" : "" %>"
-				href="PrestamosServlet?id=<%=clienteMenu.getIdCliente()%>">Pr閟tamos</a></li>
+			<li class="nav-item" title="Pr茅stamos"><a class="nav-link <%= urlActual.toLowerCase().contains("prestamo") ? "active" : "" %>"
+				href="PrestamosServlet?id=<%=clienteMenu.getIdCliente()%>">Pr茅stamos</a></li>
 			<li class="nav-item" title="Mis Datos"><a class="nav-link <%= urlActual.toLowerCase().contains("datos") ? "active" : "" %>"
 				href="GestionDatosServlet?id=<%=clienteMenu.getIdCliente()%>">Mis
 					Datos</a></li>
@@ -104,11 +104,19 @@
 			<%
 				}
 			%>
-			<li class="nav-item"><a class="nav-link" href="LoginServlet" title="Salir">
-					<i class="fas fa-sign-out-alt"
-					onclick="return confirm('縀st醩 seguro/a que deseas cerrar sesi髇?')"></i>
-			</a></li>
+      
+			<li class="nav-item">
+				<a class="nav-link" href="LoginServlet" id="logout" title="Salir">
+					<i class="fas fa-sign-out-alt"></i>
+				</a></li>
 		</ul>
 	</div>
 </nav>
 
+<script type="text/javascript">
+logout.addEventListener('click', (event) => {
+	const confirma = confirm('驴Est谩s seguro/a que deseas cerrar sesi贸n?');
+	if (!confirma)
+		event.preventDefault();
+})
+</script>
