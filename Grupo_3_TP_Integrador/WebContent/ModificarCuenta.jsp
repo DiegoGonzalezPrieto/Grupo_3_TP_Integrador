@@ -10,9 +10,14 @@
     <title>Modificar Cuenta</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<style>
+	body{
+		margin-top:70px;
+	}
+</style>
 <body>
     <%@ include file="BarraMenu.jsp"%>
-    <div class="container mt-4">
+    <div class="container" style="margin-top:200px;">
         <div class="card">
             <div class="card-header bg-primary text-white">
                 <h4 class="mb-0">Modificar Cuenta</h4>
@@ -84,5 +89,6 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
