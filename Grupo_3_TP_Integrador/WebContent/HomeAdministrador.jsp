@@ -27,7 +27,7 @@ li {
 }
 
 .card a, .card a:hover {
-	olor: inherit;
+	color: inherit;
 	text-decoration: none;
 }
 
