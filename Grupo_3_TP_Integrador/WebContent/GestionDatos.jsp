@@ -123,7 +123,8 @@
 						readonly
 					<% }%>
 					title="La contraseña debe tener al menos 8 caracteres, incluyendo letras y números"
-					required>
+					required
+					placeholder="La contraseña tiene que tener 8 caracteres, incluyendo letras y numeros">
 			</div>
 			
 			<div class="form-group">
@@ -132,7 +133,8 @@
 					value="<%=cliente == null ? "" : cliente.getPass()%>"
 					pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
 					title="La contraseña debe tener al menos 8 caracteres, incluyendo letras y números"
-					required>
+					required
+					placeholder="Ingresar la misma contraseña">
 			</div>
 			
 			<div id="error-message" style="display:none; color: red;">
@@ -144,7 +146,8 @@
 					class="form-control" id="nombre" name="nombre"
 					value="<%=cliente == null ? "" : cliente.getNombre()%>"
 					pattern="[A-Za-zÀ-ÿ\s]{2,50}"
-					title="Ingrese un nombre válido (solo letras)" required>
+					title="Ingrese un nombre válido (solo letras)" required
+					placeholder="Ingresar solo Letras">
 			</div>
 
 			<div class="form-group">
@@ -152,7 +155,8 @@
 					class="form-control" id="apellido" name="apellido"
 					value="<%=cliente == null ? "" : cliente.getApellido()%>"
 					pattern="[A-Za-zÀ-ÿ\s]{2,50}"
-					title="Ingrese un apellido válido (solo letras)" required>
+					title="Ingrese un apellido válido (solo letras)" required
+					placeholder="Ingresar solo Letras">
 			</div>
 
 			<div class="form-group">
@@ -160,7 +164,8 @@
 					class="form-control" id="dni" name="dni"
 					value="<%=cliente == null ? "" : cliente.getDni()%>"
 					
-					required>
+					required
+					placeholder="Ingresar solo numeros, 8 digitos">
 			</div>
 
 			<div class="form-group">
@@ -168,7 +173,8 @@
 					class="form-control" id="cuil" name="cuil"
 					value="<%=cliente == null ? "" : cliente.getCuil()%>"
 					
-					title="El CUIL debe tener exactamente 11 dígitos" required>
+					title="El CUIL debe tener exactamente 11 dígitos" required
+					placeholder="Ingresar solo numeros,11 digitos sin guiones">
 			</div>
 			<div class="form-group">
     			<label for="genero">Género:</label>
@@ -185,7 +191,9 @@
 					class="form-control" id="email" name="email"
 					value="<%=cliente == null ? "" : cliente.getCorreoElectronico()%>"
 					
-					title="Ingrese un email válido" required>
+					title="Ingrese un email válido" required
+					placeholder="Ingresar un mail valido">
+					
 			</div>
 
 			<div class="form-group">
@@ -193,7 +201,8 @@
 					class="form-control" id="telefono" name="telefono"
 					value="<%=cliente == null ? "" : cliente.getTelefono()%>"
 					pattern="[0-9]{10}" title="El teléfono debe tener 10 dígitos"
-					required>
+					required
+					placeholder="Ingresar un telefono valido (10 Digitos)">
 			</div>
 
 			<div class="form-group">
@@ -201,7 +210,8 @@
 					class="form-control" id="fechaNacimiento" name="fechaNacimiento"
 					value="<%=cliente == null ? "" : cliente.getFechaNacimiento()%>"
 					max="<%=LocalDate.now().minusYears(18)%>"
-					title="Debe ser mayor de 18 años" required>
+					title="Debe ser mayor de 18 años" required
+					placeholder="Usuario mayor a 18 años">
 			</div>
 
 			<div class="form-group">
