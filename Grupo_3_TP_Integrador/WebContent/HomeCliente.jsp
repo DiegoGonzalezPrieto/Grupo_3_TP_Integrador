@@ -53,17 +53,32 @@
 				href="PrestamosServlet?id=<%=cliente.getIdCliente()%>">Préstamos</a></li>
 			
 			<%
-				List<Prestamo> prestamosCliente = (List<Prestamo>) request.getAttribute("prestamos");
-				
-				if( prestamosCliente != null && !prestamosCliente.isEmpty()){
-					
+		    List<Prestamo> prestamosCliente = (List<Prestamo>) request.getAttribute("prestamos");
+		    if (prestamosCliente != null && !prestamosCliente.isEmpty()) {
 			%>
-			
-			<li class="nav-item mx-2"><a class="nav-link active"
-				href="PagoPrestamoServlet?id=<%=cliente.getIdCliente()%>">Pago de Cuotas</a></li>
+			<li class="nav-item dropdown mx-2">
+			    <a class="nav-link dropdown-toggle active" href="#" id="dropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+			        Pago de Cuotas
+			    </a>
+			    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+			        <% 
+			        	int cont = 1;
+			        for (Prestamo prestamo : prestamosCliente) { %>
+			            <li>
+			                <a class="dropdown-item" href="PagoPrestamoServlet?id=<%= prestamo.getId() %>">
+			                    Prestamo: <%= cont %> - Monto solicitado: <%= prestamo.getImportePrestamo() %>
+			                </a>
+			            </li>
+			        <% 
+			        
+						cont++;
+			        } %>
+			    </ul>
+			</li>
 			<% 
-				}
+			    }
 			%>	
+				
 			<li class="nav-item mx-2"><a class="nav-link active"
 				href="GestionDatosServlet?id=<%=cliente.getIdCliente()%>">Mis Datos</a></li>
 		</ul>
