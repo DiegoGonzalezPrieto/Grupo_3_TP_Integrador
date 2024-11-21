@@ -65,10 +65,17 @@
 				}
 			%>
 			<li class="nav-item">
-				<a class="nav-link" href="LoginServlet">
-					<i class="fas fa-sign-out-alt" onclick="return confirm('¿Estás seguro/a que deseas cerrar sesión?')"></i>
+				<a class="nav-link" href="LoginServlet" id="logout">
+					<i class="fas fa-sign-out-alt"></i>
 				</a></li>
 		</ul>
 	</div>
 </nav>
 
+<script type="text/javascript">
+logout.addEventListener('click', (event) => {
+	const confirma = confirm('¿Estás seguro/a que deseas cerrar sesión?');
+	if (!confirma)
+		event.preventDefault();
+})
+</script>
