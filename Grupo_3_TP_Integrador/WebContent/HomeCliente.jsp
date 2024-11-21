@@ -63,7 +63,9 @@
 			    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 			        <% 
 			        	int cont = 1;
-			        for (Prestamo prestamo : prestamosCliente) { %>
+			        for (Prestamo prestamo : prestamosCliente) { 
+			        	if(prestamo.getEstadoValidacion().getId() == 2){
+			        %>
 			            <li>
 			                <a class="dropdown-item" href="PagoPrestamoServlet?id=<%= prestamo.getId() %>">
 			                    Prestamo: <%= cont %> - Monto solicitado: <%= prestamo.getImportePrestamo() %>
@@ -72,7 +74,8 @@
 			        <% 
 			        
 						cont++;
-			        } %>
+			        } 
+			        }%>
 			    </ul>
 			</li>
 			<% 
