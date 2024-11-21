@@ -111,11 +111,13 @@
 									cuenta</option>
 									<%
 										for(Cuenta cu : cuentasCliente){
-											
+											if(cu.Activa() == true){
+												
 									%>
 									
 								<option value="<%= cu.getId()%>"><%=cu.getTipoCuenta().getNombre() %> - <%=cu.getNumeroCuenta() %> </option>
 									<%
+									}
 										}
 									
 									%>
