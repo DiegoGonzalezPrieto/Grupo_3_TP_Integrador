@@ -16,15 +16,15 @@
 	</style>
 </head>
 <body>
-	<footer class="bg-light text-center text-lg-start" style="background-color: rgba(0, 0, 0, 0.2); margin-top: 30px;">
+	<footer class="bg-light text-center text-lg-start" style="background-color: rgba(0, 0, 0, 0.2); margin-top: 150px">
 		<div class="container p-4" style="justify-content:center">
 			<div class="row">
 				<div class="col-lg-6 col-md-12 mb-2 mb-md-0">
-					<h6 class="text-uppercase">Banco G3-L4</h6>
+					<h6 class="text-uppercase">Banco L4B-G3</h6>
 					<p>Proporcionando servicios bancarios de calidad desde 2024.</p>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row" style="margin-bottom:10px">
 				<div class="col-lg-3 col-md-6 mb-2 mb-md-0">
 					<h6 class="text-uppercase">Institucional</h6>
 					<ul class="list-unstyled mb-0">
@@ -46,7 +46,7 @@
 				<div class="col-lg-3 col-md-6 mb-2 mb-md-0">
 					<h6 class="text-uppercase">Contacto</h6>
 					<ul class="list-unstyled mb-0">
-						<li><a href="#!" class="text-dark">contacto@bancog3l4.com</a></li>
+						<li><a href="#!" class="text-dark">contacto@bancoL4B-G3.com</a></li>
 						<li><a href="#!" class="text-dark">+54 11 1234-5678</a></li>
 						<li><a href="#!" class="text-dark">0800 000 0000</a></li>
 						<li>
@@ -59,8 +59,8 @@
 				</div>
 			</div>
 		</div>
-		<div class="text-center mb-2">
-			© 2024 Banco G3-L4
+		<div class="text-center" style="margin-bottom: 15px">
+			~ © 2024 Banco L4B-G3 ~
 		</div>
 	</footer>
 
