@@ -38,7 +38,7 @@
 <body>
 	<%@ include file="BarraMenu.jsp"%>
 	<div class="container mt-5" style="font-size: 0.8em">
-		<h1 class="text-center">Gestión de Préstamos</h1>
+		<h1 class="display-5" style="margin:50px; text-align:center;">Gestión de Préstamos</h1><hr>
 		
 		<!--  TRAER LISTA DE PRESTAMOS -->
 		<%
@@ -133,7 +133,7 @@
 		</div>
 
 
-		<h2 class="mt-4">Mis Préstamos</h2>
+		<h1 class="display-6" style="margin-top:50px;">Mis Préstamos</h1><hr>
 
 		<table id="tabla-prestamos" class="table table-striped table-bordered">
 			<thead class="thead-dark">
