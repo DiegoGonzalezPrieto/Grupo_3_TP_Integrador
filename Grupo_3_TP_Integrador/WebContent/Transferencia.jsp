@@ -132,6 +132,9 @@
 				</form>
 			</div>
 		</div>
+		<div style="text-align:center; margin:10px">
+			<a href="HomeClienteServlet">Volver al Home</a>
+		</div>
 	</div>
 	<%@ include file="Footer.jsp"%>
 
