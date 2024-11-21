@@ -34,7 +34,7 @@
 <body>
 	<%@ include file="BarraMenu.jsp"%>
 	<div class="container">
-		<h1 class="display-3">Autorización de Préstamos</h1>
+		<h1 class="text-center mb-4">Autorización de Préstamos</h1>
 
 		<!-- MOSTRAR MENSAJE DE EXITO DESPUES DE LA OPERACION -->
 		<%
@@ -69,55 +69,82 @@
 		%>
 
 
-
-		<div class="row align-items-center">
-			<div class="col">
-				<table class="inputs">
-					<tbody>
-						<tr>
-							<td>Monto mínimo:</td>
-							<td><input type="number" id="minMonto" name="minMonto"></td>
-						</tr>
-						<tr>
-							<td>Monto máximo:</td>
-							<td><input type="number" id="maxMonto" name="maxMonto"></td>
-						</tr>
-					</tbody>
-				</table>
-
-			</div>
-			<div class="col d-flex justify-content-end">
-				<table class="inputs">
-					<tbody>
-						<tr>
-							<td>Cantidad de cuotas mínima:</td>
-							<td><input type="number" id="minCuotas" name="minCuotas" step="6" max="24" min="6"></td>
-						</tr>
-						<tr>
-							<td>Cantidad de cuotas máxima:</td>
-							<td><input type="number" id="maxCuotas" name="maxCuotas" step="6" max="24" min="6"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="col d-flex justify-content-end">
-				<table class="inputs">
-					<tbody>
-						<tr>
-							<td>Fecha desde:</td>
-							<td><input type="date" id="minFecha" name="minFecha"></td>
-						</tr>
-						<tr>
-							<td>Fecha hasta:</td>
-							<td><input type="date" id="maxFecha" name="maxFecha"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+		<div class="container mt-4">
+		   <div class="row">
+		       <!-- Filtro de Monto -->
+		       <div class="col-md-4">
+		           <div class="card shadow-sm h-100">
+		               <div class="card-header bg-light">
+		                   <h6 class="mb-0">Filtro por Monto</h6>
+		               </div>
+		               <div class="card-body">
+		                   <div class="mb-3">
+		                       <label class="form-label">Monto mínimo:</label>
+		                       <input type="number" class="form-control" id="minMonto" name="minMonto" 
+		                              min="0" max="999999999" 
+		                              oninput="if(this.value.length > 9) this.value=this.value.slice(0,9)">
+		                   </div>
+		                   <div class="mb-3">
+		                       <label class="form-label">Monto máximo:</label>
+		                       <input type="number" class="form-control" id="maxMonto" name="maxMonto"
+		                              min="0" max="999999999"
+		                              oninput="if(this.value.length > 9) this.value=this.value.slice(0,9)">
+		                   </div>
+		               </div>
+		           </div>
+		       </div>
+		
+		       <!-- Filtro de Cuotas -->
+		       <div class="col-md-4">
+		           <div class="card shadow-sm h-100">
+		               <div class="card-header bg-light">
+		                   <h6 class="mb-0">Filtro por Cuotas</h6>
+		               </div>
+		               <div class="card-body">
+		                   <div class="mb-3">
+		                       <label class="form-label">Cuotas mínimas:</label>
+		                       <input type="number" class="form-control" id="minCuotas" name="minCuotas" 
+		                              step="6" max="24" min="6">
+		                   </div>
+		                   <div class="mb-3">
+		                       <label class="form-label">Cuotas máximas:</label>
+		                       <input type="number" class="form-control" id="maxCuotas" name="maxCuotas" 
+		                              step="6" max="24" min="6">
+		                   </div>
+		               </div>
+		           </div>
+		       </div>
+		
+		       <!-- Filtro de Fecha -->
+		       <div class="col-md-4">
+		           <div class="card shadow-sm h-100">
+		               <div class="card-header bg-light">
+		                   <h6 class="mb-0">Filtro por Fecha</h6>
+		               </div>
+		               <div class="card-body">
+		                   <div class="mb-3">
+		                       <label class="form-label">Fecha desde:</label>
+		                       <input type="date" class="form-control" id="minFecha" name="minFecha">
+		                   </div>
+		                   <div class="mb-3">
+		                       <label class="form-label">Fecha hasta:</label>
+		                       <input type="date" class="form-control" id="maxFecha" name="maxFecha">
+		                   </div>
+		               </div>
+		           </div>
+		       </div>
+		   </div>
+		
+		   <!-- Botón Limpiar -->
+		   <div class="row mt-3">
+		       <div class="col-12 d-flex justify-content-end">
+		           <a href="#" id="limpiar-filtros" class="btn btn-outline-secondary">
+		               <i class="bi bi-trash"></i> Limpiar filtros
+		           </a>
+		       </div>
+		   </div>
 		</div>
-		<div class="col d-flex justify-content-end" style="border-bottom:1px;">
-		    <a href="#" id="limpiar-filtros">Limpiar filtros</a>
-		</div>
+		
 		<hr>
 
 		<table id="tabla-prestamos" class="table table-striped">
