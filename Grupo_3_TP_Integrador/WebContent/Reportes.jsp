@@ -57,7 +57,7 @@
 
 		<!-- Form para generar nuevos reportes -->
 		<div class="container" style="margin-top:20px;">
-			<h3>Generar Nuevo Reporte</h3>
+			<h1 class="display-6" style="margin-top:50px; text-align:left">Generar nuevo Reporte</h1><hr>
 			<form action="GenerarReporteServlet" method="POST">
 				<div class="mb-3">
 					<label for="tipoReporte">Tipo de Reporte:</label> <select
@@ -92,12 +92,13 @@
 			}
 		%>
 		
-		<div style="margin-top:10px;">
-			<h3>Reportes de esta sesión</h3>
+		<div>
+			<h1 class="display-6" style="margin-top:50px; text-align:left">Reportes de esta sesión</h1>
 			<div style="display:flex; margin-top:15px; color:dark-gray">
 				<i class="fas fa-download" style="max-width:30%; margin-right:10px;"></i>
 				<p style="font-size:10px;">Descargar reporte</p>
 			</div>
+			<hr>
 		</div>
 		<table id="tablaReportes" class="table table-striped">
 			<thead>
