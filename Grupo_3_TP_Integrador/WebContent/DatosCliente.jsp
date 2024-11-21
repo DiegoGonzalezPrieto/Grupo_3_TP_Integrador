@@ -171,6 +171,11 @@
 				%>
 			</div>
 		</div>
+		<% Boolean visible = usuario != null && !usuario.esAdmin(); %>
+		<div style="<%= visible ? "" : "display:none;" %>">
+		    <p style="text-align:center;">Para solicitar la actualización de datos, por favor comunicate con un asesor.</p>
+		</div>
+
 	</div>
 	<%@ include file="Footer.jsp"%>
 	<script
