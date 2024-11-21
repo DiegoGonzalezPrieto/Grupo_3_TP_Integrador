@@ -80,10 +80,12 @@
 		<%
 			}
 		%>
-		<h1>Administración de Cuentas</h1>
+		<h1 class="text-center mb-4">Administración de Cuentas</h1>
 
 		<div class="mt-4">
-			<h2>Listado de Cuentas</h2>
+			<!-- 
+				<h2>Listado de Cuentas</h2>
+			 -->
 			<div class="row align-items-center">
 				<div class="col d-flex justify-content-end">
 					<table class="inputs">

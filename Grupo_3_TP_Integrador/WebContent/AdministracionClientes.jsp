@@ -36,7 +36,7 @@
 	<%@ include file="BarraMenu.jsp"%>
 
 	<div class="container mt-5">
-		<h1 class="text-center mb-4">Administración de Clientes/Usuarios</h1>
+		<h1 class="text-center mb-4">Administración de Clientes</h1>
 		<%
 			String mensaje = (String) session.getAttribute("mensaje");
 			String tipoMensaje = (String) session.getAttribute("tipoMensaje");
@@ -81,16 +81,20 @@
 				<div class="mb-3"></div>
 
 				<table id="clientesTable" class="table table-striped table-bordered"
-					style="width: 80%">
+					style="text-align:center;">
 					<thead class="table-dark">
 						<tr>
+							<!-- 
 							<th>ID</th>
-							<th>Usuario</th>
-							<th>DNI</th>
 							<th>Nombre</th>
 							<th>Apellido</th>
+							 -->
+							<th>Cliente</th>
+							<th>DNI</th>
 							<th>Correo Electrónico</th>
 							<th>Teléfono</th>
+							<th>Usuario</th>
+							
 							<!-- 
 							<th>Género</th>
 							<th>Dirección</th>
@@ -110,13 +114,18 @@
 								for (Cliente cliente : listaClientes) {
 						%>
 						<tr>
+							<!-- 
 							<td><%=cliente.getIdCliente()%></td>
-							<td><%=cliente.getNombreUsuario()%></td>
+							 -->
+							<td><%=cliente.getApellido() + ", " + cliente.getNombre()%></td>
 							<td><%=cliente.getDni()%></td>
-							<td><%=cliente.getNombre()%></td>
-							<td><%=cliente.getApellido()%></td>
 							<td><%=cliente.getCorreoElectronico()%></td>
 							<td><%=cliente.getTelefono()%></td>
+							<td><%=cliente.getNombreUsuario()%></td>
+							<!-- 
+							<td><%=cliente.getNombre()%></td>
+							<td><%=cliente.getApellido()%></td>
+							 -->
 							<!-- 
 							<td><%=cliente.getGeneroCompleto()%></td>
 							<td><%=cliente.getDireccion()%></td>
