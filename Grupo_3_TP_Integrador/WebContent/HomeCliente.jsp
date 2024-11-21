@@ -23,6 +23,22 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
 	crossorigin="anonymous"></script>
+	<style>
+	.card {
+	transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card a, .card a:hover {
+	color: inherit;
+	text-decoration: none;
+}
+
+.card:hover {
+	transform: scale(1.05);
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+	
+	</style>
 </head>
 <body>
 	<%@ include file="BarraMenu.jsp"%>
@@ -64,13 +80,15 @@
 		            for(Cuenta cuenta : cuentasCliente) {
 		    %>
 		            <li class="nav-item my-1" title="Ver movimientos">
-		                <a class="border nav-link" href="DetallesCuentaServlet?id=<%=cuenta.getId()%>">
-		                    <span class="text-black">Cuenta <%=cuenta.getNumeroCuenta()%></span><br>
-		                    <span class="text-black">CBU: <%=cuenta.getCbu()%></span><br>
-		                    <span class="text-black">Número: <%=cuenta.getNumeroCuenta()%></span><br>
-		                    <span class="text-black"><%=cuenta.getTipoCuenta().getNombre()%></span><br>
-		                    <span class="text-black">Saldo: $<%=cuenta.getSaldo()%></span>
-		                </a>
+		            	<div class="card">
+			                <a class="border nav-link" href="DetallesCuentaServlet?id=<%=cuenta.getId()%>">
+			                    <span class="text-black">Cuenta <%=cuenta.getNumeroCuenta()%></span><br>
+			                    <span class="text-black">CBU: <%=cuenta.getCbu()%></span><br>
+			                    <span class="text-black">Número: <%=cuenta.getNumeroCuenta()%></span><br>
+			                    <span class="text-black"><%=cuenta.getTipoCuenta().getNombre()%></span><br>
+			                    <span class="text-black">Saldo: $<%=cuenta.getSaldo()%></span>
+			                </a>
+		            	</div>
 		            </li>
 		    <%
 		            }
