@@ -327,9 +327,6 @@
 		    
 		    var errorMessage = document.getElementById("error-message");
 	
-		    console.log(pass);
-		    console.log(confPass);
-		    console.log(pass !== ConfPass);
 		    if (ConfPass.value !== pass.value ) {
 		    	errorMessage.style.display = "block";
 		        event.preventDefault(); 
