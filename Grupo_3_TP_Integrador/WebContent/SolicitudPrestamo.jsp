@@ -131,7 +131,7 @@
 							<label for="ImporteaSolicitar">Importe a Solicitar</label> <input
 								id="ImporteaSolicitar" type="number" class="form-control"
 								placeholder="Ingrese el importe a solicitar (máx. $1.000.000)"
-								min="0" max="1000000" oninput="calcularMontos()" required
+								min="1" max="1000000" oninput="calcularMontos()" required
 								name="ImporteaSolicitar">
 						</div>
 												
