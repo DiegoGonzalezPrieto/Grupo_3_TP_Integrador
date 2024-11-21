@@ -100,7 +100,7 @@ public class SolicitudPrestamoServlet extends HttpServlet {
 
 		cliente = negoCliente.buscarPorId(idCliente);
 
-		cuentasCliente = (ArrayList<Cuenta>) negoCuenta.listarPorCliente(cliente.getIdCliente());
+		cuentasCliente = (ArrayList<Cuenta>) negoCuenta.listarActivasPorCliente(cliente.getIdCliente());
 
 		request.setAttribute("cliente", cliente);
 		request.setAttribute("listaCuentas", cuentasCliente);
