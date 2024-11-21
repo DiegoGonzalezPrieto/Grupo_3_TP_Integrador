@@ -34,7 +34,8 @@
 <body>
 	<%@ include file="BarraMenu.jsp"%>
 	<div class="container">
-		<h1 class="display-3">Autorización de Préstamos</h1>
+		<h1 class="display-5" style="margin:50px; text-align:center;">Autorización de Préstamos</h1>
+		<hr>
 
 		<!-- MOSTRAR MENSAJE DE EXITO DESPUES DE LA OPERACION -->
 		<%

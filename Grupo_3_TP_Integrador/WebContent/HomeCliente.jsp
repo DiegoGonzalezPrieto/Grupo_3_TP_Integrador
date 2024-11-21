@@ -56,7 +56,7 @@
 		</ul>
 
 
-		<h2 class="my-3">Mis Cuentas</h2>
+		<h1 class="display-6" style="margin-top:50px;">Mis Cuentas</h1><hr>
 		<ul class="nav flex-column">
 		    <%
 		        List<Cuenta> cuentasCliente = (List<Cuenta>)request.getAttribute("cuentasCliente");

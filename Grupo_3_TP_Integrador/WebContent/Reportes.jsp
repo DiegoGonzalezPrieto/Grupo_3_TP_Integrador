@@ -51,7 +51,8 @@
 </head>
 <body>
 	<%@ include file="BarraMenu.jsp"%>
-	<h1 class="display-5" style="margin-top:50px;">Administración de Reportes</h1>
+	<h1 class="display-5" style="margin:50px;">Administración de Reportes</h1>
+	<hr>
 	<div class="container">
 
 		<!-- Form para generar nuevos reportes -->

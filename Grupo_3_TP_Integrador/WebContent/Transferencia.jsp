@@ -61,7 +61,7 @@
 		<%
 			}
 		%>
-		<h1 class="text-center mb-4">Transferencia</h1>
+		<h1 class="display-5" style="margin:50px; text-align:center;">Transferencia</h1><hr>
 		<div class="row justify-content-center">
 			<div class="col-md-4">
 				<form action="" method="POST" class="p-4 border rounded bg-light">
