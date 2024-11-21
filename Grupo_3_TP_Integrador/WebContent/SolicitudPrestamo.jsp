@@ -128,10 +128,10 @@
 						</div>
 
 						<div class="form-group">
-							<label for="ImporteaSolicitar">Importe a Solicitar</label> <input
-								id="ImporteaSolicitar" type="number" class="form-control"
-								placeholder="Ingrese el importe a solicitar (máx. $1.000.000)"
-								min="1" max="1000000" oninput="calcularMontos()" required
+							<label for="ImporteaSolicitar">Importe a Solicitar</label> 
+							<input id="ImporteaSolicitar" type="number" class="form-control"
+								placeholder="Ingrese el importe a solicitar (máx. $10.000.000)"
+								min="50000" max="10000000" oninput="calcularMontos()" required
 								name="ImporteaSolicitar">
 						</div>
 												
