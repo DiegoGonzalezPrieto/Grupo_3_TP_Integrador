@@ -85,10 +85,10 @@
 					<thead class="table-dark">
 						<tr>
 							<!-- 
-							<th>ID</th>
 							<th>Nombre</th>
 							<th>Apellido</th>
 							 -->
+							<th>ID</th>
 							<th>Cliente</th>
 							<th>DNI</th>
 							<th>Correo Electrónico</th>
@@ -114,9 +114,7 @@
 								for (Cliente cliente : listaClientes) {
 						%>
 						<tr>
-							<!-- 
 							<td><%=cliente.getIdCliente()%></td>
-							 -->
 							<td><%=cliente.getApellido() + ", " + cliente.getNombre()%></td>
 							<td><%=cliente.getDni()%></td>
 							<td><%=cliente.getCorreoElectronico()%></td>
@@ -182,18 +180,26 @@
 			});
 		});
 	</script> -->
-	<script type="text/javascript">
-		let table = new DataTable(
-				'#clientesTable',
-				{
-					language : {
-						url : 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
-					},
-					paging : true,
-					searching : true,
-					info : true
-				});
+		<script type="text/javascript">
+	    document.addEventListener('DOMContentLoaded', function() {
+	        let table = new DataTable('#clientesTable', {
+	            language: {
+	                url: 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
+	            },
+	            paging: true,
+	            searching: true,
+	            info: true,
+	            columnDefs: [
+	                {
+	                    targets: [0],
+	                    visible: false,
+	                    searchable: false
+	                }
+	            ]
+	        });
+	    });
 	</script>
+
 
 
 

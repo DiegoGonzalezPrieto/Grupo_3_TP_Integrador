@@ -94,7 +94,7 @@ label {
 		<table id="tablaReportes" class="table table-striped">
 			<thead>
 				<tr>
-					<th scope="col">ID</th>
+					<th scope="col">ID Reporte</th>
 					<th scope="col">Nombre</th>
 					<th scope="col">Fecha</th>
 					<th scope="col">Tipo</th>
@@ -127,45 +127,55 @@ label {
 
 
 	<%@ include file="Footer.jsp"%>
-	<script type="text/javascript">
-		// init seleccion de fechas
-		if (tipoReporte.value === 'clientes') {
-			fechaInicio.disabled = true;
-			fechaFin.disabled = true;
-			fechasReporte.hidden = true;
-		}
-		fechaInicio.max = new Date().toISOString().split("T")[0];
-		fechaFin.max = new Date().toISOString().split("T")[0];
-
-		// Cambios en formulario según tipo de reporte:
-		function reporteSeleccionado(reporte) {
-			if (reporte === 'clientes') {
-				fechaInicio.disabled = true;
-				fechaFin.disabled = true;
-				fechasReporte.hidden = true;
-			} else {
-				fechaInicio.disabled = false;
-				fechaFin.disabled = false;
-				fechasReporte.hidden = false;
-			}
-		}
-
-		// recargar pagina para agtualizar tabla de reportes
-		function recargarPagina() {
-			setTimeout(function() {
-				location.reload();
-			}, 2000);
-		}
+	<script type="text/javascript"> 
+	
+	// init seleccion de fechas 
+	if (tipoReporte.value === 'clientes') { 
+		fechaInicio.disabled = true; 
+		fechaFin.disabled = true; 
+		fechasReporte.hidden = true; 
+		} 
+	fechaInicio.max = new Date().toISOString().split("T")[0]; 
+	fechaFin.max = new Date().toISOString().split("T")[0]; 
+	
+	// Cambios en formulario según tipo de reporte: 
+		function reporteSeleccionado(reporte) { 
+		if (reporte === 'clientes') { 
+			fechaInicio.disabled = true; 
+			fechaFin.disabled = true; 
+			fechasReporte.hidden = true; 
+			} else { 
+				fechaInicio.disabled = false; 
+				fechaFin.disabled = false; 
+				fechasReporte.hidden = false; 
+				} 
+		} 
+	// recargar pagina para agtualizar tabla de reportes 
+	function recargarPagina() { 
+		setTimeout(function() { 
+			location.reload(); }, 2000); 
+		} 
+	</script> 
+	
+	<script type="text/javascript"> 
+	let table = new DataTable( '#tablaReportes', { 
+		language : { 
+			url : 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json' 
+		},
+		paging: true, 
+		searching: true, 
+		info: true, 
+		columnDefs: [ 
+			{ 
+			targets: [0], 
+			visible: false, 
+			searchable: false 
+			} 
+		]
+	}); 
 	</script>
-	<script type="text/javascript">
-		let table = new DataTable(
-				'#tablaReportes',
-				{
-					language : {
-						url : 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
-					}
-				});
-	</script>
+
+
 
 </body>
 </html>

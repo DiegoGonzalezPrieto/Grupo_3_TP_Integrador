@@ -180,61 +180,68 @@
 	</div>
 
 	<%@ include file="Footer.jsp"%>
-	<script>
-		let table = new DataTable(
-				'#cuentasTable',
-				{
-					language : {
-						url : 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
-					},
-					paging : true,
-					searching : true,
-					info : true
-				});
+	<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        let table = new DataTable('#cuentasTable', {
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/2.1.8/i18n/es-AR.json'
+            },
+            paging: true,
+            searching: true,
+            info: true,
+            columnDefs: [
+                {
+                    targets: [0], // Índice de la columna que deseas ocultar (ID)
+                    visible: false,
+                    searchable: false
+                }
+            ]
+        });
 
-		// Filtros por saldo mayor y menor
-		table.search.fixed('saldo', function(searchStr, data, index) {
-			var min = parseInt(minSaldo.value, 10);
-			var max = parseInt(maxSaldo.value, 10);
-			var saldo = parseFloat(data[6].replace("$", "").replace(".", ",")
-					.replace(",", "")) || 0;
+        // Filtros por saldo mayor y menor
+        table.search.fixed('saldo', function(searchStr, data, index) {
+            var min = parseInt(minSaldo.value, 10);
+            var max = parseInt(maxSaldo.value, 10);
+            var saldo = parseFloat(data[6].replace("$", "").replace(".", ",").replace(",", "")) || 0;
 
-			if ((isNaN(min) && isNaN(max)) || (isNaN(min) && saldo <= max)
-					|| (min <= saldo && isNaN(max))
-					|| (min <= saldo && saldo <= max)) {
-				return true;
-			}
+            if ((isNaN(min) && isNaN(max)) || (isNaN(min) && saldo <= max)
+                || (min <= saldo && isNaN(max))
+                || (min <= saldo && saldo <= max)) {
+                return true;
+            }
 
-			return false;
-		});
+            return false;
+        });
 
-		minSaldo.addEventListener('input', function() {
-			table.draw();
-		});
-		maxSaldo.addEventListener('input', function() {
-			table.draw();
-		});
+        minSaldo.addEventListener('input', function() {
+            table.draw();
+        });
+        maxSaldo.addEventListener('input', function() {
+            table.draw();
+        });
 
-		// Filtros por fecha mayor y menor
-		table.search.fixed('fecha', function(searchStr, data, index) {
-			var min = minFecha.value ? new Date(minFecha.value) : false;
-			var max = maxFecha.value ? new Date(maxFecha.value) : false;
-			var fecha = new Date(data[2]);
+        // Filtros por fecha mayor y menor
+        table.search.fixed('fecha', function(searchStr, data, index) {
+            var min = minFecha.value ? new Date(minFecha.value) : false;
+            var max = maxFecha.value ? new Date(maxFecha.value) : false;
+            var fecha = new Date(data[2]);
 
-			if ((min <= fecha || !min) && (max >= fecha || !max)) {
-				return true;
-			}
+            if ((min <= fecha || !min) && (max >= fecha || !max)) {
+                return true;
+            }
 
-			return false;
-		});
+            return false;
+        });
 
-		minFecha.addEventListener('input', function() {
-			table.draw();
-		});
-		maxFecha.addEventListener('input', function() {
-			table.draw();
-		});
-	</script>
+        minFecha.addEventListener('input', function() {
+            table.draw();
+        });
+        maxFecha.addEventListener('input', function() {
+            table.draw();
+        });
+    });
+</script>
+
 </body>
 </html>
 
