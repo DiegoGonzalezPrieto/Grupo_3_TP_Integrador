@@ -44,11 +44,13 @@
 		<%} %>
 		<ul class="nav nav-pills nav-fill m-3">
 			<li class="nav-item mx-2"><a class="nav-link active"
-				href="TransferenciaServlet?cliente=<%=cliente.getIdCliente()%>">Transferencias</a></li>
+				href="TransferenciaServlet?cliente=<%=cliente.getIdCliente()%>">Realizar una transferencia</a></li>
 			<li class="nav-item mx-2"><a class="nav-link active"
 				href="PrestamosServlet?id=<%=cliente.getIdCliente()%>">Préstamos</a></li>
+			<!-- 
 			<li class="nav-item mx-2"><a class="nav-link active"
 				href="PagoPrestamoServlet?id=<%=cliente.getIdCliente()%>">Pago de Cuotas</a></li>
+			 -->
 			<li class="nav-item mx-2"><a class="nav-link active"
 				href="GestionDatosServlet?id=<%=cliente.getIdCliente()%>">Mis Datos</a></li>
 		</ul>
@@ -61,7 +63,7 @@
 		        if(cuentasCliente != null && !cuentasCliente.isEmpty()) {
 		            for(Cuenta cuenta : cuentasCliente) {
 		    %>
-		            <li class="nav-item my-1">
+		            <li class="nav-item my-1" title="Ver movimientos">
 		                <a class="border nav-link" href="DetallesCuentaServlet?id=<%=cuenta.getId()%>">
 		                    <span class="text-black">Cuenta <%=cuenta.getNumeroCuenta()%></span><br>
 		                    <span class="text-black">CBU: <%=cuenta.getCbu()%></span><br>
@@ -74,9 +76,10 @@
 		            }
 		        } else {
 		    %>
-		            <li class="nav-item my-1">
+		            <li class="nav-item my-1" style="text-align:center">
 		                <div class="border nav-link">
-		                    <span class="text-black">No hay cuentas disponibles</span>
+		                    <span class="text-black">No hay cuentas disponibles aún.</span>
+		                    <p class="text-black">Para solicitar abrir una cuenta, por favor comunicate con un asesor.</p>
 		                </div>
 		            </li>
 		    <%
