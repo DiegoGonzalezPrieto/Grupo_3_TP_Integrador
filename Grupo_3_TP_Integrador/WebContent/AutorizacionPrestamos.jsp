@@ -1,5 +1,6 @@
 <%@page import="java.util.List"%>
 <%@page import="dominio.Prestamo"%>
+<%@page import= "java.util.Map" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html >
@@ -55,7 +56,9 @@
 
 		<!--  TRAER LISTA DE PRESTAMOS -->
 		<%
+			
 			List<Prestamo> prestamos = (List<Prestamo>) request.getAttribute("listaPrestamos");
+			Map<Integer, Integer> mapCuotasPagas = (Map<Integer, Integer>) request.getAttribute("mapCuotasPagas");
 			if (prestamos == null || prestamos.isEmpty()) {
 		%>
 		<p></p>
@@ -162,6 +165,7 @@
 					<th scope="col" class="text-center">Monto Solicitado</th>
 					<th scope="col" class="text-center">Fecha Solicitado</th>
 					<th scope="col" class="text-center">Cantidad de Cuotas</th>
+					<th scope="col" class="text-center">Cuotas pagas </th>
 					<th scope="col" class="text-center">Estado</th>
 					<th scope="col" class="text-center">Acción</th>
 				</tr>
@@ -171,6 +175,7 @@
 				<%
 					if (prestamos != null) {
 						for (Prestamo p : prestamos) {
+							
 				%>
 
 				<tr>
@@ -179,11 +184,14 @@
 					<td class="text-center"><%=p.getCliente().getApellido()%></td>
 					 -->
 					<td class="text-center"><%=p.getId()%></td>
-					<td class="text-center"><%=p.getCliente().getApellido() + ", " + p.getCliente().getApellido()%></td>
+					<td class="text-center"><%=p.getCliente().getApellido() + ", " + p.getCliente().getNombre()%></td>
 					<td class="text-center"><%=p.getCuenta().getNumeroCuenta()%></td>
 					<td class="text-center">$ <%=p.getImportePrestamo()%></td>
 					<td class="text-center"><%=p.getFechaAltaPrestamo()%></td>
 					<td class="text-center"><%=p.getCuotas()%></td>
+					<td class="text-center"><%= (mapCuotasPagas != null && mapCuotasPagas.containsKey(p.getId())) 
+            ? mapCuotasPagas.get(p.getId()) 
+            : "0" %>/<%=p.getCuotas()%>  </td>
 					<td
 						class="text-center <%if (p.getEstadoValidacion().getNombre().equals("Pendiente")) {%> text-bg-secondary 
 					<%} else if (p.getEstadoValidacion().getNombre().equals("Autorizado")) {%>text-bg-success
