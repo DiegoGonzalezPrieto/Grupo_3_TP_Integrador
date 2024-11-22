@@ -3,6 +3,8 @@ package servlets;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,8 +13,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dominio.Cuota;
 import dominio.Prestamo;
 import negocio.PrestamoNegocio;
+import negocioImpl.CuotaNegocioImpl;
 import negocioImpl.PrestamoNegocioImpl;
 
 
@@ -44,7 +48,8 @@ public class AutorizacionPrestamoServlet extends HttpServlet {
 			//OBTENER TODOS LOS PRESTAMOS
 			ArrayList<Prestamo> todosLosPrestamos = pNeg.listarTodosLosPrestamos();
 			request.setAttribute("listaPrestamos", todosLosPrestamos);
-								
+			//OBTENER MAP DE CUOTAS PAGAS POR PRESTAMO
+			contarCuotasPagas(request);
 			//MANDA LA INFO AL JSP.
 			RequestDispatcher rd = request.getRequestDispatcher("/AutorizacionPrestamos.jsp");
 			rd.forward(request, response); 
@@ -60,6 +65,7 @@ public class AutorizacionPrestamoServlet extends HttpServlet {
 		
 		String idPrestamo = request.getParameter("id");
 		String accion = request.getParameter("accion");
+		
 		
 		///VERIFICO QUE NO LLEGUE VACIO O NULL
 		
@@ -107,5 +113,21 @@ public class AutorizacionPrestamoServlet extends HttpServlet {
 		
 		
 	}
+	
+	private void contarCuotasPagas(HttpServletRequest request) throws SQLException {
+		ArrayList<Prestamo> prestamos = pNeg.listarTodosLosPrestamos();
+		CuotaNegocioImpl negoCuota = new CuotaNegocioImpl();
+		Map<Integer, Integer> cuotasPagas = new HashMap<>();
+		
+		for(Prestamo pre : prestamos) {
+			int pagas =  negoCuota.contarCuotasPagadas(pre.getId());
+			cuotasPagas.put(pre.getId(),pagas);
+		}
+		
+		request.setAttribute("mapCuotasPagas", cuotasPagas);
+		
+		
+	}
+
 
 }
