@@ -1,5 +1,3 @@
-<%@page import="negocioImpl.CuentaNegocioImpl"%>
-<%@page import="negocio.CuentaNegocio"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="dominio.Cuenta"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"

@@ -110,7 +110,7 @@
 					<%
 						if (listaCuenta != null && !listaCuenta.isEmpty()) {
 							for (Cuenta cuenta : listaCuenta) {
-								if(cuenta.Activa()){
+								if (cuenta.Activa()) {
 					%>
 					<option value="<%=cuenta.getId()%>"
 						data-saldo="<%=cuenta.getSaldo()%>">
@@ -119,8 +119,8 @@
 					</option>
 					<%
 						}
-					}
-				}
+							}
+						}
 					%>
 				</select>
 			</div>
@@ -202,14 +202,11 @@
 				<div class="col-auto">
 					<!-- BOTON PARA PAGAR TODAS -->
 					<input type="hidden" name="idPrestamo"
-						value="<%=prestamo.getId()%>"> <button type="submit" class="btn btn-primary"
-						onclick="return pagarTodas()"
-						name="accion" value="pagarTodas"
-						<% if (montoPendiente.compareTo(BigDecimal.ZERO) == 0) { %>
-						disabled
-						<%  } %>
-						>Pagar
-						Todas</button>
+						value="<%=prestamo.getId()%>">
+					<button type="submit" class="btn btn-primary"
+						onclick="return pagarTodas()" name="accion" value="pagarTodas"
+						<%if (montoPendiente.compareTo(BigDecimal.ZERO) == 0) {%>
+						disabled <%}%>>Pagar Todas</button>
 				</div>
 
 				<div class="col-auto">
@@ -217,10 +214,8 @@
 					<button class="btn btn-success" type="submit" name="accion"
 						onclick="return confirm('Confirma que desea pagar la cuota seleccionada?')"
 						value="pagarCuotaSeleccionada"
-						<% if (montoPendiente.compareTo(BigDecimal.ZERO) == 0) { %>
-						disabled
-						<%  } %>
-						>Pagar Cuota Seleccionada</button>
+						<%if (montoPendiente.compareTo(BigDecimal.ZERO) == 0) {%>
+						disabled <%}%>>Pagar Cuota Seleccionada</button>
 				</div>
 
 				<!-- BOTON PARA PAGAR VOLVER -->
@@ -246,39 +241,32 @@
 	</script>
 	<!--  SCRIP PARA CALCULAR EL SALDO EN CUENTA DE MANERA DINAMICA  -->
 	<script type="text/javascript">
-		document
-				.addEventListener(
-						'DOMContentLoaded',
-						function() {
-
-							function actualizarSaldo() {
-								var cuentaSeleccionada = document
-										.getElementById('Cuentas').value;
-
-								/// SINO SELECCIONA CUENTA, SETEA EL SALDO EN 0
-								if (!cuentaSeleccionada) {
-									document.getElementById('saldoDisponible').textContent = '$0';
-									return;
-								}
-
-								// OBTIENE SELECCION Y SALDO.
-								var option = document
-										.querySelector('#Cuentas option[value="'
-												+ cuentaSeleccionada + '"]');
-								var saldo = option ? option
-										.getAttribute('data-saldo') : 0;
-
-								// ACTUALIZA EL TEXXTO
-								document.getElementById('saldoDisponible').textContent = '$'
-										+ saldo;
-							}
-
-							// Asignar el evento para actualizar el saldo cuando se cambie la cuenta seleccionada
-							document
-									.getElementById('Cuentas')
-									.addEventListener('change', actualizarSaldo);
-						});
+		function actualizarSaldo() {
+			var cuentaSeleccionada = document
+					.getElementById('Cuentas').value;
+	
+			/// SINO SELECCIONA CUENTA, SETEA EL SALDO EN 0
+			if (!cuentaSeleccionada) {
+				document.getElementById('saldoDisponible').textContent = '$0';
+				return;
+			}
+	
+			// OBTIENE SELECCION Y SALDO.
+			var option = document
+					.querySelector('#Cuentas option[value="'
+							+ cuentaSeleccionada + '"]');
+			var saldo = option ? option
+					.getAttribute('data-saldo') : 0;
+	
+			// ACTUALIZA EL TEXXTO
+			document.getElementById('saldoDisponible').textContent = '$'
+					+ saldo;
+		}
+	
+		// Asignar el evento para actualizar el saldo cuando se cambie la cuenta seleccionada
+		document.getElementById('Cuentas').addEventListener('change', actualizarSaldo);
 		
+		// Manejo de inputs radio al Pagar Todas las cuotas
 		function pagarTodas() {
 			const confirmado = confirm('Confirma que desea pagar todas las cuotas, por un total de $ <%=montoPendiente%> ?')
 			
