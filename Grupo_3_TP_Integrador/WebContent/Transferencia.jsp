@@ -75,7 +75,7 @@
 								for (Cuenta cuenta : cuentasPropias) {
 							%>
 
-							<option value="<%=cuenta.getId()%>"><%=cuenta.getNumeroCuenta() + " - " + cuenta.getTipoCuenta().getNombre() + " - $"
+							<option value="<%=cuenta.getId()%>" data-saldo="<%=cuenta.getSaldo()%>"><%=cuenta.getNumeroCuenta() + " - " + cuenta.getTipoCuenta().getNombre() + " - $"
 						+ cuenta.getSaldo()%></option>
 							<%
 								}
@@ -119,7 +119,8 @@
 					<div class="mb-3">
 						<label for="monto" class="form-label">Monto a Transferir:</label>
 						<input type="number" id="monto" name="monto" class="form-control"
-							placeholder="Ingrese monto" step="0.01" required min=0.01>
+							placeholder="Ingrese monto" step="0.01" required min=0.01
+							oninput="validarMontoEnTiempoReal()">
 					</div>
 
 					<div class="d-flex justify-content-between">
@@ -171,7 +172,22 @@
 			if (esACuentaPropia)
 				filtrarCuentasPropias();
 		}
+		
+		function validarMontoEnTiempoReal() {
+            const cuentaOrigen = document.getElementById('cuentaOrigen');
+            const montoInput = document.getElementById('monto');
+            
+            if (cuentaOrigen.selectedIndex === 0) return;
+            
+            const saldo = parseFloat(cuentaOrigen.options[cuentaOrigen.selectedIndex].getAttribute('data-saldo'));
+            
+            let monto = parseFloat(montoInput.value);
 
+            
+            if (monto > saldo) {
+                montoInput.value = saldo.toFixed(2); 
+            }
+        }
 		alternarCuentaPropia(false);
 	</script>
 </body>
