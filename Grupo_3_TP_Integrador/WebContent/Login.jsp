@@ -48,7 +48,7 @@
 <body>
 	<div class="container-login">
 		<div>
-			<h1 class="display-3 my-3" style="text-align: center; width:300px;">- BANCO G3L4 -</h1>
+			<h1 class="display-3 my-3" style="text-align: center; width:300px;">- BANCO L4B G3 -</h1>
 		</div>
 		<div class="container" style="width:500px">
 			<h2 class="my-3">Iniciar sesión</h2>

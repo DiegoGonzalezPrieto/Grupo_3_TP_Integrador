@@ -16,11 +16,12 @@
 	</style>
 </head>
 <body>
-	<footer class="bg-light text-center text-lg-start" style="background-color: rgba(0, 0, 0, 0.2); margin-top: 30px;">
-		<div class="container p-4" style="justify-content:center">
+	<footer class="bg-light text-center text-lg-start" style="background-color: rgba(0, 0, 0, 0.2); 
+		margin-top: 120px; padding-top:15px; padding-bottom:15px">
+		<div class="container p-4" style="justify-content:center; margin-bottom:10px;">
 			<div class="row">
 				<div class="col-lg-6 col-md-12 mb-2 mb-md-0">
-					<h6 class="text-uppercase">Banco G3-L4</h6>
+					<h6 class="text-uppercase">Banco L4B G3</h6>
 					<p>Proporcionando servicios bancarios de calidad desde 2024.</p>
 				</div>
 			</div>
@@ -60,7 +61,7 @@
 			</div>
 		</div>
 		<div class="text-center mb-2">
-			© 2024 Banco G3-L4
+			© 2024 Banco L4B G3
 		</div>
 	</footer>
 
