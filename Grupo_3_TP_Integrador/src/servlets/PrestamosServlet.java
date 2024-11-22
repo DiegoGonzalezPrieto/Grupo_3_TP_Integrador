@@ -66,12 +66,6 @@ public class PrestamosServlet extends HttpServlet {
 		String cuotasJsp = request.getParameter("cuotas");
 		String importe = request.getParameter("importeMax");
 
-		// Imprimir los valores de los par�metros
-		System.out.println("tipoCuenta: " + tipoCuenta);
-		System.out.println("estadoPrestamo: " + estadoPrestamo);
-		System.out.println("cuotas: " + cuotasJsp);
-		System.out.println("importeMax: " + importe);
-
 		// Declaramos las variables para usar en los filtros
 		BigDecimal importeMax = null;
 		Integer cuotas = null; // Cambi� el valor inicial a null para manejar la ausencia de cuota
