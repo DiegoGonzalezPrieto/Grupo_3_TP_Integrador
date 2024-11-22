@@ -156,7 +156,7 @@
 					<td class="text-center"><%=p.getCliente().getApellido()%></td>
 					 -->
 					<td class="text-center"><%=p.getId()%></td>
-					<td class="text-center"><%=p.getCliente().getApellido() + ", " + p.getCliente().getApellido()%></td>
+					<td class="text-center"><%=p.getCliente().getApellido() + ", " + p.getCliente().getNombre()%></td>
 					<td class="text-center"><%=p.getCuenta().getNumeroCuenta()%></td>
 					<td class="text-center">$ <%=p.getImportePrestamo()%></td>
 					<td class="text-center"><%=p.getFechaAltaPrestamo()%></td>
