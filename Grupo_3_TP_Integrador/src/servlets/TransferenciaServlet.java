@@ -18,12 +18,10 @@ import negocio.ClienteNegocio;
 import negocio.CuentaNegocio;
 import negocio.MovimientoNegocio;
 import negocio.TipoMovimientoNegocio;
-import negocio.UsuarioNegocio;
 import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.CuentaNegocioImpl;
 import negocioImpl.MovimientoNegocioImpl;
 import negocioImpl.TipoMovimientoNegocioImpl;
-import negocioImpl.UsuarioNegocioImpl;
 
 /**
  * Servlet implementation class TransferenciaServlet
@@ -67,7 +65,6 @@ public class TransferenciaServlet extends HttpServlet {
 		request.setAttribute("cuentasPropias", cuentasPropias);
 		request.setAttribute("idUsuarioCuentas", idUsuarioCuentas);
 		request.getRequestDispatcher("Transferencia.jsp").forward(request, response);
-		;
 
 	}
 
@@ -133,10 +130,11 @@ public class TransferenciaServlet extends HttpServlet {
 				doGet(request, response);
 				return;
 			}
-			
+
 			// Validar cuenta destino no es la cuenta de origen
 			if (cuentaDestino.getCbu().equals(cuentaOrigen.getCbu())) {
-				request.setAttribute("mensaje", "Error: La cuenta de origen no puede ser igual a la cuenta de destino.");
+				request.setAttribute("mensaje",
+						"Error: La cuenta de origen no puede ser igual a la cuenta de destino.");
 				request.setAttribute("claseMensaje", "danger");
 				doGet(request, response);
 				return;
@@ -147,9 +145,8 @@ public class TransferenciaServlet extends HttpServlet {
 
 			// 2 movimientos
 			generarMovimientos(cuentaOrigen, cuentaDestino, monto);
-			
 
-			// Éxito
+			// ï¿½xito
 			request.setAttribute("mensaje", "Transferencia exitosa!");
 			request.setAttribute("claseMensaje", "success");
 			doGet(request, response);
@@ -164,20 +161,22 @@ public class TransferenciaServlet extends HttpServlet {
 	void modificarSaldos(Cuenta cuentaOrigen, Cuenta cuentaDestino, BigDecimal monto) {
 		cuentaOrigen.setSaldo(cuentaOrigen.getSaldo().subtract(monto));
 		cuentaDestino.setSaldo(cuentaDestino.getSaldo().add(monto));
-		
+
 		negCuenta.actualizarCuenta(cuentaOrigen);
 		negCuenta.actualizarCuenta(cuentaDestino);
 	}
-	
+
 	void generarMovimientos(Cuenta cuentaOrigen, Cuenta cuentaDestino, BigDecimal monto) {
 		TipoMovimiento tipoTransfDebitada = negTipoMovimiento.buscarPorId(5);
 		TipoMovimiento tipoTransfAcreditada = negTipoMovimiento.buscarPorId(4);
 		Date hoy = new Date(new java.util.Date().getTime());
-		
-		Movimiento movSalida = new Movimiento(0, cuentaOrigen, tipoTransfDebitada, hoy, "Débito por transferencia", monto.negate());
-		Movimiento movEntrada = new Movimiento(0, cuentaDestino, tipoTransfAcreditada, hoy, "Crédito por transferencia", monto);
+
+		Movimiento movSalida = new Movimiento(0, cuentaOrigen, tipoTransfDebitada, hoy, "Dï¿½bito por transferencia",
+				monto.negate());
+		Movimiento movEntrada = new Movimiento(0, cuentaDestino, tipoTransfAcreditada, hoy, "Crï¿½dito por transferencia",
+				monto);
 		negMovimiento.insert(movSalida);
 		negMovimiento.insert(movEntrada);
 	}
-	
+
 }
