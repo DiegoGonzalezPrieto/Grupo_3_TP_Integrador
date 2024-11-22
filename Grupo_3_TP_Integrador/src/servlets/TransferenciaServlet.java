@@ -171,10 +171,10 @@ public class TransferenciaServlet extends HttpServlet {
 		TipoMovimiento tipoTransfAcreditada = negTipoMovimiento.buscarPorId(4);
 		Date hoy = new Date(new java.util.Date().getTime());
 
-		Movimiento movSalida = new Movimiento(0, cuentaOrigen, tipoTransfDebitada, hoy, "D�bito por transferencia",
+		Movimiento movSalida = new Movimiento(0, cuentaOrigen, tipoTransfDebitada, hoy, "Débito por transferencia.",
 				monto.negate());
-		Movimiento movEntrada = new Movimiento(0, cuentaDestino, tipoTransfAcreditada, hoy, "Cr�dito por transferencia",
-				monto);
+		Movimiento movEntrada = new Movimiento(0, cuentaDestino, tipoTransfAcreditada, hoy,
+				"Crédito por transferencia.", monto);
 		negMovimiento.insert(movSalida);
 		negMovimiento.insert(movEntrada);
 	}
