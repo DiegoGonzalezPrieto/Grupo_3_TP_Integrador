@@ -223,7 +223,9 @@
 		    var min = parseFloat(minSaldo.value) || 0;
 		    var max = parseFloat(maxSaldo.value) || Infinity;
 		    
-		    var saldo  = parseFloat(data[6].replace('$', '').replace(/\./g, '').trim()) || 0;
+		    var saldo  = 
+		    	parseFloat(data[6].replace('$', '').replace('.', ',').replace(',', '')) 
+		    	|| 0;
 		    
 		    return (isNaN(min) || saldo >= min) && (isNaN(max) || saldo <= max);
 		});
