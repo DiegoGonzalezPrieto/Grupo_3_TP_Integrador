@@ -69,15 +69,17 @@
 		%>
 
 		<%
-			String encabezado = "Datos Personales";
-			String accion = "editar";
-			if (request.getAttribute("nuevo") != null) {
-				encabezado = "Nuevo Cliente";
-				accion = "crear";
-			}else{
-				accion="editar";
-				encabezado="Editar Cliente";
-			}
+		    String encabezado = "Datos Personales";
+		    String accion = "editar";
+		    Boolean esNuevo = (Boolean) request.getAttribute("nuevo");
+		    
+		    if (esNuevo != null && esNuevo) {
+		        encabezado = "Nuevo Cliente";
+		        accion = "crear";
+		    } else {
+		        accion = "editar";
+		        encabezado = "Editar Cliente";
+		    }
 		%>
 		
 		<%
@@ -98,9 +100,9 @@
 		<!-- En el JSP: -->
 		<form action="GestionDatosServlet" method="POST" id="form">
 
-		<% if (cliente != null && !reintentoCreacion){%>
-			<input type="hidden" value="<%= cliente.getIdCliente()%>" name="idCliente" id="idCliente">
-		<% } %>
+		<% if (!esNuevo) { %>
+        	<input type="hidden" name="idCliente" value="${clienteEditar.idCliente}">
+    	<% } %>
 
 			<div class="form-group">
 				<label for="usuario">Usuario:</label> <input type="text"
@@ -123,17 +125,20 @@
 						readonly
 					<% }%>
 					title="La contraseña debe tener al menos 8 caracteres, incluyendo letras y números"
-					required>
+					required
+					placeholder="La contraseña tiene que tener 8 caracteres, incluyendo letras y numeros">
 			</div>
-			
+			<% if (accion.equals("crear")) { %>
 			<div class="form-group">
 				<label for="pass">Confirmar contraseña:</label> <input type="password"
 					class="form-control" id="ConfPass" name="ConfPass"
 					value="<%=cliente == null ? "" : cliente.getPass()%>"
 					pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
 					title="La contraseña debe tener al menos 8 caracteres, incluyendo letras y números"
-					required>
+					required
+					placeholder="Ingresar la misma contraseña">
 			</div>
+			<% }%>
 			
 			<div id="error-message" style="display:none; color: red;">
         		Las contraseñas no coinciden.
@@ -144,7 +149,8 @@
 					class="form-control" id="nombre" name="nombre"
 					value="<%=cliente == null ? "" : cliente.getNombre()%>"
 					pattern="[A-Za-zÀ-ÿ\s]{2,50}"
-					title="Ingrese un nombre válido (solo letras)" required>
+					title="Ingrese un nombre válido (solo letras)" required
+					placeholder="Ingresar solo Letras">
 			</div>
 
 			<div class="form-group">
@@ -152,7 +158,8 @@
 					class="form-control" id="apellido" name="apellido"
 					value="<%=cliente == null ? "" : cliente.getApellido()%>"
 					pattern="[A-Za-zÀ-ÿ\s]{2,50}"
-					title="Ingrese un apellido válido (solo letras)" required>
+					title="Ingrese un apellido válido (solo letras)" required
+					placeholder="Ingresar solo Letras">
 			</div>
 
 			<div class="form-group">
@@ -160,7 +167,8 @@
 					class="form-control" id="dni" name="dni"
 					value="<%=cliente == null ? "" : cliente.getDni()%>"
 					
-					required>
+					required
+					placeholder="Ingresar solo numeros, 8 digitos">
 			</div>
 
 			<div class="form-group">
@@ -168,7 +176,8 @@
 					class="form-control" id="cuil" name="cuil"
 					value="<%=cliente == null ? "" : cliente.getCuil()%>"
 					
-					title="El CUIL debe tener exactamente 11 dígitos" required>
+					title="El CUIL debe tener exactamente 11 dígitos" required
+					placeholder="Ingresar solo numeros,11 digitos sin guiones">
 			</div>
 			<div class="form-group">
     			<label for="genero">Género:</label>
@@ -185,7 +194,9 @@
 					class="form-control" id="email" name="email"
 					value="<%=cliente == null ? "" : cliente.getCorreoElectronico()%>"
 					
-					title="Ingrese un email válido" required>
+					title="Ingrese un email válido" required
+					placeholder="Ingresar un mail valido">
+					
 			</div>
 
 			<div class="form-group">
@@ -193,7 +204,8 @@
 					class="form-control" id="telefono" name="telefono"
 					value="<%=cliente == null ? "" : cliente.getTelefono()%>"
 					pattern="[0-9]{10}" title="El teléfono debe tener 10 dígitos"
-					required>
+					required
+					placeholder="Ingresar un telefono valido (10 Digitos)">
 			</div>
 
 			<div class="form-group">
@@ -201,7 +213,8 @@
 					class="form-control" id="fechaNacimiento" name="fechaNacimiento"
 					value="<%=cliente == null ? "" : cliente.getFechaNacimiento()%>"
 					max="<%=LocalDate.now().minusYears(18)%>"
-					title="Debe ser mayor de 18 años" required>
+					title="Debe ser mayor de 18 años" required
+					placeholder="Usuario mayor a 18 años">
 			</div>
 
 			<div class="form-group">
@@ -284,15 +297,8 @@
 				</select>
 			</div>
 
-			<%
-				String accionBoton = "Crear";
-				if (accion == "editar") {
-					accionBoton = "Editar";
-				}
-			%>
-
-			<input type="submit" value="<%=accionBoton%>" name="<%= accion.equals("editar")? "editar" : "crear" %>"
-				class="btn btn-primary" onclick="return confirm ('¿Seguro que desea <%=accionBoton%> el usuario?');">
+			<input type="submit" value="<%= esNuevo ? "Crear" : "Editar" %>" name="<%= esNuevo ? "crear" : "editar" %>"
+				class="btn btn-primary" onclick="return confirm('¿Seguro que desea <%= esNuevo ? "crear" : "editar" %> el usuario?');">
 				<a href="AdministracionClientes.jsp" class="btn btn-primary">Volver</a>
 
 		</form>

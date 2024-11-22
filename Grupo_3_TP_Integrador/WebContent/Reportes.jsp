@@ -26,37 +26,38 @@
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
-.btn {
-	margin-top: 10px;
-}
-
-h1 {
-	text-align: center;
-	margin: 5px;
-}
-
-h2 {
-	margin-top: 5px;
-}
-
-label {
-	margin-top: 6px;
-}
-
-.container {
-	margin-bottom: 40px;
-}
+	.btn {
+		margin-top: 10px;
+	}
+	
+	h1 {
+		text-align: center;
+		margin-top: 10px;
+	}
+	
+	h2 {
+		margin-top: 5px;
+	}
+	
+	label {
+		margin-top: 6px;
+	}
+	
+	.container {
+		margin-bottom: 40px;
+	}
 </style>
 
 </head>
 <body>
 	<%@ include file="BarraMenu.jsp"%>
-	<h1>Gestión de Reportes</h1>
+	<h1 class="display-5" style="margin:50px;">Administración de Reportes</h1>
+	<hr>
 	<div class="container">
 
 		<!-- Form para generar nuevos reportes -->
-		<div class="container">
-			<h2>Generar Nuevo Reporte</h2>
+		<div class="container" style="margin-top:20px;">
+			<h1 class="display-6" style="margin-top:50px; text-align:left">Generar nuevo Reporte</h1><hr>
 			<form action="GenerarReporteServlet" method="POST">
 				<div class="mb-3">
 					<label for="tipoReporte">Tipo de Reporte:</label> <select
@@ -79,6 +80,7 @@ label {
 				</div>
 			</form>
 		</div>
+		<hr>
 
 		<!-- Lista de reportes -->
 		<%
@@ -89,8 +91,15 @@ label {
 				session.setAttribute("reportes", reportes);
 			}
 		%>
-
-		<h2>Reportes de esta sesión</h2>
+		
+		<div>
+			<h1 class="display-6" style="margin-top:50px; text-align:left">Reportes de esta sesión</h1>
+			<div style="display:flex; margin-top:15px; color:dark-gray">
+				<i class="fas fa-download" style="max-width:30%; margin-right:10px;"></i>
+				<p style="font-size:10px;">Descargar reporte</p>
+			</div>
+			<hr>
+		</div>
 		<table id="tablaReportes" class="table table-striped">
 			<thead>
 				<tr>

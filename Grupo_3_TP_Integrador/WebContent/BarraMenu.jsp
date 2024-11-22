@@ -11,15 +11,48 @@
 
 		response.sendRedirect("Login.jsp");
 	}
+
+	String urlActual = request.getRequestURL().toString();
 %>
 
+<style>
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f8f9fa;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.navbar-brand {
+    margin: 0 30px;
+}
+
+.navbar-nav {
+    margin-left: auto;
+}
+
+.navbar-nav .nav-item {
+    margin-left: 20px;
+}
+
+</style>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-	<a class="navbar-brand" href="#!" style="margin: 30px">Banco G3-L4</a>
+	<a class="navbar-brand" href="<%= usuario.esAdmin() ? "HomeAdministradorServlet" : "HomeClienteServlet"%>" 
+	style="margin: 30px">Banco G3-L4</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse"
 		data-target="#navbarNav" aria-controls="navbarNav"
 		aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
+
 	<div class="collapse navbar-collapse" id="navbarNav">
 		<ul class="navbar-nav ml-auto">
 			<%
@@ -27,7 +60,8 @@
 			%>
 			<li class="nav-item"><a
 				class="nav-link btn btn-info rounded-5 text-white"
-				href="<%=usuario.esAdmin() ? "HomeAdministradorServlet" : "GestionDatosServlet?id="+ clienteMenu.getIdCliente()%>">
+				href="<%=usuario.esAdmin() ? "HomeAdministradorServlet"
+						: "GestionDatosServlet?id=" + clienteMenu.getIdCliente()%>">
 					<%=clienteMenu != null ? clienteMenu.getNombre() + " " + clienteMenu.getApellido()
 						: usuario.getNombreUsuario()%></a></li>
 
@@ -36,39 +70,53 @@
 				if (usuario != null && usuario.esAdmin()) {
 			%>
 
-			<li class="nav-item"><a class="nav-link"
+			<li class="nav-item" title="Inicio"><a
+				class="nav-link <%=urlActual.toLowerCase().contains("home") ? "active" : ""%>"
 				href="HomeAdministradorServlet">Inicio</a></li>
-			<li class="nav-item"><a class="nav-link"
-				href="AdministracionClientes.jsp">Adm. de Clientes</a></li>
-			<li class="nav-item"><a class="nav-link"
-				href="AdministracionCuentas.jsp">Adm. de Cuentas</a></li>
-			<li class="nav-item"><a class="nav-link"
-				href="AutorizacionPrestamos.jsp">Autorizaci髇 de Pr閟tamos</a></li>
-			<li class="nav-item"><a class="nav-link" href="Reportes.jsp">Reportes</a>
-			</li>
+			<li class="nav-item" title="Administraci贸n de Clientes"><a
+				class="nav-link <%=urlActual.toLowerCase().contains("cliente") ? "active" : ""%>"
+				href="AdministracionClientes.jsp">Clientes</a></li>
+			<li class="nav-item" title="Administraci贸n de Cuentas"><a
+				class="nav-link <%=urlActual.toLowerCase().contains("cuenta") ? "active" : ""%>"
+				href="AdministracionCuentas.jsp">Cuentas</a></li>
+			<li class="nav-item" title="Autorizaci贸n de Pr茅stamos"><a
+				class="nav-link <%=urlActual.toLowerCase().contains("autorizacion") ? "active" : ""%>"
+				href="AutorizacionPrestamos.jsp">Pr茅stamos</a></li>
+			<li class="nav-item" title="Reportes"><a
+				class="nav-link <%=urlActual.toLowerCase().contains("reporte") ? "active" : ""%>"
+				href="Reportes.jsp">Reportes</a></li>
 			<%
 				} else {
 			%>
-			<li class="nav-item"><a class="nav-link"
+			<li class="nav-item" title="Inicio"><a
+				class="nav-link <%=urlActual.toLowerCase().contains("home") ? "active" : ""%>"
 				href="HomeClienteServlet">Inicio</a></li>
-			<li class="nav-item"><a class="nav-link"
-				href="PrestamosServlet?id=<%=clienteMenu.getIdCliente()%>">Pr閟tamos</a></li>
-			<li class="nav-item"><a class="nav-link"
+			<li class="nav-item" title="Transferencia"><a class="nav-link <%= urlActual.toLowerCase().contains("transferencia") ? "active" : "" %>"
+				href="TransferenciaServlet?cliente=<%=clienteMenu.getIdCliente()%>">Transferencia</a></li>			
+			<li class="nav-item" title="Pr茅stamos"><a class="nav-link <%= urlActual.toLowerCase().contains("prestamo") ? "active" : "" %>"
+				href="PrestamosServlet?id=<%=clienteMenu.getIdCliente()%>">Pr茅stamos</a></li>
+			<li class="nav-item" title="Mis Datos"><a class="nav-link <%= urlActual.toLowerCase().contains("datos") ? "active" : "" %>"
 				href="GestionDatosServlet?id=<%=clienteMenu.getIdCliente()%>">Mis
 					Datos</a></li>
-			<li class="nav-item"><a class="nav-link"
-				href="TransferenciaServlet?cliente=<%=clienteMenu.getIdCliente()%>">Transferencia</a></li>
 			<%
 				}
 			%>
 			<%
 				}
 			%>
+      
 			<li class="nav-item">
-				<a class="nav-link" href="LoginServlet">
-					<i class="fas fa-sign-out-alt" onclick="return confirm('縀st醩 seguro/a que deseas cerrar sesi髇?')"></i>
+				<a class="nav-link" href="LoginServlet" id="logout" title="Salir">
+					<i class="fas fa-sign-out-alt"></i>
 				</a></li>
 		</ul>
 	</div>
 </nav>
 
+<script type="text/javascript">
+logout.addEventListener('click', (event) => {
+	const confirma = confirm('驴Est谩s seguro/a que deseas cerrar sesi贸n?');
+	if (!confirma)
+		event.preventDefault();
+})
+</script>

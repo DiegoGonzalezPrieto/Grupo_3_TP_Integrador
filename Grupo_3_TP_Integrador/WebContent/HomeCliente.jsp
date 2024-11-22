@@ -23,6 +23,22 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
 	crossorigin="anonymous"></script>
+	<style>
+	.card {
+	transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card a, .card a:hover {
+	color: inherit;
+	text-decoration: none;
+}
+
+.card:hover {
+	transform: scale(1.05);
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+	
+	</style>
 </head>
 <body>
 	<%@ include file="BarraMenu.jsp"%>
@@ -44,39 +60,44 @@
 		<%} %>
 		<ul class="nav nav-pills nav-fill m-3">
 			<li class="nav-item mx-2"><a class="nav-link active"
-				href="TransferenciaServlet?cliente=<%=cliente.getIdCliente()%>">Transferencias</a></li>
+				href="TransferenciaServlet?cliente=<%=cliente.getIdCliente()%>">Realizar una transferencia</a></li>
 			<li class="nav-item mx-2"><a class="nav-link active"
 				href="PrestamosServlet?id=<%=cliente.getIdCliente()%>">Préstamos</a></li>
+			<!-- 
 			<li class="nav-item mx-2"><a class="nav-link active"
 				href="PagoPrestamoServlet?id=<%=cliente.getIdCliente()%>">Pago de Cuotas</a></li>
+			 -->
 			<li class="nav-item mx-2"><a class="nav-link active"
 				href="GestionDatosServlet?id=<%=cliente.getIdCliente()%>">Mis Datos</a></li>
 		</ul>
 
 
-		<h2 class="my-3">Mis Cuentas</h2>
+		<h1 class="display-6" style="margin-top:50px;">Mis Cuentas</h1><hr>
 		<ul class="nav flex-column">
 		    <%
 		        List<Cuenta> cuentasCliente = (List<Cuenta>)request.getAttribute("cuentasCliente");
 		        if(cuentasCliente != null && !cuentasCliente.isEmpty()) {
 		            for(Cuenta cuenta : cuentasCliente) {
 		    %>
-		            <li class="nav-item my-1">
-		                <a class="border nav-link" href="DetallesCuentaServlet?id=<%=cuenta.getId()%>">
-		                    <span class="text-black">Cuenta <%=cuenta.getNumeroCuenta()%></span><br>
-		                    <span class="text-black">CBU: <%=cuenta.getCbu()%></span><br>
-		                    <span class="text-black">Número: <%=cuenta.getNumeroCuenta()%></span><br>
-		                    <span class="text-black"><%=cuenta.getTipoCuenta().getNombre()%></span><br>
-		                    <span class="text-black">Saldo: $<%=cuenta.getSaldo()%></span>
-		                </a>
+		            <li class="nav-item my-1" title="Ver movimientos">
+		            	<div class="card">
+			                <a class="border nav-link" href="DetallesCuentaServlet?id=<%=cuenta.getId()%>">
+			                    <span class="text-black">Cuenta <%=cuenta.getNumeroCuenta()%></span><br>
+			                    <span class="text-black">CBU: <%=cuenta.getCbu()%></span><br>
+			                    <span class="text-black">Número: <%=cuenta.getNumeroCuenta()%></span><br>
+			                    <span class="text-black"><%=cuenta.getTipoCuenta().getNombre()%></span><br>
+			                    <span class="text-black">Saldo: $<%=cuenta.getSaldo()%></span>
+			                </a>
+		            	</div>
 		            </li>
 		    <%
 		            }
 		        } else {
 		    %>
-		            <li class="nav-item my-1">
+		            <li class="nav-item my-1" style="text-align:center">
 		                <div class="border nav-link">
-		                    <span class="text-black">No hay cuentas disponibles</span>
+		                    <span class="text-black">No hay cuentas disponibles aún.</span>
+		                    <p class="text-black">Para solicitar abrir una cuenta, por favor comunicate con un asesor.</p>
 		                </div>
 		            </li>
 		    <%

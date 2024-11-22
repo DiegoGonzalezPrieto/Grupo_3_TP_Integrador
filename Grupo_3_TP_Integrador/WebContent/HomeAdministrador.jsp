@@ -50,7 +50,7 @@ li {
 	<%@ include file="BarraMenu.jsp"%>
 
 	<div class="container-Admin">
-		<h1 class="display-3 my-3">
+		<h1 class="display-3" style="margin:50px;">
 			Bienvenido/a,
 			<%=((Usuario) request.getSession().getAttribute("usuario")).getNombreUsuario()%>
 		</h1>
@@ -68,7 +68,7 @@ li {
 	</div>
 
 	<div class="container-Admin">
-		<h2 class="my-3 text-center">Resumen de actividad</h2>
+		<h1 class="display-6" style="margin-top:50px; text-align:center">Resumen de Actividad</h1><hr>
 		<div class="border p-4 rounded-3">
 			<div class="row text-center">
 				<div class="col-md-3">
@@ -123,7 +123,7 @@ li {
 	</div>
 
 	<div class="container-Admin">
-		<h2 class="my-3 text-center">Cuentas recientes</h2>
+		<h1 class="display-6" style="margin-bottom:20px; text-align:center">Cuentas Recientes</h1><hr>
 		<ul class="flex-column">
 			<%
 				List<Cuenta> cuentasRecientes = (List<Cuenta>) request.getAttribute("cuentasRecientes");
@@ -155,6 +155,9 @@ li {
 				}
 			%>
 		</ul>
+		<div class="nav-link">
+				<a href="Reportes.jsp"> Ir a Cuentas </a>
+			</div>
 	</div>
 
 	<%@ include file="Footer.jsp"%>

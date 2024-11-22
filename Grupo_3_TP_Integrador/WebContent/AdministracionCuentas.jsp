@@ -80,7 +80,8 @@
 		<%
 			}
 		%>
-		<h1 class="text-center mb-4">Administración de Cuentas</h1>
+		<h1 class="display-5" style="margin:50px; text-align:center;">Administración de Cuentas</h1>
+		<hr>
 
 		<div class="mt-4">
 			<!-- 

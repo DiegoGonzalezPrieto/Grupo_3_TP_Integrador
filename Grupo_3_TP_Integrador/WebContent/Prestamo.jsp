@@ -38,7 +38,7 @@
 <body>
 	<%@ include file="BarraMenu.jsp"%>
 	<div class="container mt-5" style="font-size: 0.8em">
-		<h1 class="text-center">Gestión de Prestamos</h1>
+		<h1 class="display-5" style="margin:50px; text-align:center;">Gestión de Préstamos</h1><hr>
 		
 		<!--  TRAER LISTA DE PRESTAMOS -->
 		<%
@@ -67,12 +67,14 @@
 
 		<div class="d-flex justify-content-between align-items-center mb-4">
 			<div class="p-2">
-				<h2 class="my-3"><%= cliente.getApellido() +" "+ cliente.getNombre() %></h2>
+				<!-- 
+				<h2 class="my-3"><%= cliente.getApellido() +", "+ cliente.getNombre() %></h2>
+				 -->
 			</div>
 			<div class="p-2">
 				<a class="btn btn-primary"
 					href="SolicitudPrestamoServlet?id=<%=cliente.getIdCliente()%>">+
-					Nuevo Prestamo</a>
+					Solicitar un préstamo</a>
 			</div>
 		</div>
 		
@@ -131,7 +133,7 @@
 		</div>
 
 
-		<h2 class="mt-4">Mis Prestamos Actuales</h2>
+		<h1 class="display-6" style="margin-top:50px;">Mis Préstamos</h1><hr>
 
 		<table id="tabla-prestamos" class="table table-striped table-bordered">
 			<thead class="thead-dark">
@@ -189,6 +191,9 @@
 							}%>
 			</tbody>
 		</table>
+		<div>
+			<a href="HomeClienteServlet">Volver al Home</a>
+		</div>
 	</div>
 	<%@ include file="Footer.jsp"%>
 	<!-- DATATABLE INICIO -->

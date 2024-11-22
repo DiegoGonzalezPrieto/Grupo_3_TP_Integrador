@@ -309,4 +309,14 @@ public class PrestamoNegocioImpl implements PrestamoNegocio {
 		return pDao.getPromedioPrestamos(fechaInicio, fechaFin);
 	}
 
+	@Override
+	public int contarPrestamosPagados(Date fechaInicio, Date fechaFin) throws SQLException {
+		return pDao.contarPrestamosPagados(fechaInicio, fechaFin);
+	}
+
+	@Override
+	public BigDecimal sumarPrestamosPagados(Date fechaInicio, Date fechaFin) throws SQLException {
+		return pDao.sumarPrestamosPagados(fechaInicio, fechaFin);
+	}
+
 }

@@ -12,7 +12,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Autorización de Préstamos</title>
+<title>AutorizaciÃ³n de PrÃ©stamos</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -34,7 +34,9 @@
 <body>
 	<%@ include file="BarraMenu.jsp"%>
 	<div class="container">
-		<h1 class="text-center mb-4">Autorización de Préstamos</h1>
+
+		<h1 class="display-5" style="margin:50px; text-align:center;">AutorizaciÃ³n de PrÃ©stamos</h1>
+		<hr>
 
 		<!-- MOSTRAR MENSAJE DE EXITO DESPUES DE LA OPERACION -->
 		<%
@@ -79,13 +81,13 @@
 		               </div>
 		               <div class="card-body">
 		                   <div class="mb-3">
-		                       <label class="form-label">Monto mínimo:</label>
+		                       <label class="form-label">Monto mÃ­nimo:</label>
 		                       <input type="number" class="form-control" id="minMonto" name="minMonto" 
 		                              min="0" max="999999999" 
 		                              oninput="if(this.value.length > 9) this.value=this.value.slice(0,9)">
 		                   </div>
 		                   <div class="mb-3">
-		                       <label class="form-label">Monto máximo:</label>
+		                       <label class="form-label">Monto mÃ¡ximo:</label>
 		                       <input type="number" class="form-control" id="maxMonto" name="maxMonto"
 		                              min="0" max="999999999"
 		                              oninput="if(this.value.length > 9) this.value=this.value.slice(0,9)">
@@ -102,12 +104,12 @@
 		               </div>
 		               <div class="card-body">
 		                   <div class="mb-3">
-		                       <label class="form-label">Cuotas mínimas:</label>
+		                       <label class="form-label">Cuotas mÃ­nimas:</label>
 		                       <input type="number" class="form-control" id="minCuotas" name="minCuotas" 
 		                              step="6" max="24" min="6">
 		                   </div>
 		                   <div class="mb-3">
-		                       <label class="form-label">Cuotas máximas:</label>
+		                       <label class="form-label">Cuotas mÃ¡ximas:</label>
 		                       <input type="number" class="form-control" id="maxCuotas" name="maxCuotas" 
 		                              step="6" max="24" min="6">
 		                   </div>
@@ -135,7 +137,7 @@
 		       </div>
 		   </div>
 		
-		   <!-- Botón Limpiar -->
+		   <!-- BotÃ³n Limpiar -->
 		   <div class="row mt-3">
 		       <div class="col-12 d-flex justify-content-end">
 		           <a href="#" id="limpiar-filtros" class="btn btn-outline-secondary">
@@ -154,14 +156,14 @@
 					<th scope="col" class="text-center">Nombre del Cliente</th>
 					<th scope="col" class="text-center">Apellido del Cliente</th>
 					 -->
-					<th scope="col" class="text-center">ID Préstamo</th>
+					<th scope="col" class="text-center">ID PrÃ©stamo</th>
 					<th scope="col" class="text-center">Cliente</th>
 					<th scope="col" class="text-center">Cuenta a Depositar</th>
 					<th scope="col" class="text-center">Monto Solicitado</th>
 					<th scope="col" class="text-center">Fecha Solicitado</th>
 					<th scope="col" class="text-center">Cantidad de Cuotas</th>
 					<th scope="col" class="text-center">Estado</th>
-					<th scope="col" class="text-center">Acción</th>
+					<th scope="col" class="text-center">AcciÃ³n</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -196,13 +198,13 @@
 						%>
 
 						<form action="AutorizacionPrestamoServlet" method="post"
-							onsubmit="return confirm('¿Está seguro de que desea Autorizar el préstamo?')">
+							onsubmit="return confirm('Â¿EstÃ¡ seguro de que desea Autorizar el prÃ©stamo?')">
 							<input type="hidden" name="id" value="<%=p.getId()%>" /> <input
 								type="hidden" name="accion" value="Aprobar" />
 							<button type="submit" class="btn btn-outline-success btn-sm me-2">Aprobar</button>
-						</form> <!-- Formulario para rechazar el préstamo -->
+						</form> <!-- Formulario para rechazar el prÃ©stamo -->
 						<form action="AutorizacionPrestamoServlet" method="post"
-							onsubmit="return confirm('¿Está seguro de que desea Rechazar el préstamo?')">
+							onsubmit="return confirm('Â¿EstÃ¡ seguro de que desea Rechazar el prÃ©stamo?')">
 							<input type="hidden" name="id" value="<%=p.getId()%>" /> <input
 								type="hidden" name="accion" value="Rechazar" />
 							<button type="submit" class="btn btn-outline-danger btn-sm me-2">Rechazar</button>

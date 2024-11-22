@@ -56,9 +56,11 @@ public class PrestamoDaoImpl implements PrestamoDao {
 	private static final String contarAprobadosFecha = "SELECT CASE WHEN COUNT(*) IS NULL THEN 0  ELSE COUNT(*) END AS cantidad FROM prestamos WHERE id_estado_prestamo = 2 AND fecha_alta_prestamo BETWEEN ? AND ?;";
 	private static final String contarRechazadosFecha = "SELECT CASE WHEN COUNT(*) IS NULL THEN 0  ELSE COUNT(*) END AS cantidad FROM prestamos WHERE id_estado_prestamo = 3 AND fecha_alta_prestamo BETWEEN ? AND ?;";
 	private static final String contarPendienteFecha = "SELECT CASE WHEN COUNT(*) IS NULL THEN 0  ELSE COUNT(*) END AS cantidad FROM prestamos WHERE id_estado_prestamo = 1 AND fecha_alta_prestamo BETWEEN ? AND ?;";
+	private static final String contarPagadosFecha = "SELECT CASE WHEN COUNT(*) IS NULL THEN 0  ELSE COUNT(*) END AS cantidad FROM prestamos WHERE id_estado_prestamo = 4 AND fecha_alta_prestamo BETWEEN ? AND ?;";
 	private static final String sumarValorAprobadosFecha = "SELECT CASE WHEN sum(importe_prestamo) IS NULL THEN 0 ELSE sum(importe_prestamo) END AS suma FROM prestamos WHERE id_estado_prestamo = 2 AND fecha_alta_prestamo BETWEEN ? AND ?;";
 	private static final String sumarValorRechazadosFecha = "SELECT CASE WHEN sum(importe_prestamo) IS NULL THEN 0 ELSE sum(importe_prestamo) END AS suma FROM prestamos WHERE id_estado_prestamo = 3 AND fecha_alta_prestamo BETWEEN ? AND ?;";
 	private static final String sumarValorEvaluacionFecha = "SELECT CASE WHEN sum(importe_prestamo) IS NULL THEN 0 ELSE sum(importe_prestamo) END AS suma FROM prestamos WHERE id_estado_prestamo = 1 AND fecha_alta_prestamo BETWEEN ? AND ?;";
+	private static final String sumarValorPagadosFecha = "SELECT CASE WHEN sum(importe_prestamo) IS NULL THEN 0 ELSE sum(importe_prestamo) END AS suma FROM prestamos WHERE id_estado_prestamo = 4 AND fecha_alta_prestamo BETWEEN ? AND ?;";
 	private static final String promedioConFecha = "SELECT COALESCE(AVG(importe_prestamo), 0) as promedio FROM prestamos WHERE fecha_alta_prestamo BETWEEN ? AND ?;";
 
 	// -----------------------METODOS DML ----------------------------//
@@ -733,6 +735,69 @@ public class PrestamoDaoImpl implements PrestamoDao {
 
 			if (rs.next()) {
 				return rs.getBigDecimal("promedio");
+			}
+		}
+
+		catch (SQLException ex) {
+			throw ex;
+		}
+
+		return BigDecimal.ZERO;
+
+	}
+
+	@Override
+	public int contarPrestamosPagados(Date fechaInicio, Date fechaFin) throws SQLException {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		// DESARROLLO DE METODO
+
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(contarPagadosFecha)) {
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			statement.setString(1, sdf.format(fechaInicio));
+			statement.setString(2, sdf.format(fechaFin));
+
+			ResultSet rs = statement.executeQuery();
+
+			if (rs.next()) {
+				return rs.getInt("cantidad");
+			}
+		}
+
+		catch (SQLException ex) {
+			throw ex;
+		}
+		return 0;
+
+	}
+
+	@Override
+	public BigDecimal sumarPrestamosPagados(Date fechaInicio, Date fechaFin) throws SQLException {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		// DESARROLLO DE METODO
+
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(sumarValorPagadosFecha)) {
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			statement.setString(1, sdf.format(fechaInicio));
+			statement.setString(2, sdf.format(fechaFin));
+
+			ResultSet rs = statement.executeQuery();
+
+			if (rs.next()) {
+				return rs.getBigDecimal("suma");
 			}
 		}
 

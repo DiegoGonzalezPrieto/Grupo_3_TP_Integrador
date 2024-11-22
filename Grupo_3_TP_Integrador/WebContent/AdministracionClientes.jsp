@@ -36,7 +36,8 @@
 	<%@ include file="BarraMenu.jsp"%>
 
 	<div class="container mt-5">
-		<h1 class="text-center mb-4">Administración de Clientes</h1>
+		<h1 class="display-5" style="margin:50px; text-align:center;">Administración de Clientes</h1>
+		<hr>
 		<%
 			String mensaje = (String) session.getAttribute("mensaje");
 			String tipoMensaje = (String) session.getAttribute("tipoMensaje");
