@@ -94,12 +94,12 @@
 						<div class="card-body">
 							<div class="mb-3">
 								<label class="form-label">Importe mín.:</label> <input
-									type="number" id="min" name="min" class="form-control"
+									type="number" id="min" name="min" class="form-control" min="0"
 									placeholder="Imp. mínimo">
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Importe máx.:</label> <input
-									type="number" id="max" name="max" class="form-control"
+									type="number" id="max" name="max" class="form-control" min="0"
 									placeholder="Imp. máximo">
 							</div>
 						</div>
