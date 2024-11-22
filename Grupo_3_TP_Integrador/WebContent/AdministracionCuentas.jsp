@@ -87,46 +87,65 @@
 			<!-- 
 				<h2>Listado de Cuentas</h2>
 			 -->
-			<div class="row align-items-center">
-				<div class="col d-flex justify-content-end">
-					<table class="inputs">
-						<tbody>
-							<tr>
-								<td>Saldo mínimo:</td>
-								<td><input type="number" id="minSaldo" name="minSaldo"></td>
-							</tr>
-							<tr>
-								<td>Saldo máximo:</td>
-								<td><input type="number" id="maxSaldo" name="maxSaldo"></td>
-							</tr>
-						</tbody>
-					</table>
-
-				</div>
-
-			</div>
-			<div class="row justify-content-end">
-				<div class="col">
-					<a href="AgregarCuentaServlet" class="btn btn-outline-success mb-3">Nueva
-						Cuenta</a>
-				</div>
-				<div class="col d-flex justify-content-end">
-					<table class="inputs">
-						<tbody>
-							<tr>
-								<td>Fecha desde:</td>
-								<td><input type="date" id="minFecha" name="minFecha"></td>
-							</tr>
-							<tr>
-								<td>Fecha hasta:</td>
-								<td><input type="date" id="maxFecha" name="maxFecha"></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				</div>
-				<div class="col d-flex justify-content-end" style="border-bottom:1px;">
-					<a href="#" id="limpiar-filtros">Limpiar filtros</a>
+			<div class="container mt-4">
+				   <div class="row">
+				       <!-- Botón Nueva Cuenta -->
+				       <div class="col-md-4">
+				           
+				       </div>
+				
+				       <!-- Filtro de Saldo -->
+				       <div class="col-md-4">
+				           <div class="card shadow-sm h-100">
+				               <div class="card-header bg-light">
+				                   <h6 class="mb-0">Filtro por Saldo</h6>
+				               </div>
+				               <div class="card-body">
+				                   <div class="mb-3">
+				                       <label class="form-label">Saldo mínimo:</label>
+				                       <input type="number" class="form-control" id="minSaldo" name="minSaldo" 
+				                              min="0" max="999999999" 
+				                              oninput="if(this.value.length > 9) this.value=this.value.slice(0,9)">
+				                   </div>
+				                   <div class="mb-3">
+				                       <label class="form-label">Saldo máximo:</label>
+				                       <input type="number" class="form-control" id="maxSaldo" name="maxSaldo"
+				                              min="0" max="999999999"
+				                              oninput="if(this.value.length > 9) this.value=this.value.slice(0,9)">
+				                   </div>
+				               </div>
+				           </div>
+				       </div>
+				
+				       <!-- Filtro de Fecha -->
+				       <div class="col-md-4">
+				           <div class="card shadow-sm h-100">
+				               <div class="card-header bg-light">
+				                   <h6 class="mb-0">Filtro por Fecha</h6>
+				               </div>
+				               <div class="card-body">
+				                   <div class="mb-3">
+				                       <label class="form-label">Fecha desde:</label>
+				                       <input type="date" class="form-control" id="minFecha" name="minFecha">
+				                   </div>
+				                   <div class="mb-3">
+				                       <label class="form-label">Fecha hasta:</label>
+				                       <input type="date" class="form-control" id="maxFecha" name="maxFecha">
+				                   </div>
+				               </div>
+				           </div>
+				       </div>
+				   </div>
+				
+				   <!-- Botón Limpiar -->
+				   <div class="row mt-3">
+					   <div class="col-12 d-flex justify-content-between">
+					       <a href="AgregarCuentaServlet" class="btn btn-outline-success">Nueva Cuenta</a>
+					       <a href="#" id="limpiar-filtros" class="btn btn-outline-secondary">
+					           <i class="bi bi-trash"></i> Limpiar filtros
+					       </a>
+					   </div>
+					</div>
 				</div>
 			<hr>
 
@@ -201,18 +220,13 @@
 
         // Filtros por saldo mayor y menor
         table.search.fixed('saldo', function(searchStr, data, index) {
-            var min = parseInt(minSaldo.value, 10);
-            var max = parseInt(maxSaldo.value, 10);
-            var saldo = parseFloat(data[6].replace("$", "").replace(".", ",").replace(",", "")) || 0;
-
-            if ((isNaN(min) && isNaN(max)) || (isNaN(min) && saldo <= max)
-                || (min <= saldo && isNaN(max))
-                || (min <= saldo && saldo <= max)) {
-                return true;
-            }
-
-            return false;
-        });
+		    var min = parseFloat(minSaldo.value) || 0;
+		    var max = parseFloat(maxSaldo.value) || Infinity;
+		    
+		    var saldo  = parseFloat(data[6].replace('$', '').replace(/\./g, '').trim()) || 0;
+		    
+		    return (isNaN(min) || saldo >= min) && (isNaN(max) || saldo <= max);
+		});
 
         minSaldo.addEventListener('input', function() {
             table.draw();
@@ -239,6 +253,17 @@
         });
         maxFecha.addEventListener('input', function() {
             table.draw();
+        });
+        
+     // Limpiar filtros
+        document.getElementById('limpiar-filtros').addEventListener('click', function(e) {
+            e.preventDefault();
+            minSaldo.value = '';
+            maxSaldo.value = '';
+            minFecha.value = '';
+            maxFecha.value = '';
+
+            table.search('').columns().search('').draw();
         });
     });
 </script>
