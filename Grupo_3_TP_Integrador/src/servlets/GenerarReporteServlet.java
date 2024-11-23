@@ -140,11 +140,11 @@ public class GenerarReporteServlet extends HttpServlet {
 
 		// Cuentas
 
-		reporte += "- Cantidad de Cuentas creadas durante el per�odo: "
+		reporte += "- Cantidad de Cuentas creadas durante el período: "
 				+ n.obtenerReporteCantidadDeCuentas(fechaInicio, fechaFin) + "\n\n";
-		reporte += "- Suma de saldos de Cuentas creadas durante el per�odo: $"
+		reporte += "- Suma de saldos de Cuentas creadas durante el período: $"
 				+ df.format(n.obtenerReporteSumaDeSaldos(fechaInicio, fechaFin)) + "\n";
-		reporte += "- Promedio de saldos de Cuentas creadas durante el per�odo: $"
+		reporte += "- Promedio de saldos de Cuentas creadas durante el período: $"
 				+ df.format(n.obtenerReporteSaldoPromedio(fechaInicio, fechaFin)) + "\n\n";
 
 		// Movimientos
@@ -158,15 +158,15 @@ public class GenerarReporteServlet extends HttpServlet {
 		BigDecimal sumaTransferencias = nm.obtenerSumaTransferencias(fechaInicio, fechaFin);
 		BigDecimal promedioTransferencias = nm.obtenerPromedioTransferencias(fechaInicio, fechaFin);
 
-		reporte += "- Cantidad de Movimientos durante el per�odo: " + cantMovimientos + "\n";
-		reporte += "- Cantidad de Altas de Cuenta durante el per�odo: " + cantidadAltasCuenta + "\n";
-		reporte += "- Cantidad de Transferencias realizadas durante el per�odo: " + cantidadTransferencias + " - "
+		reporte += "- Cantidad de Movimientos durante el período: " + cantMovimientos + "\n";
+		reporte += "- Cantidad de Altas de Cuenta durante el período: " + cantidadAltasCuenta + "\n";
+		reporte += "- Cantidad de Transferencias realizadas durante el período: " + cantidadTransferencias + " - "
 				+ cantidadTransferencias * 2 + " movimientos" + "\n";
-		reporte += "- Cantidad de Altas de Pr�stamo durante el per�odo: " + cantidadAltasPrestamo + "\n";
-		reporte += "- Cantidad de Pagos de Pr�stamo durante el per�odo: " + cantidadPagosPrestamo + "\n\n";
+		reporte += "- Cantidad de Altas de Préstamo durante el período: " + cantidadAltasPrestamo + "\n";
+		reporte += "- Cantidad de Pagos de Préstamo durante el período: " + cantidadPagosPrestamo + "\n\n";
 
-		reporte += "- Monto transferido durante el per�odo: $" + df.format(sumaTransferencias) + "\n";
-		reporte += "- Promedio de montos transferidos durante el per�odo: $" + df.format(promedioTransferencias)
+		reporte += "- Monto transferido durante el período: $" + df.format(sumaTransferencias) + "\n";
+		reporte += "- Promedio de montos transferidos durante el período: $" + df.format(promedioTransferencias)
 				+ "\n\n";
 
 		return reporte;
@@ -175,7 +175,7 @@ public class GenerarReporteServlet extends HttpServlet {
 	private String generarReportePrestamos(Date fechaInicio, Date fechaFin) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String periodo = sdf.format(fechaInicio) + "_" + sdf.format(fechaFin);
-		String reporte = "Reporte de Pr�stamos " + periodo + "\n";
+		String reporte = "Reporte de Préstamos " + periodo + "\n";
 		reporte += "==========================================\n\n";
 
 		PrestamoNegocio n = new PrestamoNegocioImpl();
@@ -194,25 +194,25 @@ public class GenerarReporteServlet extends HttpServlet {
 			BigDecimal sumaPagados = n.sumarPrestamosPagados(fechaInicio, fechaFin);
 			BigDecimal promedio = n.getPromedioPrestamos(fechaInicio, fechaFin);
 
-			reporte += "- Cantidad de Prestamos aprobados y con cuotas pendientes de pago que fueron creados durante el per�odo: "
+			reporte += "- Cantidad de Préstamos aprobados y con cuotas pendientes de pago que fueron creados durante el período: "
 					+ cantAprobados + "\n";
-			reporte += "- Cantidad de Prestamos rechazados que fueron creados durante el per�odo: " + cantRechazados
+			reporte += "- Cantidad de Préstamos rechazados que fueron creados durante el período: " + cantRechazados
 					+ "\n";
-			reporte += "- Cantidad de Prestamos en evaluacion que fueron creados durante el per�odo: " + cantPendientes
+			reporte += "- Cantidad de Préstamos en evaluacion que fueron creados durante el período: " + cantPendientes
 					+ "\n\n";
-			reporte += "- Cantidad de Prestamos totalmente pagados que fueron creados durante el per�odo: "
+			reporte += "- Cantidad de Préstamos totalmente pagados que fueron creados durante el período: "
 					+ cantPagados + "\n\n";
 
-			reporte += "- Monto total de Prestamos aprobados y con cuotas pendientes de pago que fueron creados durante el per�odo: $"
+			reporte += "- Monto total de Préstamos aprobados y con cuotas pendientes de pago que fueron creados durante el período: $"
 					+ df.format(sumaAprobados) + "\n";
-			reporte += "- Monto total de Prestamos rechazados que fueron creados durante el per�odo: $"
+			reporte += "- Monto total de Préstamos rechazados que fueron creados durante el período: $"
 					+ df.format(sumaRechazados) + "\n";
-			reporte += "- Monto total de Prestamos en evaluaci�n que fueron creados durante el per�odo: $"
+			reporte += "- Monto total de Préstamos en evaluación que fueron creados durante el período: $"
 					+ df.format(sumaPendientes) + "\n";
-			reporte += "- Monto total de Prestamos totalmente pagados que fueron creados durante el per�odo: $"
+			reporte += "- Monto total de Préstamos totalmente pagados que fueron creados durante el período: $"
 					+ df.format(sumaPagados) + "\n\n";
 
-			reporte += "- Monto promedio de Prestamos que fueron creados durante el per�odo: $" + df.format(promedio)
+			reporte += "- Monto promedio de Préstamos que fueron creados durante el período: $" + df.format(promedio)
 					+ "\n\n";
 
 		} catch (Exception e) {
@@ -287,7 +287,7 @@ public class GenerarReporteServlet extends HttpServlet {
 			reporteGuardado.setTipo("Reporte de Clientes");
 			reporteGuardado.setFechas(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 		} else {
-			String tipoReporte = tipo.equals("prestamos") ? "Reporte de Pr�stamos" : "Reporte de Cuentas";
+			String tipoReporte = tipo.equals("prestamos") ? "Reporte de Préstamos" : "Reporte de Cuentas";
 			reporteGuardado.setTipo(tipoReporte);
 			reporteGuardado.setFechas(request.getParameter("fechaInicio") + " a " + request.getParameter("fechaFin"));
 		}
