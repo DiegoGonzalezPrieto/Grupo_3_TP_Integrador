@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import dominio.Prestamo;
 
@@ -18,6 +19,8 @@ public interface PrestamoDao {
 	public Prestamo obtenerPrestamoPorId(int idPrestamo) throws SQLException;
 
 	public ArrayList<Prestamo> listarPrestamosXCliente(int idCliente) throws SQLException;
+
+	public List<Prestamo> obtenerPrestamosPendientesPorCliente(int idCliente);
 
 	public ArrayList<Prestamo> listarTodosLosPrestamos() throws SQLException;
 

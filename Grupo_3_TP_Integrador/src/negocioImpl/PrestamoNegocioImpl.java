@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import dao.PrestamoDao;
 import daoImpl.PrestamoDaoImpl;
@@ -152,6 +153,16 @@ public class PrestamoNegocioImpl implements PrestamoNegocio {
 		} catch (Exception ex) {
 			throw ex;
 		}
+	}
+
+	@Override
+	public List<Prestamo> listarPrestamosPendientesXCliente(int idCliente) throws SQLException {
+		try {
+			return pDao.obtenerPrestamosPendientesPorCliente(idCliente);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override

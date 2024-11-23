@@ -17,6 +17,7 @@ import dominio.Cliente;
 import dominio.Cuenta;
 import dominio.Localidad;
 import dominio.Nacionalidad;
+import dominio.Prestamo;
 import dominio.Provincia;
 import dominio.TipoUsuario;
 import dominio.Usuario;
@@ -26,12 +27,14 @@ import negocio.ClienteNegocio;
 import negocio.CuentaNegocio;
 import negocio.LocalidadNegocio;
 import negocio.NacionalidadNegocio;
+import negocio.PrestamoNegocio;
 import negocio.ProvinciaNegocio;
 import negocio.UsuarioNegocio;
 import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.CuentaNegocioImpl;
 import negocioImpl.LocalidadNegocioImpl;
 import negocioImpl.NacionalidadNegocioImpl;
+import negocioImpl.PrestamoNegocioImpl;
 import negocioImpl.ProvinciaNegocioImpl;
 import negocioImpl.UsuarioNegocioImpl;
 
@@ -50,15 +53,19 @@ public class GestionDatosServlet extends HttpServlet {
 	private ProvinciaNegocio daoProvincia = new ProvinciaNegocioImpl();
 	private ArrayList<Provincia> listaProvincias;
 
+	private static final int RECHAZADO = 3;
+
 	ClienteNegocio negoCliente;
 	UsuarioNegocio negoUsuario;
 	CuentaNegocio negocioCuentas;
+	PrestamoNegocio negoPrestamo;
 
 	public GestionDatosServlet() {
 		super();
 		negoCliente = new ClienteNegocioImpl();
 		negoUsuario = new UsuarioNegocioImpl();
 		negocioCuentas = new CuentaNegocioImpl();
+		negoPrestamo = new PrestamoNegocioImpl();
 	}
 
 	/**
@@ -124,6 +131,11 @@ public class GestionDatosServlet extends HttpServlet {
 							response.sendRedirect("AdministracionClientesServlet");
 							return;
 						}
+					}
+
+					List<Prestamo> prestamosPendientes = negoPrestamo.listarPrestamosPendientesXCliente(idCliente);
+					for (Prestamo prestamo : prestamosPendientes) {
+						negoPrestamo.actualizarEstadoSolicitud(prestamo.getId(), RECHAZADO);
 					}
 
 					for (Cuenta cuenta : listCuentasCliente) {
