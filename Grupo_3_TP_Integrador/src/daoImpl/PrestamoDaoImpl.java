@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import dao.ClienteDao;
 import dao.CuentaDao;
@@ -38,6 +39,7 @@ public class PrestamoDaoImpl implements PrestamoDao {
 
 	// CONSULTA DE LISTA
 	private static final String obtenerPrestamoPorId = "Select P.id_cliente,P.id_prestamo,P.id_cuenta,P.fecha_alta_prestamo,P.importe_prestamo,P.meses_plazo,P.importe_cuota,P.cantidad_cuotas,P.id_estado_prestamo,C.nombre,C.apellido from prestamos as P INNER JOIN clientes as C on P.id_cliente = C.id_cliente WHERE P.id_prestamo = ? ";
+	private static final String obtenerPrestamosPrendieteXCliente = "SELECT * FROM Prestamos WHERE id_cliente = ? AND id_estado_prestamo = 1";
 	private static final String listarPrestamosXCliente = "SELECT P.id_prestamo,P.id_cliente,P.id_cuenta,P.fecha_alta_prestamo, P.importe_prestamo,P.meses_plazo, P.importe_cuota, P.cantidad_cuotas, EP.estado_prestamo, EP.id_estado_prestamo,C.nombre,C.apellido FROM prestamos as P INNER JOIN estados_prestamo as EP on P.id_estado_prestamo = EP.id_estado_prestamo INNER JOIN clientes as C on P.id_cliente = C.id_cliente WHERE C.id_cliente = ?";
 	private static final String listarTodosLosPrestamos = "Select id_prestamo,id_cliente, id_cuenta, fecha_alta_prestamo, importe_prestamo, meses_plazo, importe_cuota, cantidad_cuotas, id_estado_prestamo from prestamos ";
 	private static final String listarTodosLosPrestamosAprobados = "SELECT id_prestamo,id_cliente, id_cuenta, fecha_alta_prestamo, importe_prestamo, meses_plazo,importe_cuota, cantidad_cuotas, id_estado_prestamo from prestamos where id_estado_prestamo = 2";
@@ -190,6 +192,50 @@ public class PrestamoDaoImpl implements PrestamoDao {
 			throw ex;
 		}
 
+	}
+
+	@Override
+	public List<Prestamo> obtenerPrestamosPendientesPorCliente(int idCliente) {
+		List<Prestamo> prestamos = new ArrayList<>();
+		String prestamosPendiente = obtenerPrestamosPrendieteXCliente;
+
+		try (Connection conexion = Conexion.getConnection();
+				PreparedStatement statement = conexion.prepareStatement(prestamosPendiente)) {
+			statement.setInt(1, idCliente);
+
+			ResultSet rs = statement.executeQuery();
+
+			while (rs.next()) {
+				Prestamo prestamo = new Prestamo();
+
+				prestamo.setId(rs.getInt("id_prestamo"));
+
+				Cliente cliente = new Cliente();
+				cliente.setId(rs.getInt("id_cliente"));
+				prestamo.setCliente(cliente);
+
+				Cuenta cuenta = new Cuenta();
+				cuenta.setId(rs.getInt("id_cuenta"));
+				prestamo.setCuenta(cuenta);
+
+				prestamo.setFechaAltaPrestamo(rs.getDate("fecha_alta_prestamo"));
+				prestamo.setImportePrestamo(rs.getBigDecimal("importe_prestamo"));
+				prestamo.setMesesPlazo(rs.getInt("meses_plazo"));
+				prestamo.setImportePrestamo(rs.getBigDecimal("importe_cuota"));
+				prestamo.setCuotas(rs.getInt("cantidad_cuotas"));
+
+				// Setear estado del préstamo
+				EstadoPrestamo estado = new EstadoPrestamo();
+				estado.setId(rs.getInt("id_estado_prestamo"));
+				prestamo.setEstadoValidacion(estado);
+
+				prestamos.add(prestamo);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return prestamos;
 	}
 
 	@Override
